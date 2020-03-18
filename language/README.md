@@ -2,7 +2,7 @@
 * [English](lang.yml)
 * [Vietnamese](lang_vi.yml)
 
-
+Just copy and paste into `lang.yml` file. It will work!
 # Language example
     # Default prefix
     PREFIX: '&e[OptEco]'
