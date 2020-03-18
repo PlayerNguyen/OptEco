@@ -7,9 +7,11 @@ OptEco - Spigot Points System with API and web integration
 * Support MySQL 
 * Fully commands and permissions
 * Pending payment (confirm/cancel before transfer)
-* Listener support
 * [API support](#)
+* Website Integration.
 # Commands and permissions
+You can use `points` instead of `opteco`.
+
 | Command         | Usage                           | Permissions Group             |   
 |-----------------|------------------------         |-------------------------------|
 |`/points pay`    | Transfer points                 | `admin`, `user`,`everyone`    |
@@ -23,8 +25,7 @@ OptEco - Spigot Points System with API and web integration
 |`/points reload` | Reload the plugin               | `admin`, `everyone`           |
 
 Each command have one permission like `opteco.pay`, `opteco.confirm`...
-#### Group permissions 
-Split into group is the best way to config and I think my plugin can do it.  
+#### Group permissions   
 * `everyone` is `opteco.*`
 * `admin` is `opteco.admin`
 * `user` is `opteco.user`
@@ -34,7 +35,7 @@ Hm...with this system I though is must be clear and great so me take a whole tim
 ### Config.yml
 #### 🔷 language: lang
 This is the language file, it can be any string type like `en_lang`, `uk_lang`,...
-You can visit [language](#) to download it and you can [share](#) your language for everybody
+You can visit [language](#) to download it or you can [share](#) your language for everybody
 #### 🔷  debug: false
 Opps, switch this section on will display all of your MySQL execute command, processing. Warning! This section can leak player OptEco account information.
 #### 🔷 checkForUpdate: true
