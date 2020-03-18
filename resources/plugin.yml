@@ -3,6 +3,8 @@ version: 1.1b
 api-version: 1.15
 main: me.playernguyen.OptEco
 author: Player_Nguyen
+softdepend:
+  - PlaceholderAPI
 
 commands:
   opteco:

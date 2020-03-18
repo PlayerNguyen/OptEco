@@ -12,6 +12,7 @@ import me.playernguyen.logger.Debugger;
 import me.playernguyen.logger.OptEcoDebugger;
 import me.playernguyen.mysql.AccountMySQLConfiguration;
 import me.playernguyen.mysql.MySQLConnection;
+import me.playernguyen.placeholderapi.OptEcoExpansion;
 import me.playernguyen.updater.OptEcoUpdater;
 import me.playernguyen.utils.MessageFormat;
 import org.bukkit.Bukkit;
@@ -35,6 +36,7 @@ public class OptEco extends JavaPlugin {
 
     private ArrayList<Listener> listeners = new ArrayList<>();
     private HashMap<String, CommandExecutor> executors = new HashMap<>();
+    private boolean isHookPlaceholder;
 
     private ConfigurationLoader configurationLoader;
     private LanguageLoader languageLoader;
@@ -66,7 +68,28 @@ public class OptEco extends JavaPlugin {
             this.executor();
         }
 
+        this.placeHolderHook();
+
         this.metrics = new Metrics(getPlugin(), METRICS_ID);
+    }
+
+    private void placeHolderHook() {
+        this.isHookPlaceholder = Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null;
+        if (isHookPlaceholder()) {
+            this.getLogger().info("Detected PlaceholderAPI...");
+            this.getLogger().info("Hooking with PlaceholderAPI...");
+            this.getLogger().info("Register parameters with PlaceholderAPI...");
+            OptEcoExpansion expansion = new OptEcoExpansion(this);
+            if (expansion.register()) {
+                this.getLogger().info("Active PlaceholderAPI...");
+            } else {
+                this.getLogger().severe("Failed to active PlaceholderAPI...");
+            }
+        }
+    }
+
+    public boolean isHookPlaceholder() {
+        return isHookPlaceholder;
     }
 
     public Metrics getMetrics() {
