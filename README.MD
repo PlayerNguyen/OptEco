@@ -44,3 +44,4 @@ At this time, API wasn't tested in every version. It will test and release asap
 Using parameter `%opteco_points%` to get player point
 #Links:
 * Discord: Player_Nguyen#5200
+* [bStat](https://bstats.org/plugin/bukkit/OptEco/6793)
