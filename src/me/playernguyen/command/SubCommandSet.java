@@ -14,7 +14,7 @@ import java.util.List;
 
 public class SubCommandSet extends SubCommand {
     SubCommandSet(String command, OptEco plugin) {
-        super(command, "set balance of player", plugin);
+        super(command, plugin.getLanguageLoader().getLanguage(OptEcoLanguage.COMMAND_DESCRIBE_SET), plugin);
 
         addArgument(CommandArguments.PLAYER);
         addArgument(CommandArguments.AMOUNT);

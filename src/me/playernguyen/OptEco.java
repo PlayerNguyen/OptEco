@@ -28,7 +28,7 @@ import java.util.logging.Logger;
 public class OptEco extends JavaPlugin {
 
     private static final String PLUGIN_NAME = "OptEco";
-    private static final String UPDATE_ID = "49330";
+    private static final String UPDATE_ID = "76179";
     private static final int METRICS_ID = 6793;
 
     private final Logger logger = this.getLogger();
@@ -58,7 +58,7 @@ public class OptEco extends JavaPlugin {
         this.transactionManager = new TransactionManager(this);
 
         // Enable after beta
-        // this.update();
+        this.update();
         this.storeType();
 
         if ( this.loadAccounts() ) {

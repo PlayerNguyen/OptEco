@@ -13,7 +13,7 @@ import java.util.List;
 
 public class SubCommandPayConfirm extends SubCommand {
     SubCommandPayConfirm(String command, OptEco plugin) {
-        super(command, "confirm the transaction", plugin);
+        super(command, plugin.getLanguageLoader().getLanguage(OptEcoLanguage.COMMAND_DESCRIBE_CONFIRM), plugin);
 
         addPermissions(OptEcoPermission.EVERYTHING);
         addPermissions(OptEcoPermission.ADMIN);

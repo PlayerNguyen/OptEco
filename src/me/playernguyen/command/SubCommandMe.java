@@ -15,7 +15,7 @@ public class SubCommandMe extends SubCommand {
 
     SubCommandMe(String command, OptEco plugin) {
 
-        super(command, "check my balance", plugin);
+        super(command, plugin.getLanguageLoader().getLanguage(OptEcoLanguage.COMMAND_DESCRIBE_SELFCHECK), plugin);
 
         addPermissions(OptEcoPermission.EVERYTHING);
         addPermissions(OptEcoPermission.ADMIN);

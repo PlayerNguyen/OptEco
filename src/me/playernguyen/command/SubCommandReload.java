@@ -13,7 +13,7 @@ import java.util.List;
 public class SubCommandReload extends SubCommand {
 
     SubCommandReload(String command, OptEco plugin) {
-        super(command, "reload config", plugin);
+        super(command, plugin.getLanguageLoader().getLanguage(OptEcoLanguage.COMMAND_DESCRIBE_RELOAD), plugin);
 
         addPermissions(OptEcoPermission.ADMIN);
         addPermissions(OptEcoPermission.EVERYTHING);

@@ -36,7 +36,7 @@ Hm...with this system I though is must be clear and great so we take a whole tim
 ### Config.yml
 #### 🔷 language: lang
 This is the language file, it can be any string type like `en_lang`, `uk_lang`,...
-You can visit [language](#) to download it or you can [share](#) your language for everybody
+You can visit [language](https://github.com/PlayerNguyen/OptEco/tree/master/language) to download it or you can [share](#) your language for everybody
 #### 🔷  debug: false
 Opps, switch this section on will display all of your MySQL execute command, processing. Warning! This section can leak player OptEco account information.
 #### 🔷 checkForUpdate: true

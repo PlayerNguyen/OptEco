@@ -15,7 +15,7 @@ import java.util.List;
 public class SubCommandPay extends SubCommand {
 
     public SubCommandPay(String s, OptEco pl) {
-        super(s, "transfer money to player", pl);
+        super(s, pl.getLanguageLoader().getLanguage(OptEcoLanguage.COMMAND_DESCRIBE_PAY), pl);
 
         addArgument(CommandArguments.PLAYER);
         addArgument(CommandArguments.AMOUNT);

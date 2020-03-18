@@ -14,7 +14,7 @@ import java.util.List;
 public class SubCommandCheck extends SubCommand {
 
     public SubCommandCheck(String command, OptEco optEco) {
-        super(command, "check your balance", optEco);
+        super(command, optEco.getLanguageLoader().getLanguage(OptEcoLanguage.COMMAND_DESCRIBE_CHECK), optEco);
 
         addArgument(CommandArguments.PLAYER);
 

@@ -15,7 +15,7 @@ import java.util.List;
 public class SubCommandTake extends SubCommand {
 
     SubCommandTake(String command, OptEco plugin) {
-        super(command, "take the balance", plugin);
+        super(command, plugin.getLanguageLoader().getLanguage(OptEcoLanguage.COMMAND_DESCRIBE_TAKE), plugin);
 
         addArgument(CommandArguments.PLAYER);
         addArgument(CommandArguments.AMOUNT);

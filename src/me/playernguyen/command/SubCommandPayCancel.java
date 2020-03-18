@@ -11,7 +11,7 @@ import java.util.List;
 
 public class SubCommandPayCancel extends SubCommand {
     SubCommandPayCancel(String command, OptEco plugin) {
-        super(command, "cancel the transaction", plugin);
+        super(command, plugin.getLanguageLoader().getLanguage(OptEcoLanguage.COMMAND_DESCRIBE_CANCEL), plugin);
 
         addPermissions(OptEcoPermission.EVERYTHING);
         addPermissions(OptEcoPermission.ADMIN);
