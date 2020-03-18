@@ -8,7 +8,7 @@ OptEco - Spigot Points System with API and web integration
 * PlaceholderAPI support
 * Fully commands and permissions
 * Pending payment (confirm/cancel before transfer)
-* [API support](#)
+* API Support
 * Website Integration.
 * bStats (Metrics) 
 # Commands and permissions
@@ -43,10 +43,11 @@ Visit to [language page](language/README.md) for more information.
 At this time, API wasn't tested in every version. It will test and release asap
 
 # PlaceholderAPI (1.2b)
-Using parameter `%opteco_points%` to get player point
+From 1.2b version of plugin, using parameter `%opteco_points%` to get player point if your server using PlaceholderAPI.
 
-#Links:
+# Links:
 * Discord: Player_Nguyen#5200
 * [bStat](https://bstats.org/plugin/bukkit/OptEco/6793)
+* [Spigot](https://www.spigotmc.org/resources/opteco-placeholderapi-mysql-support-api-web-integration-points-system.76179/)
 
 Having an issues? Don't be shy, [create an issue now](https://github.com/PlayerNguyen/OptEco/issues)
