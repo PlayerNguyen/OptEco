@@ -5,6 +5,7 @@
 
 OptEco - Spigot Points System with API and web integration
 * Support MySQL 
+* PlaceholderAPI support
 * Fully commands and permissions
 * Pending payment (confirm/cancel before transfer)
 * [API support](#)
@@ -67,6 +68,7 @@ Table of MySQL which containing all player account
 Find a language from your `OptEco` folder and edit like what you want.
 # API
 At this time, API wasn't tested in every version. It will test and release asap
-
+# PlaceholderAPI
+Using parameter `%opteco_points` to get player point
 #Links:
 * 
