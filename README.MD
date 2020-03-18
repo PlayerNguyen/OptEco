@@ -48,3 +48,5 @@ Using parameter `%opteco_points%` to get player point
 #Links:
 * Discord: Player_Nguyen#5200
 * [bStat](https://bstats.org/plugin/bukkit/OptEco/6793)
+
+Having an issues? Don't be shy, [create an issue now](https://github.com/PlayerNguyen/OptEco/issues)
