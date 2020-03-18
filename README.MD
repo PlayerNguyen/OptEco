@@ -32,7 +32,7 @@ Each command have one permission like `opteco.pay`, `opteco.confirm`...
 * `admin` is `opteco.admin`
 * `user` is `opteco.user`
 
-# Configuration
+# Configurations
 ## Config.yml
 Visit to [configuration page](CONFIGURATION.md) for more information. 
 
