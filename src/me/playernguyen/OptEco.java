@@ -16,6 +16,7 @@ import me.playernguyen.placeholderapi.OptEcoExpansion;
 import me.playernguyen.updater.OptEcoUpdater;
 import me.playernguyen.utils.MessageFormat;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -50,7 +51,7 @@ public class OptEco extends JavaPlugin {
 
     @Override
     public void onEnable() {
-
+        this.waterMarkPrint();
         this.getLogger().info("Loading configuration...");
         this.configurationLoader = new ConfigurationLoader(this);
         this.languageLoader =
@@ -71,6 +72,13 @@ public class OptEco extends JavaPlugin {
         this.placeHolderHook();
 
         this.metrics = new Metrics(getPlugin(), METRICS_ID);
+    }
+
+    private void waterMarkPrint() {
+        Bukkit.getConsoleSender().sendMessage(ChatColor.AQUA + "--------------------------------");
+        Bukkit.getConsoleSender().sendMessage(ChatColor.AQUA + "+ "+ChatColor.GREEN + getName() + " v" + getDescription().getVersion());
+        Bukkit.getConsoleSender().sendMessage(ChatColor.AQUA + "+"+ ChatColor.GREEN + " Always update plugin please :v");
+        Bukkit.getConsoleSender().sendMessage(ChatColor.AQUA + "--------------------------------");
     }
 
     private void placeHolderHook() {

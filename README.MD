@@ -59,4 +59,4 @@ Check out our example website integration PHP [here](web_integration).
 * [bStat](https://bstats.org/plugin/bukkit/OptEco/6793)
 * [Spigot](https://www.spigotmc.org/resources/opteco-placeholderapi-mysql-support-api-web-integration-points-system.76179/)
 
-Having an issues? Don't be shy, [create an issue now](https://github.com/PlayerNguyen/OptEco/issues)
+Having any issues? Don't be shy, [create an issue now](https://github.com/PlayerNguyen/OptEco/issues).
