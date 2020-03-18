@@ -63,7 +63,8 @@ Username of MySQL Server
 Password of MySQL Server
 ##### 🔷 settings.mysql.tableName: OptEco
 Table of MySQL which containing all player account
-
+# Language
+Find a language from your `OptEco` folder and edit like what you want.
 # API
 At this time, API wasn't tested in every version. It will test and release asap
 

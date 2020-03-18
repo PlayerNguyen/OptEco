@@ -1,0 +1,41 @@
+# Copy về và paste vào file lang.yml hoặc bạn có thể
+# tải về và đưa vào thư mục OptEco sau đó vào plugin.yml và chỉnh mục language thành 'lang_vi'
+
+PREFIX: '&e[OptEco]'
+NO_PERMISSIONS: '&cBạn không có quyền đòi hỏi ở đây.'
+COMMAND_NOT_FOUND: '&cKhông tìm thấy lệnh.'
+FOR_PLAYER: '&cLệnh này chỉ dùng cho người chơi!'
+COMMAND:
+  VAR_AMOUNT: <số lượng>
+  VAR_NOT_A_NUMBER: '&cGiá trị %value% không phải là số.'
+  VAR_PLAYER: <người chơi>
+  VAR_VALUE_CANNOT_BE_NEGATIVE: '&cGiá trị không thể là số âm.'
+  PLAYER_NOT_FOUND: '&cKhông tìm thấy người chơi %who% trong máy chủ.'
+  ADD:
+    DESCRIPTION: thêm giá trị tiền cho người chơi
+    SUCCEEDED: '&aHoàn tất thêm &d%value% %currency% &avào tài khoản của &d%who% .'
+    FAILED: '&cThất bại khi thêm &d%value% %currency% &a vào tài khoản của &d%who%.'
+  CHECK:
+    SELF: '&a Tài khoản của bạn hiện tại có &d%value% %currency%'
+    ANOTHER: '&aNgười chơi %who% có tài khoản là &8%value% %currency%'
+  PAY:
+    PAY_ON_TRANSACTION: '&cBạn đang có giao dịch với người khác, hãy sử dụng
+      &d/points [confirm/cancel] &cđể xác nhận trước khi tạo giao dịch mới.'
+    CONFIRM_DISPLAY: '&aBạn có &d%value% giây &at để xác nhận, hãy dùng &d/points
+      [confirm/cancel] &ađể xác nhận hoặc hủy giao dịch của bạn.'
+    OUT_OF_TIME_CONFIRM: '&cBạn đã hết thời gian giao dịch của mình.'
+    NOT_ENOUGH: '&cKhông đủ tiền để giao dịch.'
+    PAY_CANNOT_SELF_TRANSFER: '&cBạn không thể giao dịch với bản thân mình.'
+    PAY_TRANSACTION_NOT_EXIST: '&c Bạn chưa giao dịch với bất kỳ ai.'
+    ACCEPTED: '&aChuyển tiền &d%value% %currency% &acho &d%who%.'
+    ACCEPTED_TARGET: '&aBạn đã nhận được &d%value% %currency% &atừ &d%who%'
+    FAILED: '&cĐã có lỗi khi chờ giao dịch.'
+    DENY: '&cBạn đã từ chối giao dịch.'
+  RELOAD:
+    DONE: '&aĐã tải lại tất cả.'
+  TAKE:
+    SUCCESS: '&aĐã lấy &d%value% %currency% &atừ &d%who%'
+    FAIL: '&aKhông thể lấy &d%value% %currency% &atừ &d%who% &avì lỗi!'
+  SET:
+    SUCCESS: '&aĐặt số tiền &d%value% %currency% &acủa &d%who%'
+    FAIL: '&aKhông thể đặt số tiền&d%value% %currency% &acủa &d%who% &avì lỗi!'
