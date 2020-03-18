@@ -9,6 +9,7 @@ OptEco - Spigot Points System with API and web integration
 * Pending payment (confirm/cancel before transfer)
 * [API support](#)
 * Website Integration.
+* bStats (Metrics) 
 # Commands and permissions
 You can use `points` instead of `opteco`.
 
@@ -31,7 +32,7 @@ Each command have one permission like `opteco.pay`, `opteco.confirm`...
 * `user` is `opteco.user`
 
 # Configuration
-Hm...with this system I though is must be clear and great so me take a whole time to create this. All config are in `OptEco` folder.
+Hm...with this system I though is must be clear and great so we take a whole time to create this. All config are in `OptEco` folder.
 ### Config.yml
 #### 🔷 language: lang
 This is the language file, it can be any string type like `en_lang`, `uk_lang`,...
@@ -64,5 +65,7 @@ Password of MySQL Server
 Table of MySQL which containing all player account
 
 # API
+At this time, API wasn't tested in every version. It will test and release asap
 
-
+#Links:
+* 
