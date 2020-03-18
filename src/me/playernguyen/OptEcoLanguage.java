@@ -1,0 +1,63 @@
+package me.playernguyen;
+
+public enum  OptEcoLanguage {
+
+    PREFIX                              ("PREFIX", "&e[OptEco]"),
+
+    NO_PERMISSION                       ("NO_PERMISSIONS", "&cYou have no permission to require this action."),
+    COMMAND_NOT_FOUND                   ("COMMAND_NOT_FOUND", "&cCommand not found."),
+    FOR_PLAYER_COMMAND                  ("FOR_PLAYER", "&cThis command just for player, console cannot use this."),
+
+    VAR_AMOUNT                          ("COMMAND.VAR_AMOUNT", "<amount>"),
+    VAR_NOT_A_NUMBER                    ("COMMAND.VAR_NOT_A_NUMBER", "&cValue %value% is not a number."),
+    VAR_PLAYER                          ("COMMAND.VAR_PLAYER", "<player>"),
+    VALUE_CANNOT_BE_NEGATIVE            ("COMMAND.VAR_VALUE_CANNOT_BE_NEGATIVE", "&cThe amount cannot be negative."),
+    VAR_PLAYER_NOT_FOUND                ("COMMAND.PLAYER_NOT_FOUND", "&cCannot found player %who% in server."),
+
+    COMMAND_DESCRIBE_ADD                ("COMMAND.ADD.DESCRIPTION", "add balance to player"),
+    COMMAND_SUCCEEDED_ADD               ("COMMAND.ADD.SUCCEEDED", "&aSucceeded add &d%value% %currency% &ainto &d%who% &aaccount."),
+    COMMAND_FAILED_ADD                  ("COMMAND.ADD.FAILED", "&cFailed to add &d%value% %currency% &ainto &d%who% &aaccount."),
+
+    CHECK_SELF                          ("COMMAND.CHECK.SELF", "&aYour balance now is &d%value% %currency%"),
+    CHECK_ANOTHER                       ("COMMAND.CHECK.ANOTHER", "&aPlayer %who% balance now is &d%value% %currency%"),
+
+    PAY_ON_TRANSACTION                  ("COMMAND.PAY.PAY_ON_TRANSACTION", "&cYou are on transaction with another player, please using &d/points [confirm/cancel] &cto confirm your before transaction."),
+    PAY_CONFIRM_DISPLAY                 ("COMMAND.PAY.CONFIRM_DISPLAY", "&aYou have &d%value% seconds &ato confirm, please using &d/points [confirm/cancel] &ato confirm your transaction."),
+    PAY_OUT_OF_TIME_CONFIRM             ("COMMAND.PAY.OUT_OF_TIME_CONFIRM", "&cYou are out of time to confirm your transaction."),
+    PAY_NOT_ENOUGH                      ("COMMAND.PAY.NOT_ENOUGH", "&cNot enough to pay."),
+    PAY_CANNOT_SELF_TRANSFER            ("COMMAND.PAY.PAY_CANNOT_SELF_TRANSFER", "&cYou cannot transfer to yourself."),
+    PAY_TRANSACTION_NOT_EXIST           ("COMMAND.PAY.PAY_TRANSACTION_NOT_EXIST", "&cYou have not paid for everybody."),
+    PAY_SUCCESS                         ("COMMAND.PAY.ACCEPTED", "&aTransfer &d%value% %currency% &ato &d%who%."),
+    PAY_SUCCESS_TARGET                  ("COMMAND.PAY.ACCEPTED_TARGET", "&aYou has been received &d%value% %currency% &aby &d%who%"),
+    PAY_FAILED                          ("COMMAND.PAY.FAILED", "&cHaving an error while pending transferred."),
+    PAY_DENY                            ("COMMAND.PAY.DENY", "&cYou are denied the transaction."),
+
+    RELOAD_DONE                         ("COMMAND.RELOAD.DONE", "&aReloaded all config."),
+
+    TAKE_SUCCESS                        ("COMMAND.TAKE.SUCCESS", "&aTaking &d%value% %currency% &afrom &d%who%"),
+    TAKE_FAIL                           ("COMMAND.TAKE.FAIL", "&aCannot take &d%value% %currency% &afrom &d%who% &abecause of the error!"),
+
+    SET_SUCCESS                         ("COMMAND.SET.SUCCESS", "&aSetting &d%value% %currency% &ato &d%who%"),
+    SET_FAIL                            ("COMMAND.SET.FAIL", "&aCannot set &d%value% %currency% &ato &d%who% &abecause of the error!"),
+
+
+
+    ;
+
+    private String path;
+    private Object wh;
+
+    OptEcoLanguage(String path, Object wh) {
+        this.path = path;
+        this.wh = wh;
+    }
+
+    public String getPath() {
+        return path;
+    }
+
+    public Object getDefaultSetting() {
+        return wh;
+    }
+
+}

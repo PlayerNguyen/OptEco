@@ -1,0 +1,11 @@
+name: OptEco
+version: 1.0b
+api-version: 1.15
+main: me.playernguyen.OptEco
+author: Player_Nguyen
+
+commands:
+  opteco:
+    usage: /opteco help
+  points:
+    usage: /opteco help
