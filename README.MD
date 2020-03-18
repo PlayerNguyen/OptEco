@@ -37,7 +37,7 @@ Hm...with this system I though is must be clear and great so we take a whole tim
 ## Config.yml
 Visit to [configuration page](CONFIGURATION.md) for more information. 
 ## Language
-Visit to [language page](language/LANGUAGE.md) for more information.
+Visit to [language page](language/README.md) for more information.
 # API
 At this time, API wasn't tested in every version. It will test and release asap
 # PlaceholderAPI (1.2b)
