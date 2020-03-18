@@ -33,15 +33,18 @@ Each command have one permission like `opteco.pay`, `opteco.confirm`...
 * `user` is `opteco.user`
 
 # Configuration
-Hm...with this system I though is must be clear and great so we take a whole time to create this. All config are in `OptEco` folder.
 ## Config.yml
 Visit to [configuration page](CONFIGURATION.md) for more information. 
+
 ## Language
 Visit to [language page](language/README.md) for more information.
+
 # API
 At this time, API wasn't tested in every version. It will test and release asap
+
 # PlaceholderAPI (1.2b)
 Using parameter `%opteco_points%` to get player point
+
 #Links:
 * Discord: Player_Nguyen#5200
 * [bStat](https://bstats.org/plugin/bukkit/OptEco/6793)
