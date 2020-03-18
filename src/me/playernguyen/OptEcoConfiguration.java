@@ -10,7 +10,6 @@ public enum OptEcoConfiguration {
     PAYMENT_CONFIRM         ("settings.timeToConfirmPayment", 15),
     CURRENCY_SYMBOL         ("settings.currencySymbol", "points"),
     STORED_TYPE             ("settings.storeType", StoreType.YAML.toString()),
-    ACCOUNT_AUTO_UPDATE     ("settings.autoUpdate", true),
 
     MYSQL_HOST              ("settings.mysql.host", "localhost"),
     MYSQL_DATABASE          ("settings.mysql.database", "dbname"),

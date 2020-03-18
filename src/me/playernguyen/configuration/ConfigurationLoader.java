@@ -9,7 +9,7 @@ public class ConfigurationLoader extends LoaderAbstract {
 
     private static final String CONFIG_FILE = "config.yml";
 
-    private static final String HEADER_HELPER = "Wanna help? https://google.com";
+    private static final String HEADER_HELPER = "Need help? Visit: https://github.com/PlayerNguyen/OptEco for more helpful tips of config!";
 
     public ConfigurationLoader (OptEco plugin) {
         super(plugin, new File(plugin.getDataFolder(), CONFIG_FILE), HEADER_HELPER);

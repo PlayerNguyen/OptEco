@@ -15,7 +15,7 @@ import java.util.List;
 public class SubCommandPay extends SubCommand {
 
     public SubCommandPay(String s, OptEco pl) {
-        super(s, "pay for player", pl);
+        super(s, "transfer money to player", pl);
 
         addArgument(CommandArguments.PLAYER);
         addArgument(CommandArguments.AMOUNT);

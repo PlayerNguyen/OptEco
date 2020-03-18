@@ -15,9 +15,9 @@ public class SubCommandPayCancel extends SubCommand {
 
         addPermissions(OptEcoPermission.EVERYTHING);
         addPermissions(OptEcoPermission.ADMIN);
-        addPermissions(OptEcoPermission.PAY);
         addPermissions(OptEcoPermission.USER);
 
+        addPermissions(OptEcoPermission.CONFIRM);
     }
 
     @Override
