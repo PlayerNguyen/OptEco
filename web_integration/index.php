@@ -16,5 +16,5 @@ require_once "api/PlayerAPI.php";
 
 $api = new OptEcoAPI(new OptEcoMySQL());
 
-var_dump($api->createAccount("IronMan"));
+// Your code here //
 
