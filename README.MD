@@ -43,7 +43,13 @@ Visit to [language page](language/README.md) for more information.
 At this time, API wasn't tested in every version. It will test and release asap
 
 ## PlaceholderAPI (1.2b)
-From 1.2b version of plugin, using parameter `%opteco_points%` to get player point if your server using PlaceholderAPI.
+From 1.2b version of plugin, OptEco added PlaceholderAPI for server
+
+|Parameters         |Info               |   From    |
+|-------------------|-------------------|----------:|
+|%opteco_points%    | Get player points |1.2b       | 
+|%opteco_version%   | Get player points |1.3b       |
+
 
 ## Website Integration
 Check out our example website integration PHP [here](web_integration).
