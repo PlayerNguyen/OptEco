@@ -41,7 +41,7 @@ Visit to [configuration page](CONFIGURATION.md) for more information.
 ## Language
 Visit to [language page](language/README.md) for more information.
 
-# [API](API.md)
+# [API](https://github.com/PlayerNguyen/OptEco/blob/master/API.MD)
 
 
 ## PlaceholderAPI (1.2b)
