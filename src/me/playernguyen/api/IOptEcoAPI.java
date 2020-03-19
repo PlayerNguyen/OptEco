@@ -49,5 +49,10 @@ public interface IOptEcoAPI {
      */
     boolean takePoints(double amount);
 
+    /**
+     * Get the currency symbol
+     * @return String currency symbol
+     */
+    String getCurrencySymbol();
 
 }

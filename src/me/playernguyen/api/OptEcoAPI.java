@@ -1,6 +1,7 @@
 package me.playernguyen.api;
 
 import me.playernguyen.OptEco;
+import me.playernguyen.OptEcoConfiguration;
 import org.bukkit.entity.Player;
 
 public class OptEcoAPI implements IOptEcoAPI {
@@ -94,5 +95,15 @@ public class OptEcoAPI implements IOptEcoAPI {
     public boolean takePoints(double amount) {
         if (amount <= 0) throw new IllegalArgumentException("amount must greater than 0");
         return this.plugin.getAccountLoader().takeBalance(getPlayer(), amount);
+    }
+
+    /**
+     * Get the currency symbol
+     *
+     * @return String currency symbol
+     */
+    @Override
+    public String getCurrencySymbol() {
+        return this.plugin.getConfigurationLoader().getString(OptEcoConfiguration.CURRENCY_SYMBOL);
     }
 }
