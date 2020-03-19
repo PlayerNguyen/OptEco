@@ -41,8 +41,8 @@ Visit to [configuration page](CONFIGURATION.md) for more information.
 ## Language
 Visit to [language page](language/README.md) for more information.
 
-# API
-At this time, API wasn't tested in every version. It will test and release asap
+# [API](API.md)
+
 
 ## PlaceholderAPI (1.2b)
 From 1.2b version of plugin, OptEco added PlaceholderAPI for server
