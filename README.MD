@@ -11,6 +11,8 @@ OptEco - Spigot Points System with API and web integration
 * API Support
 * Website Integration.
 * bStats (Metrics) 
+# Usage
+OptEco is easy-to-use Spigot/Bukkit/Paper plugin that get points from database(YAML, MySQL,...) 
 # Commands and permissions
 You can use `points` instead of `opteco`.
 

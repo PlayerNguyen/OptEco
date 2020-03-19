@@ -68,7 +68,16 @@ public class SubCommandTake extends SubCommand {
             );
             return true;
         }
-
+        // If sender don't have enough points
+        if ( (getPlugin().getAccountLoader().getBalance(target) - Double.parseDouble(_value)) <
+                getPlugin().getConfigurationLoader().getDouble(OptEcoConfiguration.MIN_BALANCE) ) {
+            sender.sendMessage(
+                    getMessageFormat()
+                            .format(getPlugin().getLanguageLoader().getLanguage(OptEcoLanguage.TAKE_NOT_ENOUGH))
+                            .replaceAll("%value%", _value)
+            );
+            return true;
+        }
         if (getPlugin().getAccountLoader().takeBalance(target, value)) {
             sender.sendMessage(
                     getMessageFormat()

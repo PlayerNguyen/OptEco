@@ -41,7 +41,8 @@ public enum  OptEcoLanguage {
 
     COMMAND_DESCRIBE_TAKE               ("COMMAND.TAKE.DESCRIPTION", "take player points"),
     TAKE_SUCCESS                        ("COMMAND.TAKE.SUCCESS", "&aTaking &d%value% %currency% &afrom &d%who%"),
-    TAKE_FAIL                           ("COMMAND.TAKE.FAIL", "&aCannot take &d%value% %currency% &afrom &d%who% &abecause of the error!"),
+    TAKE_FAIL                           ("COMMAND.TAKE.FAIL", "&cCannot take &d%value% %currency% &afrom &d%who% &abecause of the error!"),
+    TAKE_NOT_ENOUGH                     ("COMMAND.TAKE.NOT_ENOUGH", "&cYou cannot take out of limitation."),
 
     COMMAND_DESCRIBE_SET                ("COMMAND.SET.DESCRIPTION", "set player points"),
     SET_SUCCESS                         ("COMMAND.SET.SUCCESS", "&aSetting &d%value% %currency% &ato &d%who%"),

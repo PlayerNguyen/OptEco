@@ -53,12 +53,16 @@ public class OptEco extends JavaPlugin {
     public void onEnable() {
         this.waterMarkPrint();
         this.getLogger().info("Loading configuration...");
-        this.configurationLoader = new ConfigurationLoader(this);
+        this.configurationLoader =
+                new ConfigurationLoader(this);
         this.languageLoader =
                 new LanguageLoader(getConfigurationLoader().getString(OptEcoConfiguration.LANGUAGE_FILE), this);
-        this.debugger = new OptEcoDebugger(this);
-        this.messageFormat = new MessageFormat(this);
-        this.transactionManager = new TransactionManager(this);
+        this.debugger =
+                new OptEcoDebugger(this);
+        this.messageFormat =
+                new MessageFormat(this);
+        this.transactionManager =
+                new TransactionManager(this);
 
         // Enable after beta
         this.update();
