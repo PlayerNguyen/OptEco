@@ -1,0 +1,49 @@
+PREFIX: '&e[OptEco]'
+NO_PERMISSIONS: '&c你没有权限这么做.'
+COMMAND_NOT_FOUND: '&c命令不存在.'
+FOR_PLAYER: '&c控制台不能执行此命令.'
+COMMAND:
+  VAR_AMOUNT: <数量>
+  VAR_NOT_A_NUMBER: '&c%value% 不是有效数字.'
+  VAR_PLAYER: <玩家名称>
+  VAR_VALUE_CANNOT_BE_NEGATIVE: '&c无效的数字.'
+  PLAYER_NOT_FOUND: '&c不能找到名称为 %who% 的玩家.'
+  ADD:
+    DESCRIPTION: 添加点券至玩家
+    SUCCEEDED: '&a成功添加 &d%value% %currency% &a到 &d%who% &a的账户.'
+    FAILED: '&c不能添加 &d%value% %currency% &a到 &d%who% &a的账户.'
+  CHECK:
+    DESCRIPTION: 检查玩家点券数
+    SELF: '&a你的点券: &d%value% %currency%'
+    ANOTHER: '&a玩家 %who% 的点券: &d%value% %currency%'
+  ME:
+    DESCRIPTION: 检查我的点券
+  PAY:
+    DESCRIPTION: 转账点券给别的玩家
+    PAY_ON_TRANSACTION: '&c你正在将一些点券转给另一玩家, 请输入
+      &d/points [confirm/cancel] &c确认此操作.'
+    CONFIRM_DISPLAY: '&a你还有 &d%value% 秒 &a来确认, 请使用 &d/points
+      [confirm/cancel] &a来确认.'
+    OUT_OF_TIME_CONFIRM: '&c请求已超时.'
+    NOT_ENOUGH: '&c你没有足够的点券.'
+    PAY_CANNOT_SELF_TRANSFER: '&c你不能转账给你自己.'
+    PAY_TRANSACTION_NOT_EXIST: '&c你不能给每个人付钱.'
+    ACCEPTED: '&a成功&a将 &d%value% %currency% 转账至 &d%who%.'
+    ACCEPTED_TARGET: '&a你收到了&a来自于 &d%who% 的 &d%value% %currency% '
+    FAILED: '&c转账时出现未知错误.'
+    DENY: '&c你取消了转账请求.'
+  RELOAD:
+    DESCRIPTION: 重载配置
+    DONE: '&a所有配置已重载.'
+  TAKE:
+    DESCRIPTION: 拿走点券
+    SUCCESS: '&a成功&a从 &d%who% &a的账户拿走 &d%value% %currency% '
+    FAIL: '&a不能拿走 &d%value% %currency% &a从 &d%who% &a的账户,因为出现未知错误!'
+  SET:
+    DESCRIPTION: 设置点券
+    SUCCESS: '&a将 %who% 的点券数量设置为了 &d%value% %currency%'
+    FAIL: '&a不能把 &d%who% &a点券数量设置为 &d%value% %currency% &ato &d%who% &a,因为出现未知错误!'
+  CONFIRM:
+    DESCRIPTION: 确认支付
+  CANCEL:
+    DESCRIPTION: 取消支付

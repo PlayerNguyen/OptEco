@@ -1,7 +1,10 @@
 # API Using
 OptEco was create by manually way, first of all you must set the `softdepends` or `depend` into your `config.yml` file of your plugin.
-
 You can also check our [source code](src/me/playernguyen/api/IOptEcoAPI.java) for the API.
+
+And then you import OptEco.jar into your project
+* [InteliJ Import](https://www.jetbrains.com/help/idea/library.html#add-library-to-module-dependencies)
+* [Eclipse Import](https://javabeat.net/eclipse-user-library/)
 
 # ExamplePlugin.java
 ## Soft Depends
