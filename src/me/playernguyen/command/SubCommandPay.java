@@ -54,14 +54,14 @@ public class SubCommandPay extends SubCommand {
             return true;
         }
         // If sender transfer to themselves
-        if (target.equals(player) && !getPlugin().getConfigurationLoader().getBool(OptEcoConfiguration.DEBUG)) {
+        if (target.equals(player)) {
             player.sendMessage(getMessageFormat().format(
                     getPlugin().getLanguageLoader().getLanguage(OptEcoLanguage.PAY_CANNOT_SELF_TRANSFER)
             ));
             return true;
         }
         // If the value is not number
-        if ( !ValidationChecker.isNumber(_value) ) {
+        if (!ValidationChecker.isNumber(_value)) {
             player.sendMessage(
                     getMessageFormat()
                             .format(getPlugin().getLanguageLoader().getLanguage(OptEcoLanguage.VAR_NOT_A_NUMBER))
@@ -78,8 +78,8 @@ public class SubCommandPay extends SubCommand {
             return true;
         }
         // If sender don't have enough points
-        if ( (getPlugin().getAccountLoader().getBalance(player) - Double.parseDouble(_value)) <
-                getPlugin().getConfigurationLoader().getDouble(OptEcoConfiguration.MIN_BALANCE) ) {
+        if ((getPlugin().getAccountLoader().getBalance(player) - Double.parseDouble(_value))
+                < getPlugin().getConfigurationLoader().getDouble(OptEcoConfiguration.MIN_BALANCE) ) {
             player.sendMessage(
                     getMessageFormat()
                             .format(getPlugin().getLanguageLoader().getLanguage(OptEcoLanguage.PAY_NOT_ENOUGH))
