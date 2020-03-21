@@ -49,7 +49,7 @@ public class SubCommandPay extends SubCommand {
             player.sendMessage(
                     getMessageFormat()
                             .format(getPlugin().getLanguageLoader().getLanguage(OptEcoLanguage.VAR_PLAYER_NOT_FOUND))
-                            .replaceAll("%who%", _target)
+                            .replace("%who%", _target)
             );
             return true;
         }

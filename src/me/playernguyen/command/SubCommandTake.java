@@ -74,7 +74,7 @@ public class SubCommandTake extends SubCommand {
             sender.sendMessage(
                     getMessageFormat()
                             .format(getPlugin().getLanguageLoader().getLanguage(OptEcoLanguage.TAKE_NOT_ENOUGH))
-                            .replaceAll("%value%", _value)
+                            .replace("%value%", _value)
             );
             return true;
         }

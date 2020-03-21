@@ -40,10 +40,9 @@ public class MessageFormat extends OptEcoObject {
 
     public String numberFormat(double d) {
         if (d % 1 == 0) {
-            return String.valueOf(Integer.parseInt(String.valueOf(d).replace(".0", "")));
-        } else {
-            return String.valueOf(d);
+            return String.valueOf((int)d);
         }
+        return String.format("%.2f", d);
     }
 
 }

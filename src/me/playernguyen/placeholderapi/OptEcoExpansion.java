@@ -2,6 +2,7 @@ package me.playernguyen.placeholderapi;
 
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import me.playernguyen.OptEco;
+import me.playernguyen.OptEcoConfiguration;
 import org.bukkit.entity.Player;
 
 public class OptEcoExpansion extends PlaceholderExpansion {
@@ -39,6 +40,10 @@ public class OptEcoExpansion extends PlaceholderExpansion {
         // %opteco_version%
         if (params.equalsIgnoreCase("version")) {
             return this.plugin.getDescription().getVersion();
+        }
+        // %opteco_currency%
+        if (params.equalsIgnoreCase("currency")) {
+            return this.plugin.getConfigurationLoader().getString(OptEcoConfiguration.CURRENCY_SYMBOL);
         }
         return null;
     }
