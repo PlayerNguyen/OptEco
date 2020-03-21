@@ -54,7 +54,7 @@ public class SubCommandPay extends SubCommand {
             return true;
         }
         // If sender transfer to themselves
-        if (target.equals(player)) {
+        if (target.equals(player) && !getPlugin().getConfigurationLoader().getBool(OptEcoConfiguration.DEBUG)) {
             player.sendMessage(getMessageFormat().format(
                     getPlugin().getLanguageLoader().getLanguage(OptEcoLanguage.PAY_CANNOT_SELF_TRANSFER)
             ));

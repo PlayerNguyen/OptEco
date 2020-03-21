@@ -2,85 +2,71 @@ package me.playernguyen.configuration;
 
 import me.playernguyen.OptEco;
 import me.playernguyen.OptEcoConfiguration;
+import me.playernguyen.OptEcoObject;
 import me.playernguyen.account.Account;
 import me.playernguyen.account.AccountConfiguration;
-import me.playernguyen.mysql.AccountMySQLConfiguration;
+import me.playernguyen.sql.mysql.MySQLAccount;
+import me.playernguyen.sql.sqlite.SQLiteAccount;
 import org.bukkit.entity.Player;
 
-import java.sql.SQLException;
-
-public class AccountLoader  {
+public class AccountLoader extends OptEcoObject {
 
     public static final String ACCOUNT_STORE_FOLDER =  "account";
+    private StoreType storeType;
 
-    private OptEco plugin;
 
     public AccountLoader (OptEco plugin) {
-        this.plugin = plugin;
+        super(plugin);
+        storeType = getPlugin().getStoreType();
     }
 
     public boolean createAccount(Player who) {
-        Account account = new Account(who, plugin.getConfigurationLoader().getDouble(OptEcoConfiguration.START_BALANCE));
-        if (plugin.getStoreType() == StoreType.YAML) {
-            AccountConfiguration accountConfiguration =
-                    new AccountConfiguration(who, getPlugin());
-            return accountConfiguration.save(account);
+        Account account =
+                new Account(who, getPlugin().getConfigurationLoader().getDouble(OptEcoConfiguration.START_BALANCE));
+        switch (getStoreType()) {
+            case YAML: return new AccountConfiguration(who, getPlugin()).save(account);
+            case MYSQL: return new MySQLAccount(getPlugin()).save(account);
+            case SQLITE: return new SQLiteAccount(getPlugin()).save(account);
+            default: return false;
         }
-        if (plugin.getStoreType() == StoreType.MYSQL) {
-            try {
-                return new AccountMySQLConfiguration(getPlugin()).save(account);
-            } catch (SQLException e) {
-                this.getPlugin().getDebugger().printException(e);
-            }
-        }
-        return false;
     }
 
     public boolean hasAccount(Player who) {
-        if (plugin.getStoreType() == StoreType.YAML) {
-            return new AccountConfiguration(who, getPlugin()).getFile().exists();
+        switch (getStoreType()) {
+            case YAML:
+                return new AccountConfiguration(who, getPlugin()).getFile().exists();
+            case MYSQL:
+                return new MySQLAccount(getPlugin()).getAccount(who) != null;
+            case SQLITE:
+                return new SQLiteAccount(getPlugin()).getAccount(who) != null;
+            default: return false;
         }
-        if (plugin.getStoreType() == StoreType.MYSQL) {
-            try {
-                return new AccountMySQLConfiguration(getPlugin()).getAccount(who) != null;
-            } catch (SQLException e) {
-                this.getPlugin().getDebugger().printException(e);
-            }
-        }
-        return false;
     }
 
     public Account getAccount(Player player) {
-        if (plugin.getStoreType() == StoreType.YAML) {
-            if (!hasAccount(player)) createAccount(player);
-            return new AccountConfiguration(player, getPlugin()).toAccount();
+        if (!hasAccount(player)) createAccount(player);
+        switch (getStoreType()) {
+            case YAML:
+                return new AccountConfiguration(player, getPlugin()).getAccount();
+            case MYSQL:
+                return new MySQLAccount(getPlugin()).getAccount(player);
+            case SQLITE:
+                return new SQLiteAccount(getPlugin()).getAccount(player);
+            default: return null;
         }
-        if (plugin.getStoreType() == StoreType.MYSQL) {
-            if (!hasAccount(player)) createAccount(player);
-            try {
-                return new AccountMySQLConfiguration(getPlugin()).getAccount(player).toAccount();
-            } catch (SQLException e) {
-                this.getPlugin().getDebugger().printException(e);
-            }
-
-        }
-        return null;
     }
 
     public boolean setBalance (Player player, Double balance) {
         Account account = new Account(player, balance);
-        switch (plugin.getStoreType()) {
+        switch (getStoreType()) {
             case YAML:
                 return new AccountConfiguration(player, getPlugin()).save(account);
             case MYSQL:
-                try {
-                    return new AccountMySQLConfiguration(getPlugin()).save(account);
-                } catch (SQLException e) {
-                    this.getPlugin().getDebugger().printException(e);
-                    return false;
-                }
+                return new MySQLAccount(getPlugin()).save(account);
+            case SQLITE:
+                return new SQLiteAccount(getPlugin()).save(account);
+            default: return false;
         }
-        return false;
     }
 
     public double getBalance (Player player) {
@@ -97,8 +83,7 @@ public class AccountLoader  {
         return this.setBalance(player, temp - balance);
     }
 
-
-    public OptEco getPlugin() {
-        return plugin;
+    public StoreType getStoreType() {
+        return storeType;
     }
 }

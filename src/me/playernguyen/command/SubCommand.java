@@ -15,25 +15,24 @@ public abstract class SubCommand extends AbstractPermission {
      private String command;
      private String description;
      @Deprecated private String args;
-     private OptEco plugin;
      private MessageFormat messageFormat;
      private ArrayList<CommandArguments> arguments = new ArrayList<>();
 
 
      @Deprecated
      SubCommand(String command, String description, String args, OptEco plugin) {
+          super(plugin);
           this.command = command;
           this.description = description;
           this.args = args;
-          this.plugin = plugin;
-          this.messageFormat = new MessageFormat(this.plugin);
+          this.messageFormat = new MessageFormat(plugin);
      }
 
      SubCommand(String command, String description, OptEco plugin) {
+          super(plugin);
           this.command = command;
           this.description = description;
-          this.plugin = plugin;
-          this.messageFormat = new MessageFormat(this.plugin);
+          this.messageFormat = new MessageFormat(plugin);
      }
 
      public MessageFormat getMessageFormat() {
@@ -57,10 +56,6 @@ public abstract class SubCommand extends AbstractPermission {
           return ChatColor.GOLD + this.command + " " + ChatColor.GRAY + this.argumentsAsString() + ChatColor.GOLD + ": " + ChatColor.GREEN + this.description;
      }
 
-     public OptEco getPlugin() {
-          return plugin;
-     }
-
      public ArrayList<CommandArguments> getArguments() {
           return arguments;
      }
@@ -80,6 +75,7 @@ public abstract class SubCommand extends AbstractPermission {
      }
 
      public boolean onCommand(CommandSender commandSender, ArrayList<String> args) {
+          this.getPlugin().getDebugger().info("Sender " + commandSender.getName() + " execute sub-command " + this.getCommand());
           if (!checkPermission(commandSender)) {
                commandSender.sendMessage(
                        getMessageFormat()

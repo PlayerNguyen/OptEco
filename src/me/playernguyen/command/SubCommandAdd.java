@@ -45,7 +45,7 @@ public class SubCommandAdd extends SubCommand {
         if (target == null) {
             sender.sendMessage(
                     getMessageFormat().format(getPlugin().getLanguageLoader().getLanguage(OptEcoLanguage.VAR_PLAYER_NOT_FOUND))
-                            .replaceAll("%who%", args.get(0))
+                            .replace("%who%", args.get(0))
             );
             return true;
         }
@@ -53,7 +53,7 @@ public class SubCommandAdd extends SubCommand {
         if (!ValidationChecker.isNumber(_value)) {
             sender.sendMessage(getMessageFormat().format(
                     getPlugin().getLanguageLoader().getLanguage(OptEcoLanguage.VAR_NOT_A_NUMBER)
-                            .replaceAll("%value%", _value)
+                            .replace("%value%", _value)
             ));
             return true;
         }
@@ -69,16 +69,16 @@ public class SubCommandAdd extends SubCommand {
             // Send success message
             sender.sendMessage(
                     getMessageFormat().format(getPlugin().getLanguageLoader().getLanguage(OptEcoLanguage.COMMAND_SUCCEEDED_ADD))
-                            .replaceAll("%value%", String.valueOf(value))
-                            .replaceAll("%currency%", getPlugin().getConfigurationLoader().getString(OptEcoConfiguration.CURRENCY_SYMBOL))
-                            .replaceAll("%who%", args.get(0))
+                            .replace("%value%", getMessageFormat().numberFormat(value))
+                            .replace("%currency%", getPlugin().getConfigurationLoader().getString(OptEcoConfiguration.CURRENCY_SYMBOL))
+                            .replace("%who%", args.get(0))
             );
         } else {
             sender.sendMessage(
                     getMessageFormat().format(getPlugin().getLanguageLoader().getLanguage(OptEcoLanguage.COMMAND_FAILED_ADD))
-                            .replaceAll("%value%", String.valueOf(value))
-                            .replaceAll("%currency%", getPlugin().getConfigurationLoader().getString(OptEcoConfiguration.CURRENCY_SYMBOL))
-                            .replaceAll("%who%", args.get(0))
+                            .replace("%value%", getMessageFormat().numberFormat(value))
+                            .replace("%currency%", getPlugin().getConfigurationLoader().getString(OptEcoConfiguration.CURRENCY_SYMBOL))
+                            .replace("%who%", args.get(0))
             );
         }
         return true;

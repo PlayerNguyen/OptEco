@@ -11,16 +11,11 @@ import java.util.stream.Collectors;
 
 public abstract class AbstractCommand extends AbstractPermission implements TabCompleter, CommandExecutor {
 
-    private OptEco plugin;
     private MessageFormat messageFormat;
 
-    AbstractCommand (OptEco plugin) {
-        this.plugin = plugin;
+    public AbstractCommand (OptEco plugin) {
+        super(plugin);
         this.messageFormat = new MessageFormat(getPlugin());
-    }
-
-    public OptEco getPlugin() {
-        return plugin;
     }
 
     public MessageFormat getMessageFormat() {

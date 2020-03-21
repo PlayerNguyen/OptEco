@@ -19,7 +19,7 @@ public class SubCommandPayConfirm extends SubCommand {
         addPermissions(OptEcoPermission.ADMIN);
         addPermissions(OptEcoPermission.USER);
 
-        addPermissions(OptEcoPermission.CANCEL);
+        addPermissions(OptEcoPermission.CONFIRM);
     }
 
     @Override
@@ -38,17 +38,17 @@ public class SubCommandPayConfirm extends SubCommand {
         if (transaction.confirm()) {
             transaction.getPlayer().sendMessage(
                     getMessageFormat().format(getPlugin().getLanguageLoader().getLanguage(OptEcoLanguage.PAY_SUCCESS))
-                    .replaceAll("%who%", transaction.getTarget().getName())
-                    .replaceAll("%value%", String.valueOf(transaction.getAmount()))
-                    .replaceAll("%currency%", getPlugin().getConfigurationLoader()
+                    .replace("%who%", transaction.getTarget().getName())
+                    .replace("%value%", getMessageFormat().numberFormat(transaction.getAmount()))
+                    .replace("%currency%", getPlugin().getConfigurationLoader()
                             .getString(OptEcoConfiguration.CURRENCY_SYMBOL)
                     )
             );
             transaction.getTarget().sendMessage(
                     getMessageFormat().format(getPlugin().getLanguageLoader().getLanguage(OptEcoLanguage.PAY_SUCCESS_TARGET))
-                            .replaceAll("%who%", transaction.getPlayer().getName())
-                            .replaceAll("%value%", String.valueOf(transaction.getAmount()))
-                            .replaceAll("%currency%", getPlugin().getConfigurationLoader()
+                            .replace("%who%", transaction.getPlayer().getName())
+                            .replace("%value%", getMessageFormat().numberFormat(transaction.getAmount()))
+                            .replace("%currency%", getPlugin().getConfigurationLoader()
                                     .getString(OptEcoConfiguration.CURRENCY_SYMBOL)
                             )
             );

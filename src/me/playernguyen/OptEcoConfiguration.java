@@ -9,7 +9,7 @@ public enum OptEcoConfiguration {
     MIN_BALANCE             ("settings.minimumBalance", -15.0),
     PAYMENT_CONFIRM         ("settings.timeToConfirmPayment", 15),
     CURRENCY_SYMBOL         ("settings.currencySymbol", "points"),
-    STORED_TYPE             ("settings.storeType", StoreType.YAML.toString()),
+    STORED_TYPE             ("settings.storeType", StoreType.SQLITE.toString()),
 
     MYSQL_HOST              ("settings.mysql.host", "localhost"),
     MYSQL_DATABASE          ("settings.mysql.database", "dbname"),
@@ -18,12 +18,10 @@ public enum OptEcoConfiguration {
     MYSQL_PASSWORD          ("settings.mysql.password", ""),
     MYSQL_TABLE_NAME        ("settings.mysql.tableName", "OptEco"),
 
+    SQLITE_FILE             ("settings.sqlite.fileName", "account.sqlite"),
+
     DEBUG                   ("debug", false),
-    LANGUAGE_FILE           ("language", "lang")
-
-
-
-    ;
+    LANGUAGE_FILE           ("language", "lang");
 
     private String path;
     private Object wh;

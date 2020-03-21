@@ -1,16 +1,16 @@
-package me.playernguyen.mysql;
+package me.playernguyen.sql.mysql;
 
 import me.playernguyen.account.Account;
 import org.bukkit.Bukkit;
 
-public class AccountMySQLResult {
+public class SQLResultAccout {
 
     private String id;
     private String name;
     private String balance;
     private String uuid;
 
-    public AccountMySQLResult (String id, String name, String balance, String uuid) {
+    public SQLResultAccout(String id, String name, String balance, String uuid) {
         this.id = id;
         this.name = name;
         this.balance = balance;

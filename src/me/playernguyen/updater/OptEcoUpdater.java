@@ -1,7 +1,8 @@
 package me.playernguyen.updater;
 
+import me.playernguyen.OptEco;
+import me.playernguyen.OptEcoObject;
 import org.bukkit.Bukkit;
-import org.bukkit.plugin.Plugin;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -9,28 +10,27 @@ import java.net.URL;
 import java.util.Scanner;
 import java.util.function.Consumer;
 
-public class OptEcoUpdater {
+public class OptEcoUpdater extends OptEcoObject {
 
     public static final String UPDATE_LINK = "https://www.spigotmc.org/resources/";
     public static final String UPDATE_URL = "https://api.spigotmc.org/legacy/update.php?resource=";
 
-    private Plugin plugin;
     private int resourceId;
 
-    public OptEcoUpdater(Plugin plugin, int resourceId) {
-        this.plugin = plugin;
+    public OptEcoUpdater(OptEco plugin, int resourceId) {
+        super(plugin);
+        getPlugin().getDebugger().info("Creating connection check for updates...");
         this.resourceId = resourceId;
+        getPlugin().getDebugger().info("Check for updates id " + resourceId);
     }
 
     public void getVersion(final Consumer<String> consumer) {
-        Bukkit.getScheduler().runTaskAsynchronously(this.plugin, () -> {
+        getPlugin().getDebugger().info("Create runTaskAsynchronously and look for updates...");
+        Bukkit.getScheduler().runTaskAsynchronously(getPlugin(), () -> {
             try (InputStream inputStream = new URL(UPDATE_URL + this.resourceId).openStream(); Scanner scanner = new Scanner(inputStream)) {
-
-                if (scanner.hasNext()) {
-                    consumer.accept(scanner.next());
-                }
+                if (scanner.hasNext()) consumer.accept(scanner.next());
             } catch (IOException exception) {
-                this.plugin.getLogger().info("Cannot look for updates: " + exception.getMessage());
+                getPlugin().getLogger().info("Cannot look for updates: " + exception.getMessage());
             }
         });
     }

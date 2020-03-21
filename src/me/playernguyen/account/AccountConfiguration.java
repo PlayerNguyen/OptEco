@@ -1,6 +1,7 @@
 package me.playernguyen.account;
 
 import me.playernguyen.OptEco;
+import me.playernguyen.OptEcoObject;
 import me.playernguyen.configuration.AccountLoader;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -12,16 +13,15 @@ import java.util.HashMap;
 import java.util.Objects;
 import java.util.UUID;
 
-public class AccountConfiguration {
+public class AccountConfiguration extends OptEcoObject implements IYamlAccount {
 
     private Player player;
-    private OptEco plugin;
     private File file;
     private YamlConfiguration configuration;
 
     public AccountConfiguration (Player player, OptEco plugin) {
+        super(plugin);
         this.player = player;
-        this.plugin = plugin;
 
         File folder = new File(
                 plugin.getDataFolder(),
@@ -35,9 +35,6 @@ public class AccountConfiguration {
 
     }
 
-    public OptEco getPlugin() {
-        return plugin;
-    }
 
     public File getFile() {
         return file;
@@ -75,7 +72,12 @@ public class AccountConfiguration {
         }
     }
 
-    public Account toAccount () {
+    @Override
+    public Account getAccount() {
+        return this.toAccount();
+    }
+
+    private Account toAccount () {
         Player player =
                 Bukkit.getServer().getPlayer(
                         UUID.fromString(Objects.requireNonNull(getConfiguration().getString("data.uuid")))

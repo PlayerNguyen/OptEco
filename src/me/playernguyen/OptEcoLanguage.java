@@ -46,7 +46,7 @@ public enum  OptEcoLanguage {
 
     COMMAND_DESCRIBE_SET                ("COMMAND.SET.DESCRIPTION", "set player points"),
     SET_SUCCESS                         ("COMMAND.SET.SUCCESS", "&aSetting &d%value% %currency% &ato &d%who%"),
-    SET_FAIL                            ("COMMAND.SET.FAIL", "&aCannot set &d%value% %currency% &ato &d%who% &abecause of the error!"),
+    SET_FAIL                            ("COMMAND.SET.FAIL", "&cCannot set &d%value% %currency% &ato &d%who% &abecause of the error!"),
 
     COMMAND_DESCRIBE_CONFIRM                ("COMMAND.CONFIRM.DESCRIPTION", "confirm transaction"),
     COMMAND_DESCRIBE_CANCEL                ("COMMAND.CANCEL.DESCRIPTION", "cancel transaction");

@@ -34,7 +34,7 @@ public class OptEcoExpansion extends PlaceholderExpansion {
         }
         // %opteco_points%
         if (params.equalsIgnoreCase("points")) {
-            return String.valueOf(this.plugin.getAccountLoader().getBalance(p));
+            return this.plugin.getMessageFormat().numberFormat(this.plugin.getAccountLoader().getBalance(p));
         }
         // %opteco_version%
         if (params.equalsIgnoreCase("version")) {

@@ -10,9 +10,12 @@ import me.playernguyen.configuration.StoreType;
 import me.playernguyen.listener.PlayerJoinListener;
 import me.playernguyen.logger.Debugger;
 import me.playernguyen.logger.OptEcoDebugger;
-import me.playernguyen.mysql.AccountMySQLConfiguration;
-import me.playernguyen.mysql.MySQLConnection;
 import me.playernguyen.placeholderapi.OptEcoExpansion;
+import me.playernguyen.sql.SQLConnection;
+import me.playernguyen.sql.mysql.MySQLAccount;
+import me.playernguyen.sql.mysql.MySQLConnection;
+import me.playernguyen.sql.sqlite.SQLiteAccount;
+import me.playernguyen.sql.sqlite.SQLiteConnection;
 import me.playernguyen.updater.OptEcoUpdater;
 import me.playernguyen.utils.MessageFormat;
 import org.bukkit.Bukkit;
@@ -21,6 +24,8 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.io.File;
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -43,16 +48,17 @@ public class OptEco extends JavaPlugin {
     private LanguageLoader languageLoader;
     private AccountLoader accountLoader;
     private StoreType storeType;
-    private MySQLConnection mySQLConnection;
+    private SQLConnection sqlConnection;
     private Debugger debugger;
     private MessageFormat messageFormat;
     private TransactionManager transactionManager;
     private Metrics metrics;
 
+
     @Override
     public void onEnable() {
         this.waterMarkPrint();
-        this.getLogger().info("Loading configuration...");
+        this.getLogger().info("Loading data and configurations...");
         this.configurationLoader =
                 new ConfigurationLoader(this);
         this.languageLoader =
@@ -64,16 +70,13 @@ public class OptEco extends JavaPlugin {
         this.transactionManager =
                 new TransactionManager(this);
 
-        // Enable after beta
-        this.update();
-        this.storeType();
-
-        if ( this.loadAccounts() ) {
-            this.listener();
-            this.executor();
+        this.registerUpdate();
+        this.registerStoreTypes();
+        if (this.registerAccounts()) {
+            this.registerListener();
+            this.registerExecutors();
         }
-
-        this.placeHolderHook();
+        this.hookingPlaceHolderAPI();
 
         this.metrics = new Metrics(getPlugin(), METRICS_ID);
     }
@@ -85,7 +88,7 @@ public class OptEco extends JavaPlugin {
         Bukkit.getConsoleSender().sendMessage(ChatColor.AQUA + "--------------------------------");
     }
 
-    private void placeHolderHook() {
+    private void hookingPlaceHolderAPI() {
         this.isHookPlaceholder = Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null;
         if (isHookPlaceholder()) {
             this.getLogger().info("Detected PlaceholderAPI...");
@@ -108,7 +111,7 @@ public class OptEco extends JavaPlugin {
         return metrics;
     }
 
-    private void update() {
+    private void registerUpdate() {
         if (getConfigurationLoader().getBool(OptEcoConfiguration.CHECK_FOR_UPDATE)) {
             /*
             Check for update
@@ -119,7 +122,6 @@ public class OptEco extends JavaPlugin {
             );
         }
     }
-
 
     public static OptEco getPlugin() {
         return (OptEco) Bukkit.getServer().getPluginManager().getPlugin(PLUGIN_NAME);
@@ -156,40 +158,35 @@ public class OptEco extends JavaPlugin {
         });
     }
 
-    private void storeType() {
-        logger.info("Loading store type....");
+    private void registerStoreTypes() {
+        getLogger().info("Loading store type and loading data....");
         this.storeType =
                 StoreType.valueOf(getConfigurationLoader().getString(OptEcoConfiguration.STORED_TYPE));
-        logger.info("Select " + storeType.name() + ".");
+        getLogger().info("You're pick " + storeType.name().toLowerCase() + "...");
     }
 
-    private boolean loadAccounts()  {
+    private boolean registerAccounts()  {
         /*
         MySQL Setup whether player switch to MySQL mode
          */
         if (getStoreType() == StoreType.MYSQL) {
             logger.info("Connecting into the MySQL Server....");
             try {
-                this.mySQLConnection = new MySQLConnection(
+                this.sqlConnection = new MySQLConnection(
                         getConfigurationLoader().getString(OptEcoConfiguration.MYSQL_HOST),
                         getConfigurationLoader().getString(OptEcoConfiguration.MYSQL_PORT),
                         getConfigurationLoader().getString(OptEcoConfiguration.MYSQL_DATABASE),
                         getConfigurationLoader().getString(OptEcoConfiguration.MYSQL_USERNAME),
                         getConfigurationLoader().getString(OptEcoConfiguration.MYSQL_PASSWORD)
                 );
-                if (getMySQLConnection().getConnection() != null) {
+                if (getSQLConnection().getConnection() != null) {
                     logger.info("Connected into the MySQL server!");
                 }
-
-                String name = getConfigurationLoader().getString(OptEcoConfiguration.MYSQL_TABLE_NAME);
-                AccountMySQLConfiguration optEcoMySQL = new AccountMySQLConfiguration(getPlugin());
-
-                if (optEcoMySQL.createTable(AccountMySQLConfiguration.SETUP_TABLE_LIST)) {
-                    logger.info(String.format("Created new table with name %s", name));
+                if (new MySQLAccount(this).createTable(MySQLAccount.SETUP_TABLE_LIST)){
+                    getLogger().info("Creating table in MySQL...");
                 } else {
-                    logger.info("Table was existed, skip create step...");
+                    getLogger().info("Table was created, skip to next step...");
                 }
-
             } catch (SQLException e) {
                 getLogger().severe("Having trouble while connected to the MySQL. Please re-setting in config.yml");
                 this.getDebugger().printException(e);
@@ -198,7 +195,24 @@ public class OptEco extends JavaPlugin {
                 this.getServer().getPluginManager().disablePlugin(this);
                 return false;
             }
+        } else if (getStoreType() == StoreType.SQLITE) {
+            try {
+                Class.forName("org.sqlite.JDBC");
+                File f = new File(getPlugin().getDataFolder(), getConfigurationLoader().getString(OptEcoConfiguration.SQLITE_FILE));
+                if (!f.exists()) { f.createNewFile(); }
+
+                this.sqlConnection = new SQLiteConnection(f);
+                if (new SQLiteAccount(this).createTable(SQLiteAccount.SETUP_TABLE_LIST)) {
+                    getLogger().info("Creating table in SQLite...");
+                } else {
+                    getLogger().info("Table was created, skip to next step...");
+                }
+            } catch (SQLException | IOException | ClassNotFoundException e) {
+                getLogger().severe("Having trouble while create connection to the SQL. Report it to developer!");
+                getDebugger().printException(e);
+            }
         }
+
         /*
         Load the account loader to manager account
          */
@@ -206,12 +220,12 @@ public class OptEco extends JavaPlugin {
         return true;
     }
 
-    private void listener() {
+    private void registerListener() {
         listeners.add(new PlayerJoinListener(this));
         listeners.forEach(e -> Bukkit.getPluginManager().registerEvents(e, this));
     }
 
-    private void executor () {
+    private void registerExecutors() {
         executors.put("opteco", new OptEcoCommand(this));
         executors.put("points", new OptEcoCommand(this));
         executors.forEach((a, b) -> Objects.requireNonNull(Bukkit.getPluginCommand(a)).setExecutor(b));
@@ -221,13 +235,12 @@ public class OptEco extends JavaPlugin {
         return accountLoader;
     }
 
-    public MySQLConnection getMySQLConnection() {
-        return mySQLConnection;
+    public SQLConnection getSQLConnection() {
+        return sqlConnection;
     }
 
     public Debugger getDebugger() {
         return debugger;
     }
-
 
 }

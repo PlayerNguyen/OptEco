@@ -30,8 +30,8 @@ public class SubCommandCheck extends SubCommand {
             player.sendMessage(
                     getMessageFormat().format(
                             getPlugin().getLanguageLoader().getLanguage(OptEcoLanguage.CHECK_SELF)
-                                    .replaceAll("%value%", String.valueOf(getPlugin().getAccountLoader().getBalance(player)))
-                                    .replaceAll("%currency%", getPlugin().getConfigurationLoader().getString(OptEcoConfiguration.CURRENCY_SYMBOL))
+                                    .replace("%value%", String.valueOf(getPlugin().getAccountLoader().getBalance(player)))
+                                    .replace("%currency%", getPlugin().getConfigurationLoader().getString(OptEcoConfiguration.CURRENCY_SYMBOL))
                     )
             );
             return true;
@@ -54,16 +54,16 @@ public class SubCommandCheck extends SubCommand {
         if (target == null) {
             sender.sendMessage(
                     getMessageFormat().format(getPlugin().getLanguageLoader().getLanguage(OptEcoLanguage.VAR_PLAYER_NOT_FOUND)
-                            .replaceAll("%who%", _target))
+                            .replace("%who%", _target))
             );
             return true;
         }
         sender.sendMessage(
                getMessageFormat().format(
                        getPlugin().getLanguageLoader().getLanguage(OptEcoLanguage.CHECK_ANOTHER)
-                               .replaceAll("%who%", _target)
-                               .replaceAll("%value%", String.valueOf(getPlugin().getAccountLoader().getBalance(target)))
-                               .replaceAll("%currency%", getPlugin().getConfigurationLoader().getString(OptEcoConfiguration.CURRENCY_SYMBOL))
+                               .replace("%who%", _target)
+                               .replace("%value%", getMessageFormat().numberFormat(getPlugin().getAccountLoader().getBalance(target)))
+                               .replace("%currency%", getPlugin().getConfigurationLoader().getString(OptEcoConfiguration.CURRENCY_SYMBOL))
                )
         );
         return true;

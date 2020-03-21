@@ -2,24 +2,20 @@ package me.playernguyen.utils;
 
 import me.playernguyen.OptEco;
 import me.playernguyen.OptEcoLanguage;
+import me.playernguyen.OptEcoObject;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
 import java.util.ArrayList;
 
-public class MessageFormat {
+public class MessageFormat extends OptEcoObject {
 
     private final char SPACE_CHARACTER = ' ';
     // Maybe: ✱
     private final char START_LIST_CHARACTER = '>';
-    private final OptEco plugin;
 
     public MessageFormat (OptEco plugin) {
-        this.plugin = plugin;
-    }
-
-    public OptEco getPlugin() {
-        return plugin;
+        super(plugin);
     }
 
     public String format(String string) {
@@ -40,6 +36,14 @@ public class MessageFormat {
 
     public void sendCuteList(CommandSender commandSender, ArrayList<String> strings) {
         sendCuteList(commandSender, strings, ChatColor.RESET, START_LIST_CHARACTER);
+    }
+
+    public String numberFormat(double d) {
+        if (d % 1 == 0) {
+            return String.valueOf(Integer.parseInt(String.valueOf(d).replace(".0", "")));
+        } else {
+            return String.valueOf(d);
+        }
     }
 
 }
