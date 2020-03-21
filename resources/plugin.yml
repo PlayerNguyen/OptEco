@@ -1,6 +1,6 @@
 name: OptEco
-version: 1.4.2b
-api-version: 1.15
+version: 1.4.3b
+api-version: 1.13
 main: me.playernguyen.OptEco
 author: Player_Nguyen
 softdepend:
