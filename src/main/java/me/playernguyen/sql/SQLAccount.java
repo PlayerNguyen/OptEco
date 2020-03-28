@@ -6,10 +6,10 @@ import me.playernguyen.account.Account;
 import me.playernguyen.account.IAccount;
 import me.playernguyen.sql.mysql.SQLResultAccout;
 import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.UUID;
 
 public abstract class SQLAccount extends OptEcoObject implements IAccount {
 
@@ -70,7 +70,7 @@ public abstract class SQLAccount extends OptEcoObject implements IAccount {
         return tableName;
     }
 
-    public Account getAccount(Player who) {
+    public Account getAccount(UUID who) {
         if (who == null) return null;
         SQLResultAccout result;
         try {
@@ -83,9 +83,9 @@ public abstract class SQLAccount extends OptEcoObject implements IAccount {
         return null;
     }
 
-    private SQLResultAccout getAccountResult(Player who) throws SQLException {
+    private SQLResultAccout getAccountResult(UUID who) throws SQLException {
 
-        ResultSet resultSet = this.executeQuery(String.format("SELECT * FROM %s WHERE uuid = '%s'", getTableName(), who.getUniqueId().toString()));
+        ResultSet resultSet = this.executeQuery(String.format("SELECT * FROM %s WHERE uuid = '%s'", getTableName(), who));
         if (resultSet == null) return null;
         ArrayList<String> result = parseResult(resultSet);
         if (result.size() == 0) return null;
@@ -121,9 +121,9 @@ public abstract class SQLAccount extends OptEcoObject implements IAccount {
          /*
         Process input value
          */
-        String player = account.getPlayer().getName();
+        String player = Bukkit.getOfflinePlayer(account.getPlayer()).getName();
         double balance = account.getBalance();
-        String uuid = account.getPlayer().getUniqueId().toString();
+        String uuid = account.getPlayer().toString();
 
         if (this.getAccount(account.getPlayer()) != null) {
             try {

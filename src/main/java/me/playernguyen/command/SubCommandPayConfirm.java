@@ -5,6 +5,7 @@ import me.playernguyen.OptEcoConfiguration;
 import me.playernguyen.OptEcoLanguage;
 import me.playernguyen.account.Transaction;
 import me.playernguyen.permission.OptEcoPermission;
+import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -25,7 +26,7 @@ public class SubCommandPayConfirm extends SubCommand {
     @Override
     public boolean onPlayerCommand(Player player, ArrayList<String> args) {
         // If don't have any transaction
-        if ( ! getPlugin().getTransactionManager().hasTransaction(player) ) {
+        if ( ! getPlugin().getTransactionManager().hasTransaction(player.getUniqueId()) ) {
             player.sendMessage(
                     getMessageFormat()
                             .format(getPlugin().getLanguageLoader().getLanguage(OptEcoLanguage.PAY_TRANSACTION_NOT_EXIST))
@@ -33,29 +34,38 @@ public class SubCommandPayConfirm extends SubCommand {
             return true;
         }
 
-        Transaction transaction = getPlugin().getTransactionManager().getTransaction(player);
+        Transaction transaction = getPlugin().getTransactionManager().getTransaction(player.getUniqueId());
         // Call accept method
         if (transaction.confirm()) {
-            transaction.getPlayer().sendMessage(
-                    getMessageFormat().format(getPlugin().getLanguageLoader().getLanguage(OptEcoLanguage.PAY_SUCCESS))
-                    .replace("%who%", transaction.getTarget().getName())
-                    .replace("%value%", getMessageFormat().numberFormat(transaction.getAmount()))
-                    .replace("%currency%", getPlugin().getConfigurationLoader()
-                            .getString(OptEcoConfiguration.CURRENCY_SYMBOL)
-                    )
-            );
-            transaction.getTarget().sendMessage(
-                    getMessageFormat().format(getPlugin().getLanguageLoader().getLanguage(OptEcoLanguage.PAY_SUCCESS_TARGET))
-                            .replace("%who%", transaction.getPlayer().getName())
-                            .replace("%value%", getMessageFormat().numberFormat(transaction.getAmount()))
-                            .replace("%currency%", getPlugin().getConfigurationLoader()
-                                    .getString(OptEcoConfiguration.CURRENCY_SYMBOL)
-                            )
-            );
+            Player tranSender = Bukkit.getPlayer(transaction.getPlayer());
+            Player tranReceiver = Bukkit.getPlayer(transaction.getTarget());
+            if (tranReceiver != null) {
+                tranSender.sendMessage(
+                        getMessageFormat().format(getPlugin().getLanguageLoader().getLanguage(OptEcoLanguage.PAY_SUCCESS))
+                                .replace("%who%", tranReceiver.getName())
+                                .replace("%value%", getMessageFormat().numberFormat(transaction.getAmount()))
+                                .replace("%currency%", getPlugin().getConfigurationLoader()
+                                        .getString(OptEcoConfiguration.CURRENCY_SYMBOL)
+                                )
+                );
+            }
+            if (tranReceiver != null) {
+                tranReceiver.sendMessage(
+                        getMessageFormat().format(getPlugin().getLanguageLoader().getLanguage(OptEcoLanguage.PAY_SUCCESS_TARGET))
+                                .replace("%who%", tranSender.getName())
+                                .replace("%value%", getMessageFormat().numberFormat(transaction.getAmount()))
+                                .replace("%currency%", getPlugin().getConfigurationLoader()
+                                        .getString(OptEcoConfiguration.CURRENCY_SYMBOL)
+                                )
+                );
+            }
         } else {
-            transaction.getPlayer().sendMessage(
-                    getMessageFormat().format(getPlugin().getLanguageLoader().getLanguage(OptEcoLanguage.PAY_FAILED))
-            );
+            Player tranSender = Bukkit.getPlayer(transaction.getPlayer());
+            if (tranSender != null) {
+                tranSender.sendMessage(
+                        getMessageFormat().format(getPlugin().getLanguageLoader().getLanguage(OptEcoLanguage.PAY_FAILED))
+                );
+            }
         }
 
         return true;

@@ -28,7 +28,7 @@ public class SubCommandMe extends SubCommand {
         player.sendMessage(
                 getMessageFormat().format(
                         getPlugin().getLanguageLoader().getLanguage(OptEcoLanguage.CHECK_SELF)
-                                .replace("%value%", getMessageFormat().numberFormat(getPlugin().getAccountLoader().getBalance(player)))
+                                .replace("%value%", getMessageFormat().numberFormat(getPlugin().getAccountLoader().getBalance(player.getUniqueId())))
                                 .replace("%currency%", getPlugin().getConfigurationLoader().getString(OptEcoConfiguration.CURRENCY_SYMBOL))
                 )
         );

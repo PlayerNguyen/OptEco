@@ -6,6 +6,7 @@ import me.playernguyen.OptEcoLanguage;
 import me.playernguyen.permission.OptEcoPermission;
 import me.playernguyen.utils.ValidationChecker;
 import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -39,7 +40,8 @@ public class SubCommandSet extends SubCommand {
             sender.sendMessage(getMessageFormat().format(getHelp()));
             return true;
         }
-        String _target = args.get(0); Player target =  Bukkit.getServer().getPlayerExact(_target);
+        String _target = args.get(0);
+        OfflinePlayer target = Bukkit.getOfflinePlayer(_target);
         String _value = args.get(1);
         if (target == null) {
             sender.sendMessage(
@@ -65,25 +67,14 @@ public class SubCommandSet extends SubCommand {
             );
             return true;
         }
-
-        if (getPlugin().getAccountLoader().setBalance(target, value)) {
-            sender.sendMessage(
-                    getMessageFormat()
-                            .format(getPlugin().getLanguageLoader().getLanguage(OptEcoLanguage.SET_SUCCESS))
-                            .replace("%value%", _value)
-                            .replace("%who%", target.getName())
-                            .replace("%currency%", getPlugin().getConfigurationLoader().getString(OptEcoConfiguration.CURRENCY_SYMBOL))
-            );
-        } else {
-            sender.sendMessage(
-                    getMessageFormat()
-                            .format(getPlugin().getLanguageLoader().getLanguage(OptEcoLanguage.SET_FAIL))
-                            .replace("%value%", _value)
-                            .replace("%who%", target.getName())
-                            .replace("%currency%", getPlugin().getConfigurationLoader().getString(OptEcoConfiguration.CURRENCY_SYMBOL))
-            );
-        }
-
+        getPlugin().getAccountLoader().setBalance(target.getUniqueId(), value);
+        sender.sendMessage(
+                getMessageFormat()
+                        .format(getPlugin().getLanguageLoader().getLanguage(OptEcoLanguage.SET_SUCCESS))
+                        .replace("%value%", _value)
+                        .replace("%who%", target.getName())
+                        .replace("%currency%", getPlugin().getConfigurationLoader().getString(OptEcoConfiguration.CURRENCY_SYMBOL))
+        );
         return true;
     }
 

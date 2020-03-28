@@ -1,6 +1,6 @@
 package me.playernguyen.account;
 
-import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 
 import java.util.UUID;
@@ -25,8 +25,23 @@ public class Account {
         this.balance = balance;
     }
 
-    public Player getPlayer() {
-        return Bukkit.getServer().getPlayer(player);
+    public Account (OfflinePlayer player) {
+        this.player = player.getUniqueId();
+        this.balance = 0.0D;
+    }
+
+    public Account (UUID uuid) {
+        this.player = uuid;
+        this.balance = 0.0D;
+    }
+
+    public Account (UUID uuid, double balance) {
+        this.player = uuid;
+        this.balance = balance;
+    }
+
+    public UUID getPlayer() {
+        return player;
     }
 
     public double getBalance() {

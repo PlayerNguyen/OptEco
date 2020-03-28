@@ -2,9 +2,9 @@ package me.playernguyen.account;
 
 import me.playernguyen.OptEco;
 import me.playernguyen.schedule.OnTransactionSchedule;
-import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
+import java.util.UUID;
 
 public class TransactionManager {
 
@@ -23,25 +23,25 @@ public class TransactionManager {
         return transactions;
     }
 
-    public boolean addTransaction(Player player, Player target, Double amount) {
+    public boolean addTransaction(UUID player, UUID target, Double amount) {
         return this.getTransactions()
                 .add(
                         new Transaction(getPlugin(), player, target, amount, new OnTransactionSchedule(getPlugin(), player, target))
                 );
     }
 
-    public Transaction getTransaction(Player player) {
+    public Transaction getTransaction(UUID player) {
         for (Transaction e : this.getTransactions()) {
             if (e.getPlayer().equals(player)) return e;
         }
         return null;
     }
 
-    public boolean hasTransaction (Player player) {
+    public boolean hasTransaction (UUID player) {
         return this.getTransaction (player) != null;
     }
 
-    public boolean removeTransaction (Player player) {
+    public boolean removeTransaction (UUID player) {
         return this.getTransactions().remove(getTransaction(player));
     }
 }

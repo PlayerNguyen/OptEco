@@ -1,11 +1,11 @@
 package me.playernguyen.account;
 
-import org.bukkit.entity.Player;
+import java.util.UUID;
 
 public interface IAccount {
 
     boolean save(Account account);
 
-    Account getAccount(Player player);
+    Account getAccount(UUID player);
 
 }

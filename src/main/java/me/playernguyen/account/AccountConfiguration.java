@@ -4,6 +4,7 @@ import me.playernguyen.OptEco;
 import me.playernguyen.OptEcoObject;
 import me.playernguyen.configuration.AccountLoader;
 import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 
@@ -15,13 +16,13 @@ import java.util.UUID;
 
 public class AccountConfiguration extends OptEcoObject implements IYamlAccount {
 
-    private Player player;
+    private OfflinePlayer player;
     private File file;
     private YamlConfiguration configuration;
 
-    public AccountConfiguration (Player player, OptEco plugin) {
+    public AccountConfiguration (UUID uuid, OptEco plugin) {
         super(plugin);
-        this.player = player;
+        this.player = Bukkit.getOfflinePlayer(uuid);
 
         File folder = new File(
                 plugin.getDataFolder(),
@@ -30,7 +31,7 @@ public class AccountConfiguration extends OptEcoObject implements IYamlAccount {
 
         if (!folder.exists()) folder.mkdir();
 
-        this.file = new File(folder, player.getDisplayName()+".yml");
+        this.file = new File(folder, player.getName()+".yml");
         this.configuration = YamlConfiguration.loadConfiguration(this.file);
 
     }
@@ -40,7 +41,7 @@ public class AccountConfiguration extends OptEcoObject implements IYamlAccount {
         return file;
     }
 
-    public Player getPlayer() {
+    public OfflinePlayer getPlayer() {
         return player;
     }
 
@@ -61,9 +62,9 @@ public class AccountConfiguration extends OptEcoObject implements IYamlAccount {
 
     public boolean save(Account account) {
         try {
-            this.getConfiguration().set("data.player", account.getPlayer().getName());
+            this.getConfiguration().set("data.player", Bukkit.getOfflinePlayer(account.getPlayer()).getName());
             this.getConfiguration().set("data.balance", account.getBalance());
-            this.getConfiguration().set("data.uuid", account.getPlayer().getUniqueId().toString());
+            this.getConfiguration().set("data.uuid", account.getPlayer().toString());
             this.getConfiguration().save(file);
             return true;
         } catch (IOException e) {

@@ -7,7 +7,8 @@ import me.playernguyen.account.Account;
 import me.playernguyen.account.AccountConfiguration;
 import me.playernguyen.sql.mysql.MySQLAccount;
 import me.playernguyen.sql.sqlite.SQLiteAccount;
-import org.bukkit.entity.Player;
+
+import java.util.UUID;
 
 public class AccountLoader extends OptEcoObject {
 
@@ -18,7 +19,7 @@ public class AccountLoader extends OptEcoObject {
         storeType = getPlugin().getStoreType();
     }
 
-    public boolean createAccount(Player who) {
+    public boolean createAccount(UUID who) {
         Account account =
                 new Account(who, getPlugin().getConfigurationLoader().getDouble(OptEcoConfiguration.START_BALANCE));
         switch (getStoreType()) {
@@ -29,7 +30,7 @@ public class AccountLoader extends OptEcoObject {
         }
     }
 
-    public boolean hasAccount(Player who) {
+    public boolean hasAccount(UUID who) {
         switch (getStoreType()) {
             case YAML:
                 return new AccountConfiguration(who, getPlugin()).getFile().exists();
@@ -41,7 +42,7 @@ public class AccountLoader extends OptEcoObject {
         }
     }
 
-    public Account getAccount(Player player) {
+    public Account getAccount(UUID player) {
         if (!hasAccount(player)) createAccount(player);
         switch (getStoreType()) {
             case YAML:
@@ -54,7 +55,7 @@ public class AccountLoader extends OptEcoObject {
         }
     }
 
-    public boolean setBalance (Player player, Double balance) {
+    public boolean setBalance (UUID player, Double balance) {
         Account account = new Account(player, balance);
         switch (getStoreType()) {
             case YAML:
@@ -67,16 +68,16 @@ public class AccountLoader extends OptEcoObject {
         }
     }
 
-    public double getBalance (Player player) {
+    public double getBalance (UUID player) {
         return this.getAccount(player).getBalance();
     }
 
-    public boolean addBalance (Player player, Double deposit) {
+    public boolean addBalance (UUID player, Double deposit) {
         double temp = this.getBalance(player);
         return this.setBalance(player, temp + deposit);
     }
 
-    public boolean takeBalance(Player player, Double balance) {
+    public boolean takeBalance(UUID player, Double balance) {
         double temp = this.getBalance(player);
         return this.setBalance(player, temp - balance);
     }

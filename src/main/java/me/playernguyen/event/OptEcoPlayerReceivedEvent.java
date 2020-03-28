@@ -1,29 +1,29 @@
 package me.playernguyen.event;
 
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
+
+import java.util.UUID;
 
 public class OptEcoPlayerReceivedEvent extends Event {
 
     private static final HandlerList handlers = new HandlerList();
 
-    private CommandSender sender;
-    private Player receiver;
+    private UUID sender;
+    private UUID receiver;
     private double balance;
 
-    public OptEcoPlayerReceivedEvent(CommandSender sender, Player receiver, double balance) {
+    public OptEcoPlayerReceivedEvent(UUID sender, UUID receiver, double balance) {
         this.sender = sender;
         this.receiver = receiver;
         this.balance = balance;
     }
 
-    public CommandSender getSender() {
+    public UUID getSender() {
         return sender;
     }
 
-    public Player getReceiver() {
+    public UUID getReceiver() {
         return receiver;
     }
 

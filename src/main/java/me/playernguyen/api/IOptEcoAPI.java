@@ -1,6 +1,6 @@
 package me.playernguyen.api;
 
-import org.bukkit.entity.Player;
+import java.util.UUID;
 
 public interface IOptEcoAPI {
 
@@ -33,7 +33,7 @@ public interface IOptEcoAPI {
      * API Player interactive
      * @return Player
      */
-    Player getPlayer();
+    UUID getPlayer();
 
     /**
      * Add points into player's account

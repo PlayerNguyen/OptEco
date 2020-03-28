@@ -6,6 +6,7 @@ import me.playernguyen.OptEcoLanguage;
 import me.playernguyen.permission.OptEcoPermission;
 import me.playernguyen.utils.ValidationChecker;
 import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -35,7 +36,7 @@ public class SubCommandPay extends SubCommand {
             return true;
         }
         // If sender has another transaction
-        if (getPlugin().getTransactionManager().hasTransaction(player)) {
+        if (getPlugin().getTransactionManager().hasTransaction(player.getUniqueId())) {
             player.sendMessage(
                     getMessageFormat()
                             .format(getPlugin().getLanguageLoader().getLanguage(OptEcoLanguage.PAY_ON_TRANSACTION))
@@ -43,16 +44,17 @@ public class SubCommandPay extends SubCommand {
             return true;
         }
         // Get args of player, value
-        String _target = args.get(0); Player target = Bukkit.getServer().getPlayerExact(_target);
+        String _target = args.get(0);
+        OfflinePlayer target = Bukkit.getOfflinePlayer(_target);
         String _value = args.get(1);
-        if (target == null) {
-            player.sendMessage(
-                    getMessageFormat()
-                            .format(getPlugin().getLanguageLoader().getLanguage(OptEcoLanguage.VAR_PLAYER_NOT_FOUND))
-                            .replace("%who%", _target)
-            );
-            return true;
-        }
+//        if (target == null) {
+//            player.sendMessage(
+//                    getMessageFormat()
+//                            .format(getPlugin().getLanguageLoader().getLanguage(OptEcoLanguage.VAR_PLAYER_NOT_FOUND))
+//                            .replace("%who%", _target)
+//            );
+//            return true;
+//        }
         // If sender transfer to themselves
         if (target.equals(player)) {
             player.sendMessage(getMessageFormat().format(
@@ -78,7 +80,7 @@ public class SubCommandPay extends SubCommand {
             return true;
         }
         // If sender don't have enough points
-        if ((getPlugin().getAccountLoader().getBalance(player) - Double.parseDouble(_value))
+        if ((getPlugin().getAccountLoader().getBalance(player.getUniqueId()) - Double.parseDouble(_value))
                 < getPlugin().getConfigurationLoader().getDouble(OptEcoConfiguration.MIN_BALANCE) ) {
             player.sendMessage(
                     getMessageFormat()
@@ -92,7 +94,7 @@ public class SubCommandPay extends SubCommand {
                 .format(getPlugin().getLanguageLoader().getLanguage(OptEcoLanguage.PAY_CONFIRM_DISPLAY))
                 .replaceAll("%value%", String.valueOf(getPlugin().getConfigurationLoader().getInt(OptEcoConfiguration.PAYMENT_CONFIRM)))
         );
-        this.getPlugin().getTransactionManager().addTransaction(player, target, Double.parseDouble(_value));
+        this.getPlugin().getTransactionManager().addTransaction(player.getUniqueId(), target.getUniqueId(), Double.parseDouble(_value));
         return true;
     }
 

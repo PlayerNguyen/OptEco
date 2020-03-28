@@ -22,7 +22,7 @@ public class SubCommandPayCancel extends SubCommand {
 
     @Override
     public boolean onPlayerCommand(Player player, ArrayList<String> args) {
-        if ( ! getPlugin().getTransactionManager().hasTransaction(player) ) {
+        if ( ! getPlugin().getTransactionManager().hasTransaction(player.getUniqueId()) ) {
             player.sendMessage(
                     getMessageFormat()
                             .format(getPlugin().getLanguageLoader().getLanguage(OptEcoLanguage.PAY_TRANSACTION_NOT_EXIST))
@@ -30,7 +30,7 @@ public class SubCommandPayCancel extends SubCommand {
             return true;
         }
 
-        if (getPlugin().getTransactionManager().getTransaction(player).cancel() ) {
+        if (getPlugin().getTransactionManager().getTransaction(player.getUniqueId()).cancel() ) {
             player.sendMessage(
                     getMessageFormat().format(getPlugin().getLanguageLoader().getLanguage(OptEcoLanguage.PAY_DENY))
             );

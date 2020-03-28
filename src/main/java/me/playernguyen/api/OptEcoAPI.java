@@ -2,18 +2,19 @@ package me.playernguyen.api;
 
 import me.playernguyen.OptEco;
 import me.playernguyen.OptEcoConfiguration;
-import org.bukkit.entity.Player;
+
+import java.util.UUID;
 
 public class OptEcoAPI implements IOptEcoAPI {
 
-    private Player player;
+    private UUID player;
     private OptEco plugin;
     /**
      * Get the OptEco API
-     * @param player who you want to get?
+     * @param uuid who you want to get?
      */
-    public OptEcoAPI(Player player) {
-        this.player = player;
+    public OptEcoAPI(UUID uuid) {
+        this.player = uuid;
         this.plugin = OptEco.getPlugin();
     }
 
@@ -69,7 +70,7 @@ public class OptEcoAPI implements IOptEcoAPI {
      * @return Player
      */
     @Override
-    public Player getPlayer() {
+    public UUID getPlayer() {
         return this.player;
     }
 

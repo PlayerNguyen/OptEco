@@ -6,6 +6,7 @@ import me.playernguyen.OptEcoLanguage;
 import me.playernguyen.permission.OptEcoPermission;
 import me.playernguyen.utils.ValidationChecker;
 import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -41,14 +42,7 @@ public class SubCommandAdd extends SubCommand {
             sender.sendMessage(getMessageFormat().format(getHelp()));
             return true;
         }
-        Player target = Bukkit.getServer().getPlayerExact(args.get(0));
-        if (target == null) {
-            sender.sendMessage(
-                    getMessageFormat().format(getPlugin().getLanguageLoader().getLanguage(OptEcoLanguage.VAR_PLAYER_NOT_FOUND))
-                            .replace("%who%", args.get(0))
-            );
-            return true;
-        }
+        OfflinePlayer target = Bukkit.getServer().getOfflinePlayer(args.get(0));
         String _value = args.get(1);
         if (!ValidationChecker.isNumber(_value)) {
             sender.sendMessage(getMessageFormat().format(
@@ -65,7 +59,7 @@ public class SubCommandAdd extends SubCommand {
             );
             return true;
         }
-        if ( this.getPlugin().getAccountLoader().addBalance(target, value) ) {
+        if ( this.getPlugin().getAccountLoader().addBalance(target.getUniqueId(), value) ) {
             // Send success message
             sender.sendMessage(
                     getMessageFormat().format(getPlugin().getLanguageLoader().getLanguage(OptEcoLanguage.COMMAND_SUCCEEDED_ADD))

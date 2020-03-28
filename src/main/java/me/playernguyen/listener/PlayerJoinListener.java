@@ -15,8 +15,8 @@ public class PlayerJoinListener extends OptEcoObject implements Listener {
 
     @EventHandler public void onPlayerJoinEvent(PlayerJoinEvent e) {
         Player player = e.getPlayer();
-        if (!getPlugin().getAccountLoader().hasAccount(player)) {
-            getPlugin().getAccountLoader().createAccount(player);
+        if (!getPlugin().getAccountLoader().hasAccount(player.getUniqueId())) {
+            getPlugin().getAccountLoader().createAccount(player.getUniqueId());
         }
     }
 

@@ -6,6 +6,7 @@ import me.playernguyen.OptEcoLanguage;
 import me.playernguyen.permission.OptEcoPermission;
 import me.playernguyen.utils.ValidationChecker;
 import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -42,7 +43,8 @@ public class SubCommandTake extends SubCommand {
             return true;
         }
 
-        String _target = args.get(0); Player target =  Bukkit.getServer().getPlayerExact(_target);
+        String _target = args.get(0);
+        OfflinePlayer target =  Bukkit.getOfflinePlayer(_target);
         String _value = args.get(1);
         if (target == null) {
             sender.sendMessage(
@@ -69,7 +71,7 @@ public class SubCommandTake extends SubCommand {
             return true;
         }
         // If sender don't have enough points
-        if ( (getPlugin().getAccountLoader().getBalance(target) - Double.parseDouble(_value)) <
+        if ( (getPlugin().getAccountLoader().getBalance(target.getUniqueId()) - Double.parseDouble(_value)) <
                 getPlugin().getConfigurationLoader().getDouble(OptEcoConfiguration.MIN_BALANCE) ) {
             sender.sendMessage(
                     getMessageFormat()
@@ -78,7 +80,7 @@ public class SubCommandTake extends SubCommand {
             );
             return true;
         }
-        if (getPlugin().getAccountLoader().takeBalance(target, value)) {
+        if (getPlugin().getAccountLoader().takeBalance(target.getUniqueId(), value)) {
             sender.sendMessage(
                     getMessageFormat()
                     .format(getPlugin().getLanguageLoader().getLanguage(OptEcoLanguage.TAKE_SUCCESS))

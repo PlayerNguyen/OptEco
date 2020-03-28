@@ -4,7 +4,6 @@ import me.playernguyen.OptEco;
 import me.playernguyen.event.OptEcoPlayerPendingEvent;
 import me.playernguyen.event.OptEcoPlayerReceivedEvent;
 import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.UUID;
@@ -20,10 +19,10 @@ public class Transaction {
     private final Double amount;
     private final BukkitRunnable runnable;
 
-    public Transaction (OptEco plugin, Player player, Player target, Double amount, BukkitRunnable runnable) {
+    public Transaction (OptEco plugin, UUID player, UUID target, Double amount, BukkitRunnable runnable) {
         this.plugin = plugin;
-        this.player = player.getUniqueId();
-        this.target = target.getUniqueId();
+        this.player = player;
+        this.target = target;
         this.amount = amount;
         this.runnable = runnable;
 
@@ -34,8 +33,8 @@ public class Transaction {
         Bukkit.getServer().getPluginManager().callEvent(e);
     }
 
-    public Player getTarget() {
-        return Bukkit.getPlayer(target);
+    public UUID getTarget() {
+        return target;
     }
 
     public OptEco getPlugin() {
@@ -46,8 +45,8 @@ public class Transaction {
         return runnable;
     }
 
-    public Player getPlayer() {
-        return Bukkit.getPlayer(player);
+    public UUID getPlayer() {
+        return player;
     }
 
     public Double getAmount() {

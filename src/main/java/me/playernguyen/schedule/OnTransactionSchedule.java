@@ -3,17 +3,20 @@ package me.playernguyen.schedule;
 import me.playernguyen.OptEco;
 import me.playernguyen.OptEcoConfiguration;
 import me.playernguyen.OptEcoLanguage;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import java.util.UUID;
+
 public class OnTransactionSchedule extends BukkitRunnable {
 
-    private Player player;
-    private Player target;
+    private UUID player;
+    private UUID target;
     private OptEco plugin;
     private int ticker;
 
-    public OnTransactionSchedule (OptEco plugin, Player player, Player target) {
+    public OnTransactionSchedule (OptEco plugin, UUID player, UUID target) {
         this.plugin = plugin;
         this.ticker
                 = getPlugin().getConfigurationLoader().getInt(OptEcoConfiguration.PAYMENT_CONFIRM);
@@ -25,11 +28,11 @@ public class OnTransactionSchedule extends BukkitRunnable {
         return plugin;
     }
 
-    public Player getPlayer() {
+    public UUID getPlayer() {
         return player;
     }
 
-    public Player getTarget() {
+    public UUID getTarget() {
         return target;
     }
 
@@ -40,10 +43,17 @@ public class OnTransactionSchedule extends BukkitRunnable {
         if (ticker == 0) {
             getPlugin().getTransactionManager().getTransaction(player).cancel();
 
-            player.sendMessage(
-                    getPlugin().getMessageFormat()
-                            .format(getPlugin().getLanguageLoader().getLanguage(OptEcoLanguage.PAY_OUT_OF_TIME_CONFIRM))
-            );
+            Player player = Bukkit.getPlayer(getPlayer());
+            if (player != null) {
+                player.sendMessage(
+                        getPlugin().getMessageFormat()
+                                .format(getPlugin().getLanguageLoader().getLanguage(OptEcoLanguage.PAY_OUT_OF_TIME_CONFIRM))
+                );
+            } else {
+                getPlugin().getLogger().severe("Cancel transaction because player not found!");
+                cancel();
+            }
+
             cancel();
         }
     }
