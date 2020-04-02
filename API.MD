@@ -10,7 +10,7 @@ These is many way to import OptEco into your project. But by the way, you can fo
 * Jitpack.io: https://jitpack.io/#PlayerNguyen/OptEco
 ## Using Maven
 Put this into your `pom.xml`. Also check your PaperMC/Spigot source.
-````xml
+````
 <repositories>
         <!-- OptEco Repo -->
 		<repository>
@@ -32,7 +32,7 @@ Put this into your `pom.xml`. Also check your PaperMC/Spigot source.
 ## Using Gradle
 Add it in your root build.gradle at the end of repositories:
 
-```json
+```
 allprojects {
   repositories {
     ...
@@ -41,7 +41,7 @@ allprojects {
 }
 ```
 And then add the dependency: 
-```json
+```
 dependencies {
     implementation 'com.github.PlayerNguyen:OptEco:v1.14.6b'
 }
