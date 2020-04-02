@@ -40,6 +40,7 @@ public class OptEco extends JavaPlugin {
     private ArrayList<Listener> listeners = new ArrayList<>();
     private HashMap<String, CommandExecutor> executors = new HashMap<>();
     private boolean isHookPlaceholder;
+    private boolean isProtocolLibEnabled;
 
     private ConfigurationLoader configurationLoader;
     private LanguageLoader languageLoader;
@@ -78,7 +79,10 @@ public class OptEco extends JavaPlugin {
             getLogger().severe("Having trouble while create connection to the SQL. Report it to developer!");
             e.printStackTrace();
         }
+
+        // Hooking plugins registration
         this.hookingPlaceHolderAPI();
+        this.hookingProtocolLib();
 
         this.metrics = new Metrics(getPlugin(), METRICS_ID);
     }
@@ -98,6 +102,13 @@ public class OptEco extends JavaPlugin {
         Bukkit.getConsoleSender().sendMessage(ChatColor.AQUA + "+ "+ChatColor.GREEN + getName() + " v" + getDescription().getVersion());
         Bukkit.getConsoleSender().sendMessage(ChatColor.AQUA + "+");
         Bukkit.getConsoleSender().sendMessage(ChatColor.AQUA + "--------------------------------");
+    }
+
+    private void hookingProtocolLib() {
+        this.isProtocolLibEnabled = Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null;
+        if (isProtocolLibEnabled) {
+            this.getLogger().info("Found ProtocolLib...[Hooked]");
+        }
     }
 
     private void hookingPlaceHolderAPI() {
@@ -226,4 +237,16 @@ public class OptEco extends JavaPlugin {
         return debugger;
     }
 
+    public boolean isSpigot() {
+        try {
+            Class.forName("org.spigotmc");
+            return true;
+        } catch (ClassNotFoundException e) {
+            return false;
+        }
+    }
+
+    public boolean isProtocolLibEnabled() {
+        return isProtocolLibEnabled;
+    }
 }

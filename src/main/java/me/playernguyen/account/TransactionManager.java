@@ -25,9 +25,7 @@ public class TransactionManager {
 
     public boolean addTransaction(UUID player, UUID target, Double amount) {
         return this.getTransactions()
-                .add(
-                        new Transaction(getPlugin(), player, target, amount, new OnTransactionSchedule(getPlugin(), player, target))
-                );
+        .add(new Transaction(getPlugin(), player, target, amount, new OnTransactionSchedule(getPlugin(), player, target)));
     }
 
     public Transaction getTransaction(UUID player) {

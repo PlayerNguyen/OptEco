@@ -6,7 +6,6 @@ import me.playernguyen.configuration.AccountLoader;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.entity.Player;
 
 import java.io.File;
 import java.io.IOException;
@@ -79,10 +78,7 @@ public class AccountConfiguration extends OptEcoObject implements IYamlAccount {
     }
 
     private Account toAccount () {
-        Player player =
-                Bukkit.getServer().getPlayer(
-                        UUID.fromString(Objects.requireNonNull(getConfiguration().getString("data.uuid")))
-                );
+        OfflinePlayer player = Bukkit.getOfflinePlayer(UUID.fromString(Objects.requireNonNull(getConfiguration().getString("data.uuid"))));
         double balance = getConfiguration().getDouble("data.balance");
         return new Account(player, balance);
     }

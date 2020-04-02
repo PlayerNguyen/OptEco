@@ -20,6 +20,9 @@ public enum OptEcoConfiguration {
 
     SQLITE_FILE             ("settings.sqlite.fileName", "account.sqlite"),
 
+    COUNTDOWN_ENABLE          ("settings.countdown.type", true),
+    COUNTDOWN_TYPE          ("settings.countdown.type", "message"),
+
     DEBUG                   ("debug", false),
     LANGUAGE_FILE           ("language", "lang");
 

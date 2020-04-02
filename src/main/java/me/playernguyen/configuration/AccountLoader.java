@@ -20,24 +20,14 @@ public class AccountLoader extends OptEcoObject {
     }
 
     public boolean createAccount(UUID who) {
-        Account account =
-                new Account(who, getPlugin().getConfigurationLoader().getDouble(OptEcoConfiguration.START_BALANCE));
-        switch (getStoreType()) {
-            case YAML: return new AccountConfiguration(who, getPlugin()).save(account);
-            case MYSQL: return new MySQLAccount(getPlugin()).save(account);
-            case SQLITE: return new SQLiteAccount(getPlugin()).save(account);
-            default: return false;
-        }
+        return this.setBalance(who, getPlugin().getConfigurationLoader().getDouble(OptEcoConfiguration.START_BALANCE));
     }
 
     public boolean hasAccount(UUID who) {
         switch (getStoreType()) {
-            case YAML:
-                return new AccountConfiguration(who, getPlugin()).getFile().exists();
-            case MYSQL:
-                return new MySQLAccount(getPlugin()).getAccount(who) != null;
-            case SQLITE:
-                return new SQLiteAccount(getPlugin()).getAccount(who) != null;
+            case YAML: return new AccountConfiguration(who, getPlugin()).getFile().exists();
+            case MYSQL: return new MySQLAccount(getPlugin()).getAccount(who) != null;
+            case SQLITE: return new SQLiteAccount(getPlugin()).getAccount(who) != null;
             default: return false;
         }
     }
@@ -45,12 +35,9 @@ public class AccountLoader extends OptEcoObject {
     public Account getAccount(UUID player) {
         if (!hasAccount(player)) createAccount(player);
         switch (getStoreType()) {
-            case YAML:
-                return new AccountConfiguration(player, getPlugin()).getAccount();
-            case MYSQL:
-                return new MySQLAccount(getPlugin()).getAccount(player);
-            case SQLITE:
-                return new SQLiteAccount(getPlugin()).getAccount(player);
+            case YAML: return new AccountConfiguration(player, getPlugin()).getAccount();
+            case MYSQL: return new MySQLAccount(getPlugin()).getAccount(player);
+            case SQLITE: return new SQLiteAccount(getPlugin()).getAccount(player);
             default: return null;
         }
     }
@@ -58,12 +45,9 @@ public class AccountLoader extends OptEcoObject {
     public boolean setBalance (UUID player, Double balance) {
         Account account = new Account(player, balance);
         switch (getStoreType()) {
-            case YAML:
-                return new AccountConfiguration(player, getPlugin()).save(account);
-            case MYSQL:
-                return new MySQLAccount(getPlugin()).save(account);
-            case SQLITE:
-                return new SQLiteAccount(getPlugin()).save(account);
+            case YAML: return new AccountConfiguration(player, getPlugin()).save(account);
+            case MYSQL: return new MySQLAccount(getPlugin()).save(account);
+            case SQLITE: return new SQLiteAccount(getPlugin()).save(account);
             default: return false;
         }
     }

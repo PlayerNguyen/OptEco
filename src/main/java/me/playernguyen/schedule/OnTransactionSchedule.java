@@ -36,13 +36,31 @@ public class OnTransactionSchedule extends BukkitRunnable {
         return target;
     }
 
+    public int getTicker() {
+        return ticker;
+    }
+
     @Override
     public void run() {
         ticker --;
 
-        if (ticker == 0) {
-            getPlugin().getTransactionManager().getTransaction(player).cancel();
 
+        if (getPlugin().getConfigurationLoader().getBool(OptEcoConfiguration.COUNTDOWN_ENABLE)) {
+            Player pla = Bukkit.getPlayer(getPlayer());
+            if (pla != null) {
+                switch (getPlugin().getConfigurationLoader().getString(OptEcoConfiguration.COUNTDOWN_TYPE)) {
+                    case "message": {
+                        pla.sendMessage(
+                                getPlugin().getLanguageLoader().getLanguage(OptEcoLanguage.COUNTDOWN_FORMAT)
+                                        .replace("%second%", String.valueOf(ticker))
+                        );
+                    }
+                }
+            }
+        }
+
+        if (getTicker() == 0) {
+            getPlugin().getTransactionManager().getTransaction(getPlayer()).cancel();
             Player player = Bukkit.getPlayer(getPlayer());
             if (player != null) {
                 player.sendMessage(

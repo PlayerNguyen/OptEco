@@ -30,6 +30,11 @@ public class Account {
         this.balance = 0.0D;
     }
 
+    public Account (OfflinePlayer player, double d) {
+        this.player = player.getUniqueId();
+        this.balance = d;
+    }
+
     public Account (UUID uuid) {
         this.player = uuid;
         this.balance = 0.0D;

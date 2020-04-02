@@ -48,8 +48,10 @@ public enum  OptEcoLanguage {
     SET_SUCCESS                         ("COMMAND.SET.SUCCESS", "&aSetting &d%value% %currency% &ato &d%who%"),
     SET_FAIL                            ("COMMAND.SET.FAIL", "&cCannot set &d%value% %currency% &ato &d%who% &abecause of the error!"),
 
-    COMMAND_DESCRIBE_CONFIRM                ("COMMAND.CONFIRM.DESCRIPTION", "confirm transaction"),
-    COMMAND_DESCRIBE_CANCEL                ("COMMAND.CANCEL.DESCRIPTION", "cancel transaction");
+    COUNTDOWN_FORMAT                    ("COUNTDOWN_FORMAT", "&8%second%..."),
+
+    COMMAND_DESCRIBE_CONFIRM            ("COMMAND.CONFIRM.DESCRIPTION", "confirm transaction"),
+    COMMAND_DESCRIBE_CANCEL             ("COMMAND.CANCEL.DESCRIPTION", "cancel transaction");
 
     private String path;
     private Object wh;
