@@ -182,7 +182,7 @@ public class OptEco extends JavaPlugin {
         getLogger().info("Loading store type and loading data....");
         this.storeType =
                 StoreType.valueOf(getConfigurationLoader().getString(OptEcoConfiguration.STORED_TYPE));
-        getLogger().info("You're pick " + storeType.name().toLowerCase() + "...");
+        getLogger().info("Loaded store type...[" + storeType.name().toLowerCase() + "]");
     }
 
     private boolean registerAccounts() throws SQLException, ClassNotFoundException, IOException {

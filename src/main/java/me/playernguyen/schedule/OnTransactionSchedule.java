@@ -48,18 +48,18 @@ public class OnTransactionSchedule extends BukkitRunnable {
         if (getPlugin().getConfigurationLoader().getBool(OptEcoConfiguration.COUNTDOWN_ENABLE)) {
             Player pla = Bukkit.getPlayer(getPlayer());
             if (pla != null) {
-                switch (getPlugin().getConfigurationLoader().getString(OptEcoConfiguration.COUNTDOWN_TYPE)) {
-                    case "message": {
-                        pla.sendMessage(
-                                getPlugin().getLanguageLoader().getLanguage(OptEcoLanguage.COUNTDOWN_FORMAT)
-                                        .replace("%second%", String.valueOf(ticker))
-                        );
-                    }
+                if (getPlugin().getConfigurationLoader().getString(OptEcoConfiguration.COUNTDOWN_TYPE)
+                        .equalsIgnoreCase("message")) {
+                    pla.sendMessage(
+                            getPlugin().getLanguageLoader().getLanguage(OptEcoLanguage.COUNTDOWN_FORMAT)
+                                    .replace("%second%", String.valueOf(ticker))
+                    );
                 }
             }
         }
 
-        if (getTicker() == 0) {
+        // <= 0 for not being crashed
+        if (getTicker() <= 0) {
             getPlugin().getTransactionManager().getTransaction(getPlayer()).cancel();
             Player player = Bukkit.getPlayer(getPlayer());
             if (player != null) {
@@ -68,7 +68,7 @@ public class OnTransactionSchedule extends BukkitRunnable {
                                 .format(getPlugin().getLanguageLoader().getLanguage(OptEcoLanguage.PAY_OUT_OF_TIME_CONFIRM))
                 );
             } else {
-                getPlugin().getLogger().severe("Cancel transaction because player not found!");
+                getPlugin().getLogger().severe("Cancel transaction because player are not online!");
                 cancel();
             }
 
