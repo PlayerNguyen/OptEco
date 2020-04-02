@@ -2,6 +2,7 @@
 
 [logo]: https://raw.githubusercontent.com/PlayerNguyen/OptEco/0be367354df5f3341272e27604bfe7afe66a26ea/logo/Banner.png "Logo"
 
+[![](https://jitpack.io/v/PlayerNguyen/OptEco.svg)](https://jitpack.io/#PlayerNguyen/OptEco)
 
 OptEco - Spigot Points System with API and web integration
 * Support MySQL 
