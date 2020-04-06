@@ -6,7 +6,7 @@
 
     <groupId>com.playernguyen</groupId>
     <artifactId>OptEco</artifactId>
-    <version>1.4.6b</version>
+    <version>1.4.7b</version>
 
     <properties>
         <maven.compiler.target>1.8</maven.compiler.target>

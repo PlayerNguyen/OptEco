@@ -13,11 +13,6 @@ public class MySQLEstablish extends SQLEstablish {
 
     private String username;
     private String password;
-    public MySQLEstablish(String address, String port, String database, String username, String password) {
-        this.username = username;
-        this.password = password;
-        setUrl(String.format("jdbc:mysql://%s:%s/%s", address, port, database));
-    }
 
     public MySQLEstablish (OptEco plugin) {
         ConfigurationLoader cf = plugin.getConfigurationLoader();
@@ -26,7 +21,7 @@ public class MySQLEstablish extends SQLEstablish {
         String address = cf.getString(OptEcoConfiguration.MYSQL_HOST);
         String port = cf.getString(OptEcoConfiguration.MYSQL_PORT);
         String database = cf.getString(OptEcoConfiguration.MYSQL_DATABASE);
-        setUrl(String.format("jdbc:mysql://%s:%s/%s", address, port, database));
+        setUrl(String.format("jdbc:mysql://%s:%s/%s?autoReconnect=true&useUnicode=yes", address, port, database));
     }
 
     @Override
