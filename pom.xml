@@ -6,7 +6,7 @@
 
     <groupId>com.playernguyen</groupId>
     <artifactId>OptEco</artifactId>
-    <version>1.4.7b</version>
+    <version>1.5b</version>
 
     <properties>
         <maven.compiler.target>1.8</maven.compiler.target>
@@ -64,6 +64,12 @@
             <artifactId>spigot-api</artifactId>
             <version>1.15.2-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.jetbrains</groupId>
+            <artifactId>annotations</artifactId>
+            <version>19.0.0</version>
+            <scope>compile</scope>
         </dependency>
     </dependencies>
 

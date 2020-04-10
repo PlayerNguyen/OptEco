@@ -1,10 +1,11 @@
 name: OptEco
-version: 1.4.7b
+version: 1.5b
 api-version: 1.13
-main: me.playernguyen.OptEco
+main: me.playernguyen.opteco.OptEco
 author: Player_Nguyen
 softdepend:
   - PlaceholderAPI
+  - ProtocolLib
 
 commands:
   opteco:
