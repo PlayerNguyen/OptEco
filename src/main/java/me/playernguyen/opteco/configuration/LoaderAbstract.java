@@ -1,49 +1,55 @@
 package me.playernguyen.opteco.configuration;
 
-import me.playernguyen.opteco.OptEco;
-import me.playernguyen.opteco.OptEcoConfiguration;
+import me.playernguyen.opteco.OptEcoImplementation;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.File;
-import java.io.IOException;
 
-public class LoaderAbstract {
+public abstract class LoaderAbstract extends OptEcoImplementation {
 
-    private OptEco plugin;
     private File file;
     private YamlConfiguration configuration;
 
     private String header;
 
-    public LoaderAbstract(OptEco plugin, File file) {
-        this.plugin = plugin;
+    public LoaderAbstract(File file) {
         this.file = file;
         this.configuration = YamlConfiguration.loadConfiguration(file);
         this.header = "";
     }
 
-    public LoaderAbstract(OptEco plugin, File file, String header) {
-        this.plugin = plugin;
+    public LoaderAbstract(String filename) {
+        this.file = new File(getPlugin().getDataFolder(), filename + ".yml");
+        this.configuration = YamlConfiguration.loadConfiguration(file);
+        this.header = "";
+    }
+
+    public LoaderAbstract(String filename, String header) {
+        this.file = new File(getPlugin().getDataFolder(), filename + ".yml");
+        this.configuration = YamlConfiguration.loadConfiguration(file);
+        this.header = header;
+    }
+
+    public LoaderAbstract(File file, String header) {
         this.file = file;
         this.configuration = YamlConfiguration.loadConfiguration(file);
         this.header = header;
     }
 
-    public void saveDefault() {
 
-        this.getConfiguration().options().copyDefaults(true);
-        this.getConfiguration().options().header(header);
-
-        for (OptEcoConfiguration dc : OptEcoConfiguration.values()) {
-            this.getConfiguration().addDefault(dc.getPath(), dc.getDefaultSetting());
-        }
-
-        try {
-            this.getConfiguration().save(file);
-        } catch (IOException e) {
-            getPlugin().getDebugger().printException(e);
-        }
+    public void setFile(File file) {
+        this.file = file;
     }
+
+    public void setConfiguration(YamlConfiguration configuration) {
+        this.configuration = configuration;
+    }
+
+    public void setHeader(String header) {
+        this.header = header;
+    }
+
+    public abstract void saveDefault();
 
     public File getFile() {
         return file;
@@ -52,11 +58,6 @@ public class LoaderAbstract {
     public YamlConfiguration getConfiguration() {
         return configuration;
     }
-
-    public OptEco getPlugin() {
-        return plugin;
-    }
-
 
     public void reload() {
         this.configuration = YamlConfiguration.loadConfiguration(file);

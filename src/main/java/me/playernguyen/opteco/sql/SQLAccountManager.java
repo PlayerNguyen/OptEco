@@ -38,13 +38,13 @@ public abstract class SQLAccountManager extends OptEcoImplementation implements 
             result = this.getAccountResult(who);
             if (result == null) return null;
             return new Account(who, Double.parseDouble(result.getBalance()));
-        } catch (SQLException | ClassNotFoundException e) {
+        } catch (SQLException e) {
             getPlugin().getDebugger().printException(e);
             return null;
         }
     }
 
-    private SQLResultAccout getAccountResult(UUID who) throws SQLException, ClassNotFoundException {
+    private SQLResultAccout getAccountResult(UUID who) throws SQLException {
         ResultSet resultSet = this.getEstablish().executeQuery(
                 String.format(
                         "SELECT * FROM %s WHERE uuid = '%s'",

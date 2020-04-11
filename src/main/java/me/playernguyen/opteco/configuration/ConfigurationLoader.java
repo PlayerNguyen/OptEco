@@ -11,8 +11,8 @@ public class ConfigurationLoader extends LoaderAbstract {
 
     private static final String HEADER_HELPER = "Need help? Visit: https://github.com/PlayerNguyen/OptEco for more helpful tips of config!";
 
-    public ConfigurationLoader (OptEco plugin) {
-        super(plugin, new File(plugin.getDataFolder(), CONFIG_FILE), HEADER_HELPER);
+    public ConfigurationLoader () {
+        super(new File(OptEco.getInstance().getDataFolder(), CONFIG_FILE), HEADER_HELPER);
         saveDefault();
 
     }
@@ -45,4 +45,8 @@ public class ConfigurationLoader extends LoaderAbstract {
         return getConfiguration().getInt(configuration.getPath());
     }
 
+    @Override
+    public void saveDefault() {
+
+    }
 }

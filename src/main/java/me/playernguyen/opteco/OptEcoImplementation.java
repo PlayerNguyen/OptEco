@@ -4,6 +4,7 @@ import me.playernguyen.opteco.account.IAccountManager;
 import me.playernguyen.opteco.configuration.ConfigurationLoader;
 import me.playernguyen.opteco.configuration.StorageType;
 import me.playernguyen.opteco.logger.Debugger;
+import me.playernguyen.opteco.transaction.TransactionManager;
 
 public abstract class OptEcoImplementation {
 
@@ -40,11 +41,19 @@ public abstract class OptEcoImplementation {
     }
 
     /**
-     * Get account manager, which manager accounts
+     * Get account manager which manage accounts
      * @return {@link IAccountManager} class
      */
     protected IAccountManager getAccountManager() {
         return getPlugin().getAccountManager();
+    }
+
+    /**
+     * Get transaction manager which manage transactions
+     * @return {@link TransactionManager} class
+     */
+    protected TransactionManager getTransactionManager() {
+        return getPlugin().getTransactionManager();
     }
 
 }

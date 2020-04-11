@@ -7,6 +7,7 @@ import me.playernguyen.opteco.permission.OptEcoPermission;
 import me.playernguyen.opteco.transaction.Transaction;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.RemoteConsoleCommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
@@ -73,6 +74,14 @@ public class SubCommandPayConfirm extends SubCommand {
 
     @Override
     public boolean onConsoleCommand(CommandSender sender, ArrayList<String> args) {
+        sender.sendMessage(
+                getMessageFormat().format(getPlugin().getLanguageLoader().getLanguage(OptEcoLanguage.FOR_PLAYER_COMMAND))
+        );
+        return true;
+    }
+
+    @Override
+    public boolean onRemoteConsoleCommand(RemoteConsoleCommandSender sender, ArrayList<String> args) {
         sender.sendMessage(
                 getMessageFormat().format(getPlugin().getLanguageLoader().getLanguage(OptEcoLanguage.FOR_PLAYER_COMMAND))
         );

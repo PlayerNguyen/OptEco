@@ -74,8 +74,9 @@ public abstract class SQLEstablish extends OptEcoImplementation implements IEsta
     /**
      * Execute an update statement {@link Statement#executeUpdate(String)}
      * @param query the query to update/execute
-     * @return the integer
-     * @throws SQLException
+     * @return either (1) the row count for SQL Data Manipulation Language (DML) statements
+     *            or (2) 0 for SQL statements that return nothing
+     * @throws SQLException Throw if not fine with SQL, not occurs,...
      */
     public int executeUpdate(String query) throws SQLException {
         Statement statement = createStatement();
@@ -135,23 +136,6 @@ public abstract class SQLEstablish extends OptEcoImplementation implements IEsta
     }
 
     /**
-     * Linear adding tables of SQL
-     * @return The table list
-     */
-    @Override public ArrayList<String> getTables() {
-        ArrayList<String> table = new ArrayList<>();
-        try {
-            ResultSet rs = this.executeQuery("SHOW TABLES");
-            while(rs.next()) {
-                table.add(rs.getString(1));
-            }
-        } catch (SQLException e) {
-            return null;
-        }
-        return table;
-    }
-
-    /**
      * Setup the table manually by condition <br>
      *     <br>
      *     <ul>
@@ -177,4 +161,24 @@ public abstract class SQLEstablish extends OptEcoImplementation implements IEsta
                 break;
         }
     }
+
+    public ResultSet select (String what, String where) throws SQLException {
+        return executeQuery(String.format(
+                "SELECT %s FROM %s WHERE %s",
+                what, getTableName(), where
+        ));
+    }
+
+    /**
+     * Get size of where
+     * @param where query search
+     * @return The size of query
+     * @throws SQLException Throw exception of the SQL cannot occurs
+     */
+    public int size(String where) throws SQLException {
+        ResultSet rs = select("count(*)", where);
+        rs.next();
+        return rs.getInt("count(*)");
+    }
+
 }

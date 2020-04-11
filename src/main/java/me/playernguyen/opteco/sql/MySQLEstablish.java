@@ -4,6 +4,7 @@ import me.playernguyen.opteco.OptEcoConfiguration;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
@@ -44,4 +45,23 @@ public class MySQLEstablish extends SQLEstablish {
     private String getPassword() {
         return password;
     }
+
+
+    /**
+     * Linear adding tables of SQL
+     * @return The table list
+     */
+    @Override public ArrayList<String> getTables() {
+        ArrayList<String> table = new ArrayList<>();
+        try {
+            ResultSet rs = this.executeQuery("SHOW TABLES");
+            while(rs.next()) {
+                table.add(rs.getString(1));
+            }
+        } catch (SQLException e) {
+            return null;
+        }
+        return table;
+    }
+
 }

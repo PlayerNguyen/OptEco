@@ -8,6 +8,7 @@ import me.playernguyen.opteco.utils.ValidationChecker;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.RemoteConsoleCommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
@@ -100,6 +101,14 @@ public class SubCommandPay extends SubCommand {
 
     @Override
     public boolean onConsoleCommand(CommandSender sender, ArrayList<String> args) {
+        sender.sendMessage(
+                getMessageFormat().format(getPlugin().getLanguageLoader().getLanguage(OptEcoLanguage.FOR_PLAYER_COMMAND))
+        );
+        return true;
+    }
+
+    @Override
+    public boolean onRemoteConsoleCommand(RemoteConsoleCommandSender sender, ArrayList<String> args) {
         sender.sendMessage(
                 getMessageFormat().format(getPlugin().getLanguageLoader().getLanguage(OptEcoLanguage.FOR_PLAYER_COMMAND))
         );

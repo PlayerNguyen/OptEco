@@ -5,6 +5,8 @@ import me.playernguyen.opteco.OptEcoLanguage;
 import me.playernguyen.opteco.utils.MessageFormat;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.ConsoleCommandSender;
+import org.bukkit.command.RemoteConsoleCommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
@@ -81,10 +83,17 @@ public abstract class SubCommand extends AbstractPermission {
                );
                return true;
           }
-          if (commandSender instanceof Player) {
+          // With player execute
+          if (commandSender instanceof Player)
                return onPlayerCommand((Player) commandSender, args);
-          }
-          return onConsoleCommand(commandSender, args);
+          // With console execute
+          else if (commandSender instanceof ConsoleCommandSender)
+               return onConsoleCommand(commandSender, args);
+          // With remote player console
+          else if (commandSender instanceof RemoteConsoleCommandSender)
+               return onRemoteConsoleCommand((RemoteConsoleCommandSender) commandSender, args);
+
+          return true;
      }
 
      public List<String> onTabComplete(CommandSender commandSender, ArrayList<String> args) {
@@ -96,5 +105,6 @@ public abstract class SubCommand extends AbstractPermission {
 
      public abstract boolean onPlayerCommand(Player player, ArrayList<String> args);
      public abstract boolean onConsoleCommand(CommandSender sender, ArrayList<String> args);
+     public abstract boolean onRemoteConsoleCommand(RemoteConsoleCommandSender sender, ArrayList<String> args);
      public abstract List<String> onTab(CommandSender commandSender, ArrayList<String> args);
 }

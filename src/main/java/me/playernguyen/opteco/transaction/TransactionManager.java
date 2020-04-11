@@ -1,9 +1,9 @@
 package me.playernguyen.opteco.transaction;
 
 import me.playernguyen.opteco.OptEcoImplementation;
-import me.playernguyen.opteco.configuration.StorageType;
 import me.playernguyen.opteco.schedule.TransactionCountRunnable;
 import me.playernguyen.opteco.transaction.mysql.TransactionMySQLStorage;
+import me.playernguyen.opteco.transaction.sqlite.TransactionSQLiteStorage;
 
 import java.util.ArrayList;
 import java.util.UUID;
@@ -14,8 +14,18 @@ public class TransactionManager extends OptEcoImplementation {
     private TransactionStorage transactionStorage;
     public TransactionManager() {
         // Setup database
-        if (getPlugin().getStorageType().equals(StorageType.MYSQL)) {
-            this.transactionStorage = new TransactionMySQLStorage();
+        switch (getStorageType()) {
+            case MYSQL: {
+                this.transactionStorage = new TransactionMySQLStorage();
+                break;
+            }
+            case SQLITE: {
+                this.transactionStorage = new TransactionSQLiteStorage();
+                break;
+            }
+            case YAML: {
+
+            }
         }
 
     }
@@ -32,7 +42,8 @@ public class TransactionManager extends OptEcoImplementation {
         Transaction transaction =
                 new Transaction(player, target, amount, new TransactionCountRunnable(player, target));
         this.getTransactions().add(transaction);
-        transactionStorage.push(transaction);
+        // Store the transaction's information
+        this.transactionStorage.push(transaction);
     }
 
     public Transaction getTransaction(UUID player) {

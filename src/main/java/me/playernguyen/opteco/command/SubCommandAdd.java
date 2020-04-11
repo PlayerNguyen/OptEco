@@ -8,6 +8,7 @@ import me.playernguyen.opteco.utils.ValidationChecker;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.RemoteConsoleCommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
@@ -34,6 +35,11 @@ public class SubCommandAdd extends SubCommand {
 
     @Override
     public boolean onConsoleCommand(CommandSender sender, ArrayList<String> args) {
+        return this.execute(sender, args);
+    }
+
+    @Override
+    public boolean onRemoteConsoleCommand(RemoteConsoleCommandSender sender, ArrayList<String> args) {
         return this.execute(sender, args);
     }
 

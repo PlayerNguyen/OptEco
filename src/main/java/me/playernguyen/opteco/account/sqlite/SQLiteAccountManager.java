@@ -10,6 +10,9 @@ import java.util.Arrays;
 
 public class SQLiteAccountManager extends SQLAccountManager {
 
+    public static final String ACCOUNT_TABLE = OptEco.getInstance()
+            .getConfigurationLoader().getString(OptEcoConfiguration.SQL_ACCOUNT_TABLE_NAME);
+
     public static final ArrayList<String> SETUP_TABLE_LIST =
             new ArrayList<>(
                     Arrays.asList("`id` INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT",
@@ -18,9 +21,6 @@ public class SQLiteAccountManager extends SQLAccountManager {
                             "`uuid` CHAR(255) NOT NULL"
                     )
             );
-
-    public static final String ACCOUNT_TABLE = OptEco.getInstance()
-            .getConfigurationLoader().getString(OptEcoConfiguration.SQL_ACCOUNT_TABLE_NAME);
 
     public SQLiteAccountManager() {
         super(new SQLiteEstablish(ACCOUNT_TABLE, SETUP_TABLE_LIST));

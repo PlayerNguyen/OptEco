@@ -12,8 +12,8 @@ public class LanguageLoader extends LoaderAbstract {
     public static final char COLOR_SYMBOL = '&';
 
 
-    public LanguageLoader(String file, OptEco plugin) {
-        super(plugin, new File(plugin.getDataFolder(), file +".yml"));
+    public LanguageLoader(String file) {
+        super(new File(OptEco.getInstance().getDataFolder(), file + ".yml"));
         saveDefault();
     }
 

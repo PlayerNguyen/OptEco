@@ -4,6 +4,7 @@ import me.playernguyen.opteco.OptEcoImplementation;
 import me.playernguyen.opteco.event.OptEcoPlayerPendingEvent;
 import me.playernguyen.opteco.event.OptEcoPlayerReceivedEvent;
 import me.playernguyen.opteco.event.OptEcoTransactionChangeStateEvent;
+import me.playernguyen.opteco.utils.RandomString;
 import org.bukkit.Bukkit;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -13,22 +14,25 @@ public class Transaction extends OptEcoImplementation {
 
     private final long DELAY = 20L;
     private final long PERIOD = 20L;
+    private final int ID_RANDOM_LENGTH = 16;
 
     private final UUID player;
     private final UUID target;
     private final Double amount;
     private final BukkitRunnable runnable;
-    private TransactionState state;
+    private TransactionState state = TransactionState.PENDING;
     private String id;
+    private long time;
 
     public Transaction (UUID player, UUID target, Double amount, BukkitRunnable runnable) {
         this.player = player;
         this.target = target;
         this.amount = amount;
         this.runnable = runnable;
-
+        // Apply time
+        this.time = System.currentTimeMillis();
         // Generate random id
-        this.id = String.valueOf(Math.random() * Integer.MAX_VALUE);
+        this.id = RandomString.rand(ID_RANDOM_LENGTH);
         // Init with pending state
         this.setState(TransactionState.PENDING);
         // Call an async task to count down
@@ -64,6 +68,14 @@ public class Transaction extends OptEcoImplementation {
         return state;
     }
 
+    public long getTime() {
+        return time;
+    }
+
+    public long getTimeAsSecond() {
+        return time / 1000;
+    }
+
     public void setState(TransactionState state) {
         Bukkit.getScheduler().runTaskAsynchronously(getPlugin(), ()-> {
             this.state = state;
@@ -84,11 +96,12 @@ public class Transaction extends OptEcoImplementation {
                 throw new IllegalStateException("Cannot accept non-pending transaction!");
             }
             // Call received listener
-            OptEcoPlayerReceivedEvent event =
-                    new OptEcoPlayerReceivedEvent(this);
-            Bukkit.getServer().getPluginManager().callEvent(event);
+            OptEcoPlayerReceivedEvent event = new OptEcoPlayerReceivedEvent(this);
+            Bukkit.getScheduler().runTask(getPlugin(), ()->Bukkit.getServer().getPluginManager().callEvent(event));
             // Change state
             this.setState(TransactionState.CONFIRMED);
+            // Update the information into database
+            this.getTransactionManager().getTransactionStorage().push(this);
         });
         // Return such as ...
         return getPlugin().getAccountManager().takeBalance(getPlayer(), getAmount())
@@ -108,6 +121,8 @@ public class Transaction extends OptEcoImplementation {
             }
             // Change state
             this.setState(TransactionState.CANCELLED);
+            // Update the information into database
+            this.getTransactionManager().getTransactionStorage().push(this);
         });
         // Clean
         return this.clean();

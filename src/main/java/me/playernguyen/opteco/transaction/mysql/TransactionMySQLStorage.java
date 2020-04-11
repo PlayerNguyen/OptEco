@@ -21,7 +21,8 @@ public class TransactionMySQLStorage extends TransactionSQL {
                             "`sender` VARCHAR(255) NOT NULL",
                             "`receiver` VARCHAR(255) NOT NULL",
                             "`amount` REAL NOT NULL",
-                            "`state` VARCHAR(255) NOT NULL"
+                            "`state` VARCHAR(255) NOT NULL",
+                            "`time` VARCHAR(255) NOT NULL"
                     )
             );
 
