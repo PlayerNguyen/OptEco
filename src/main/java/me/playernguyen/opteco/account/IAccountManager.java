@@ -16,12 +16,19 @@ public interface IAccountManager {
     boolean save(Account account);
 
     /**
-     * Get account via uuid
+     * Get account via uuid. Whether not found player, create one
      * @param player {@link UUID} the uuid if storage player
      * @return {@link Account} account of player
      */
-    @Nullable
+
     Account getAccount(UUID player);
+
+    /**
+     * Get the account which must be existed in database. Whether not will return null
+     * @return the account or null value
+     */
+    @Nullable
+    Account getAccountIdentify(UUID uuid);
 
     /**
      * Check whether the account contain or not

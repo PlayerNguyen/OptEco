@@ -3,6 +3,7 @@ package me.playernguyen.opteco.account;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 
+import javax.annotation.Nullable;
 import java.util.UUID;
 
 public class YamlAccountManager implements IYamlAccountManager {
@@ -13,8 +14,21 @@ public class YamlAccountManager implements IYamlAccountManager {
     }
 
     @Override
-    public Account getAccount(UUID player) {
-        return new AccountConfiguration(player).toAccount();
+    public Account getAccount(UUID uuid) {
+        AccountConfiguration accountConfiguration = new AccountConfiguration(uuid);
+        if (!accountConfiguration.exist()) {
+            Account account = new Account(uuid);
+            this.save(account);
+            return account;
+        }
+        return accountConfiguration.toAccount();
+    }
+
+    @Nullable @Override
+    public Account getAccountIdentify(UUID uuid) {
+        AccountConfiguration accountConfiguration = new AccountConfiguration(uuid);
+        if (!accountConfiguration.exist()) return null;
+        else return accountConfiguration.toAccount();
     }
 
     @Override
@@ -46,7 +60,7 @@ public class YamlAccountManager implements IYamlAccountManager {
      */
     @Override
     public double getBalance(UUID uuid) {
-        return this.getAccount(uuid).getBalance();
+        return getAccount(uuid).getBalance();
     }
 
     /**

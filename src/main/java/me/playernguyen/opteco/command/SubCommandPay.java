@@ -48,15 +48,16 @@ public class SubCommandPay extends SubCommand {
         String _target = args.get(0);
         OfflinePlayer target = Bukkit.getOfflinePlayer(_target);
         String _value = args.get(1);
-//        if (target == null) {
-//            player.sendMessage(
-//                    getMessageFormat()
-//                            .format(getPlugin().getLanguageLoader().getLanguage(OptEcoLanguage.VAR_PLAYER_NOT_FOUND))
-//                            .replace("%who%", _target)
-//            );
-//            return true;
-//        }
-        // If sender transfer to themselves
+        // If player has no account
+        if (!target.hasPlayedBefore()) {
+            player.sendMessage(
+                    getMessageFormat()
+                            .format(getPlugin().getLanguageLoader().getLanguage(OptEcoLanguage.VAR_PLAYER_NOT_FOUND))
+                            .replace("%who%", _target)
+            );
+            return true;
+        }
+        // If sender transfer to themselves and not in debugger mode :DDD
         if (target.equals(player) && !getPlugin().getConfigurationLoader().getBool(OptEcoConfiguration.DEBUG)) {
             player.sendMessage(getMessageFormat().format(
                     getPlugin().getLanguageLoader().getLanguage(OptEcoLanguage.PAY_CANNOT_SELF_TRANSFER)

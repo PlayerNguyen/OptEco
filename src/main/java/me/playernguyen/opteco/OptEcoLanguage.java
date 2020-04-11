@@ -12,7 +12,7 @@ public enum  OptEcoLanguage {
     VAR_NOT_A_NUMBER                    ("COMMAND.VAR_NOT_A_NUMBER", "&cValue %value% is not a number."),
     VAR_PLAYER                          ("COMMAND.VAR_PLAYER", "<player>"),
     VALUE_CANNOT_BE_NEGATIVE            ("COMMAND.VAR_VALUE_CANNOT_BE_NEGATIVE", "&cThe amount cannot be negative."),
-    VAR_PLAYER_NOT_FOUND                ("COMMAND.PLAYER_NOT_FOUND", "&cCannot found player %who% in server."),
+    VAR_PLAYER_NOT_FOUND                ("COMMAND.PLAYER_NOT_FOUND", "&cCannot found player %who% in server or database."),
 
     COMMAND_DESCRIBE_ADD                ("COMMAND.ADD.DESCRIPTION", "add balance to player"),
     COMMAND_SUCCEEDED_ADD               ("COMMAND.ADD.SUCCEEDED", "&aSucceeded add &d%value% %currency% &ainto &d%who% &aaccount."),
@@ -41,12 +41,12 @@ public enum  OptEcoLanguage {
 
     COMMAND_DESCRIBE_TAKE               ("COMMAND.TAKE.DESCRIPTION", "take player points"),
     TAKE_SUCCESS                        ("COMMAND.TAKE.SUCCESS", "&aTaking &d%value% %currency% &afrom &d%who%"),
-    TAKE_FAIL                           ("COMMAND.TAKE.FAIL", "&cCannot take &d%value% %currency% &afrom &d%who% &abecause of the error!"),
+    TAKE_FAIL                           ("COMMAND.TAKE.FAIL", "&cCannot take &d%value% %currency% &afrom &d%who% &cbecause of the error!"),
     TAKE_NOT_ENOUGH                     ("COMMAND.TAKE.NOT_ENOUGH", "&cYou cannot take out of limitation."),
 
     COMMAND_DESCRIBE_SET                ("COMMAND.SET.DESCRIPTION", "set player points"),
     SET_SUCCESS                         ("COMMAND.SET.SUCCESS", "&aSetting &d%value% %currency% &ato &d%who%"),
-    SET_FAIL                            ("COMMAND.SET.FAIL", "&cCannot set &d%value% %currency% &ato &d%who% &abecause of the error!"),
+    SET_FAIL                            ("COMMAND.SET.FAIL", "&cCannot set &d%value% %currency% &ato &d%who% &cbecause of the error!"),
 
     COUNTDOWN_FORMAT                    ("COUNTDOWN_FORMAT", "&8%second%..."),
 

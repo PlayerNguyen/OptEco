@@ -2,7 +2,6 @@ package me.playernguyen.opteco.configuration;
 
 import me.playernguyen.opteco.OptEco;
 import me.playernguyen.opteco.OptEcoConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.File;
 
@@ -15,9 +14,6 @@ public class ConfigurationLoader extends LoaderAbstract {
     public ConfigurationLoader () {
         super(new File(OptEco.getInstance().getDataFolder(), CONFIG_FILE), HEADER_HELPER);
         saveDefault();
-
-        System.out.println(getString(OptEcoConfiguration.SQLITE_FILE));
-
     }
 
     public Object getConfig(OptEcoConfiguration configuration) {

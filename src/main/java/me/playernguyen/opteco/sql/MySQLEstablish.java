@@ -1,11 +1,9 @@
 package me.playernguyen.opteco.sql;
 
 import me.playernguyen.opteco.OptEcoConfiguration;
+import me.playernguyen.opteco.schedule.CloseConnectionRunnable;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 
 public class MySQLEstablish extends SQLEstablish {
@@ -35,7 +33,14 @@ public class MySQLEstablish extends SQLEstablish {
         }
         // Create a connection and return
         Class.forName("com.mysql.jdbc.Driver");
-        return DriverManager.getConnection(getURL(), getUsername(), getPassword());
+        getDebugger().info("['Connection::MySQL] Create the connection of MySQL");
+        Connection connection = DriverManager.getConnection(getURL(), getUsername(), getPassword());
+        // Create the offset-closer if the sql cannot close :D
+        new CloseConnectionRunnable(connection).runTaskLaterAsynchronously(
+                getPlugin(),getConfigurationLoader().getInt(OptEcoConfiguration.SQL_CLOSE_CONNECT_TIMEOUT) * 20L
+        );
+        // And then return the connection
+        return connection;
     }
 
     private String getUsername() {
@@ -53,14 +58,16 @@ public class MySQLEstablish extends SQLEstablish {
      */
     @Override public ArrayList<String> getTables() {
         ArrayList<String> table = new ArrayList<>();
-        try {
-            ResultSet rs = this.executeQuery("SHOW TABLES");
-            while(rs.next()) {
-                table.add(rs.getString(1));
+        try (Connection connection = this.openConnect()) {
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery("show tables");
+
+            while (resultSet.next()) {
+                table.add(resultSet.getString(1));
             }
-        } catch (SQLException e) {
+
+        } catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();
-            return null;
         }
         return table;
     }

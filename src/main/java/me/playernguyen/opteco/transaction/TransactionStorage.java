@@ -18,14 +18,13 @@ public interface TransactionStorage {
     /**
      * Get the transaction list
      * @deprecated Every transaction has just one private key. Please using {@link #getTransaction(String)}
-     * @param id The id you want to search
      * @return {@link Transaction}
      */
-    ArrayList<TransactionResult> getList(String id);
+    ArrayList<TransactionResult> getList();
 
     /**
      * Get the transaction storage in database via id. It's work by find the first value and put it. <br>
-     * Whether it's two and more same id, please using {@link #getList(String)}
+     *
      * @param id id of transaction
      * @return The transaction
      */
@@ -37,5 +36,12 @@ public interface TransactionStorage {
      * @return the state are update or not
      */
     boolean updateTransaction(Transaction transaction);
+
+    /**
+     * Create an transaction
+     * @param transaction the transaction to create
+     * @return return state transaction
+     */
+    boolean createStorageTransaction(Transaction transaction);
 
 }

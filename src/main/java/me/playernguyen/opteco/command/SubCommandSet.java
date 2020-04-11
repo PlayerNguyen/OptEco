@@ -73,14 +73,23 @@ public class SubCommandSet extends SubCommand {
             );
             return true;
         }
-        getPlugin().getAccountManager().setBalance(target.getUniqueId(), value);
-        sender.sendMessage(
-                getMessageFormat()
-                        .format(getPlugin().getLanguageLoader().getLanguage(OptEcoLanguage.SET_SUCCESS))
-                        .replace("%value%", _value)
-                        .replace("%who%", target.getName())
-                        .replace("%currency%", getPlugin().getConfigurationLoader().getString(OptEcoConfiguration.CURRENCY_SYMBOL))
-        );
+        if (getPlugin().getAccountManager().setBalance(target.getUniqueId(), value)) {
+            sender.sendMessage(
+                    getMessageFormat()
+                            .format(getPlugin().getLanguageLoader().getLanguage(OptEcoLanguage.SET_SUCCESS))
+                            .replace("%value%", _value)
+                            .replace("%who%", target.getName())
+                            .replace("%currency%", getPlugin().getConfigurationLoader().getString(OptEcoConfiguration.CURRENCY_SYMBOL))
+            );
+        } else {
+            sender.sendMessage(
+                    getMessageFormat()
+                            .format(getPlugin().getLanguageLoader().getLanguage(OptEcoLanguage.SET_FAIL))
+                            .replace("%value%", _value)
+                            .replace("%who%", target.getName())
+                            .replace("%currency%", getPlugin().getConfigurationLoader().getString(OptEcoConfiguration.CURRENCY_SYMBOL))
+            );
+        }
         return true;
     }
 

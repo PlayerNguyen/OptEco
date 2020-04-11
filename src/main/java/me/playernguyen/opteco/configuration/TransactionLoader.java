@@ -6,7 +6,6 @@ import me.playernguyen.opteco.transaction.TransactionResult;
 import me.playernguyen.opteco.transaction.TransactionState;
 
 import java.io.File;
-import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
@@ -27,9 +26,11 @@ public class TransactionLoader extends LoaderAbstract {
     }
 
     public boolean saveTransaction(Transaction transaction) {
+        getDebugger().info("Save transaction " + transaction.getId() + " into yaml file...");
+        // Set data
         getConfiguration().set(transaction.getId() + ".time", transaction.getTime());
-        getConfiguration().set(transaction.getId() + ".sender", transaction.getPlayer());
-        getConfiguration().set(transaction.getId() + ".receiver", transaction.getTarget());
+        getConfiguration().set(transaction.getId() + ".sender", transaction.getPlayer().toString());
+        getConfiguration().set(transaction.getId() + ".receiver", transaction.getTarget().toString());
         getConfiguration().set(transaction.getId() + ".amount", transaction.getAmount());
         getConfiguration().set(transaction.getId() + ".state", transaction.getState().toString());
         // Return a saving state

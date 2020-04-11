@@ -2,10 +2,7 @@ package me.playernguyen.opteco.sql;
 
 import me.playernguyen.opteco.OptEcoConfiguration;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 
 public class SQLiteEstablish extends SQLEstablish {
@@ -16,7 +13,7 @@ public class SQLiteEstablish extends SQLEstablish {
     }
 
     @Override public Connection openConnect() throws SQLException, ClassNotFoundException {
-        setURL("jdbc:sqlite:" + getConfigurationLoader().getString(OptEcoConfiguration.SQLITE_FILE));
+        setURL("jdbc:sqlite:" + buildUrl());
         // If null
         if (getURL() == null) {
             throw new NullPointerException("The url mustn't be null");
@@ -24,6 +21,7 @@ public class SQLiteEstablish extends SQLEstablish {
         // Import class
         Class.forName("org.sqlite.JDBC");
         // Open connect
+        getDebugger().info("['Connection::SQLite] Create the connection of MySQL");
         return DriverManager.getConnection(getURL());
     }
 
@@ -32,16 +30,24 @@ public class SQLiteEstablish extends SQLEstablish {
      * @return table list
      */
     @Override public ArrayList<String> getTables() {
-        try {
-            ResultSet set = this.executeQuery("SELECT * FROM sqlite_master WHERE type='table' AND name not like 'sqlite_%'");
-            ArrayList<String> temp = new ArrayList<>();
-            while(set.next()) {
-                temp.add(set.getString("name"));
+        ArrayList<String> temp = new ArrayList<>();
+        try (Connection connection = this.openConnect()) {
+            PreparedStatement preparedStatement = connection
+                    .prepareStatement("SELECT * FROM sqlite_master WHERE type='table' AND name not like 'sqlite_%'");
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            while(resultSet.next()) {
+                temp.add(resultSet.getString("name"));
             }
-            return temp;
-        } catch (SQLException e) {
+
+        } catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();
         }
-        return null;
+        return temp;
     }
+
+    private String buildUrl() {
+        return getPlugin().getDataFolder() + "\\" + getConfigurationLoader().getString(OptEcoConfiguration.SQLITE_FILE);
+    }
+
 }

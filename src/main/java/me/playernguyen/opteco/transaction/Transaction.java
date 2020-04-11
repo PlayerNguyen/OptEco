@@ -32,7 +32,7 @@ public class Transaction extends OptEcoImplementation {
         // Apply time
         this.time = System.currentTimeMillis();
         // Generate random id
-        this.id = RandomString.rand(ID_RANDOM_LENGTH);
+        this.id = "i" +RandomString.rand(ID_RANDOM_LENGTH);
         // Init with pending state
         this.setState(TransactionState.PENDING);
         // Call an async task to count down

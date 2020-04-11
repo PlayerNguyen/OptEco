@@ -7,8 +7,6 @@ import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Objects;
 import java.util.UUID;
 
 public class AccountConfiguration extends OptEcoImplementation {
@@ -37,6 +35,10 @@ public class AccountConfiguration extends OptEcoImplementation {
 
     }
 
+    public boolean exist() {
+        return getFile().exists();
+    }
+
     private void load(File folder) {
         this.file = new File(folder, player.getName()+".yml");
         this.configuration = YamlConfiguration.loadConfiguration(this.file);
@@ -54,17 +56,6 @@ public class AccountConfiguration extends OptEcoImplementation {
         return configuration;
     }
 
-    public boolean save(HashMap <String, Object> configurations) {
-        try {
-            configurations.forEach((s, o) -> this.getConfiguration().set(s, o));
-            this.getConfiguration().save(file);
-            return true;
-        } catch (IOException e) {
-            this.getPlugin().getDebugger().printException(e);
-            return false;
-        }
-    }
-
     public boolean save(Account account) {
         try {
             this.getConfiguration().set("data.player", Bukkit.getOfflinePlayer(account.getPlayer()).getName());
@@ -78,12 +69,8 @@ public class AccountConfiguration extends OptEcoImplementation {
         }
     }
 
-    public Account getAccount() {
-        return this.toAccount();
-    }
-
     public Account toAccount() {
-        OfflinePlayer player = Bukkit.getOfflinePlayer(UUID.fromString(Objects.requireNonNull(getConfiguration().getString("data.uuid"))));
+        OfflinePlayer player = Bukkit.getOfflinePlayer(UUID.fromString(getConfiguration().getString("data.uuid")));
         double balance = getConfiguration().getDouble("data.balance");
         return new Account(player, balance);
     }

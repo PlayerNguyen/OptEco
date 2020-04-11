@@ -3,6 +3,8 @@ package me.playernguyen.opteco.transaction;
 import me.playernguyen.opteco.OptEcoImplementation;
 import me.playernguyen.opteco.sql.SQLEstablish;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -23,98 +25,108 @@ public abstract class TransactionSQL extends OptEcoImplementation implements Tra
     }
 
     @Override public void push(Transaction transaction) {
-        try {
-            if (getTransaction(transaction.getId()) != null) {
-                updateTransaction(transaction);
-            } else {
-                this.getEstablish()
-                        .execute(String.format(
-                                "INSERT INTO %s (transaction_id, sender, receiver, amount, state, time) VALUES ('%s', '%s', '%s', '%s', '%s', '%s')",
-                                getEstablish().getTableName(),
-                                transaction.getId(),
-                                transaction.getPlayer(),
-                                transaction.getTarget(),
-                                transaction.getAmount(),
-                                transaction.getState().toString(),
-                                transaction.getTime()
-                        ));
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
+        getDebugger().info(String.format("Push up the transaction %s into database", transaction.getId()));
+        if (getTransaction(transaction.getId()) != null) {
+            this.updateTransaction(transaction);
+        } else {
+            this.createStorageTransaction(transaction);
         }
     }
 
-    @Override
-    public ArrayList<TransactionResult> getList(String id) {
-        try {
-            ResultSet set = getEstablish().executeQuery(
-                    String.format(
-                            "SELECT * FROM %s WHERE transaction_id = '%s'",
-                            getEstablish().getTableName(),
-                            id
-                    )
+    @Override public ArrayList<TransactionResult> getList() {
+        ArrayList<TransactionResult> temp = new ArrayList<>();
+        try (Connection connection = getEstablish().openConnect()) {
+            PreparedStatement preparedStatement = connection.prepareStatement(
+                    String.format("SELECT * FROM %s", getEstablish().getTableName())
             );
-
-            ArrayList<TransactionResult> transactionResults = new ArrayList<>();
-            while (set.next()) {
-                transactionResults.add(fromResultSetToTransaction(set));
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                temp.add(fromResultSetToTransaction(resultSet));
             }
-            // Return the result
-            return transactionResults;
-        } catch (SQLException e) {
+        } catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();
         }
-        return null;
+        return temp;
     }
 
     @Override public TransactionResult getTransaction(String id) {
-        try {
-            // If found nothing
-            if (getEstablish().size(String.format("transaction_id = '%s'", id)) < 1) {
-                getDebugger().info("Found nothing with this id.");
-                return null;
+        try (Connection connection = getEstablish().openConnect()) {
+            PreparedStatement preparedStatement = connection.prepareStatement(String.format(
+                    "SELECT * FROM %s WHERE transaction_id = ?",
+                    getEstablish().getTableName()
+            ));
+            preparedStatement.setObject(1, id);
+
+            // Result the data
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            TransactionResult transactionResult = null;
+            while (resultSet.next()) {
+                transactionResult = fromResultSetToTransaction(resultSet);
             }
-            // If found something, return it :D
-            ResultSet set = getEstablish().executeQuery(
-                    String.format(
-                            "SELECT * FROM %s WHERE transaction_id = '%s'",
-                            getEstablish().getTableName(),
-                            id
-                    )
-            );
-            // Re-move pointer to first value
-            TransactionResult pointer = null;
-            while (set.next()) pointer = fromResultSetToTransaction(set);
-            return pointer;
-        } catch (SQLException e) {
+            return transactionResult;
+        } catch (ClassNotFoundException|SQLException e) {
             e.printStackTrace();
         }
         return null;
     }
 
-    @Override
-    public boolean updateTransaction(Transaction transaction) {
+    @Override public boolean updateTransaction(Transaction transaction) {
         if (getTransaction(transaction.getId()) == null) {
             throw new NullPointerException("The id of transaction are null");
         }
-        try {
-            // Post an update
-            int i = getEstablish().executeUpdate(String.format(
-                    "UPDATE %s SET transaction_id='%s', sender='%s', receiver='%s', amount='%s', state='%s', time='%s' WHERE transaction_id='%s'",
-                    getEstablish().getTableName(),
-                    transaction.getId(),
-                    transaction.getPlayer(),
-                    transaction.getTarget(),
-                    transaction.getAmount(),
-                    transaction.getState().toString(),
-                    transaction.getTime(),
-                    transaction.getId()
-            ));
-            if (i == 1) return true;
-        } catch (SQLException e) {
+        try (Connection connection = getEstablish().openConnect()) {
+
+            PreparedStatement preparedStatement =
+                    connection.prepareStatement(String.format(
+                            "UPDATE %s SET transaction_id=?, sender=?, receiver=?, amount=?, state=?, time=? WHERE transaction_id=?",
+                            getEstablish().getTableName()
+                    )
+            );
+
+            generateTransactionData(transaction, preparedStatement);
+            preparedStatement.setObject(7, transaction.getId());
+
+            // Return
+            return preparedStatement.executeUpdate() >= 1;
+
+        } catch (ClassNotFoundException|SQLException e) {
             e.printStackTrace();
         }
         return false;
+    }
+
+    @Override
+    public boolean createStorageTransaction(Transaction transaction) {
+        try (Connection connection = getEstablish().openConnect();) {
+            PreparedStatement preparedStatement = connection.prepareStatement(
+                    String.format("INSERT INTO %s (transaction_id, sender, receiver, amount, state, time) VALUES (?,?,?,?,?,?)"
+                            , getEstablish().getTableName())
+            );
+
+            this.generateTransactionData(transaction, preparedStatement);
+
+            return preparedStatement.executeUpdate() >= 1;
+
+        } catch (SQLException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    /**
+     * Generate the transaction data and set it into prepared statement to push it up
+     * @param transaction The transaction you want to get data
+     * @param preparedStatement The prepared statement to put it into
+     * @throws SQLException The exception
+     */
+    private void generateTransactionData(Transaction transaction, PreparedStatement preparedStatement) throws SQLException {
+        preparedStatement.setObject(1, transaction.getId());
+        preparedStatement.setObject(2, transaction.getPlayer().toString());
+        preparedStatement.setObject(3, transaction.getTarget().toString());
+        preparedStatement.setObject(4, transaction.getAmount());
+        preparedStatement.setObject(5, transaction.getState().toString());
+        preparedStatement.setObject(6, transaction.getTime());
     }
 
     /**

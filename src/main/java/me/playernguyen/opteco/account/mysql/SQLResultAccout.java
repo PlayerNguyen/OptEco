@@ -34,7 +34,7 @@ public class SQLResultAccout {
     }
 
     public Account toAccount () {
-        return new Account(Bukkit.getPlayer(name), Double.parseDouble(balance));
+        return new Account(Bukkit.getOfflinePlayer(name), Double.parseDouble(balance));
     }
 
 }

@@ -24,6 +24,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Objects;
 import java.util.logging.Logger;
 
 public class OptEco extends JavaPlugin {
@@ -39,7 +40,6 @@ public class OptEco extends JavaPlugin {
     private ArrayList<Listener> listeners = new ArrayList<>();
     private HashMap<String, CommandExecutor> executors = new HashMap<>();
     private boolean isHookPlaceholder;
-    private boolean isProtocolLibEnabled;
 
     private ConfigurationLoader configurationLoader;
     private LanguageLoader languageLoader;
@@ -66,7 +66,6 @@ public class OptEco extends JavaPlugin {
          *  Register hook with people (I mean plugins)
          */
         this.hookingPlaceHolderAPI();
-        this.hookingProtocolLib();
 
         this.setupMetric();
     }
@@ -109,37 +108,32 @@ public class OptEco extends JavaPlugin {
     @Override
     public void onDisable() {
 
+
+
     }
 
     private void waterMarkPrint() {
         ArrayList<String> waterMarks = new ArrayList<>();
-        waterMarks.add("                     ");
-        waterMarks.add(" ___     ____   _____");
-        waterMarks.add("|   |   |    |    |");
-        waterMarks.add("|   |   |¯¯¯¯     |");
-        waterMarks.add("|___/   |         | Eco v" + getDescription().getVersion());
+        waterMarks.add("                        ");
+        waterMarks.add(" ___     ___   _______  ");
+        waterMarks.add("|   |   |    )    |     " + ChatColor.DARK_GRAY + "Support Bukkit - Spigot - PaperMC");
+        waterMarks.add("|   |   |‾‾‾      |     " + ChatColor.DARK_GRAY + "__________ ");
+        waterMarks.add("|___/   |         |     Eco"+ ChatColor.RED + " v" + getDescription().getVersion());
         waterMarks.add("                     ");
         for (String waterMark : waterMarks) {
-            getServer().getConsoleSender().sendMessage(ChatColor.GREEN + waterMark);
-        }
-    }
-
-    private void hookingProtocolLib() {
-        this.isProtocolLibEnabled = Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null;
-        if (isProtocolLibEnabled) {
-            this.getLogger().info("Found ProtocolLib...[Hooked]");
+            getServer().getConsoleSender().sendMessage(ChatColor.YELLOW + waterMark);
         }
     }
 
     private void hookingPlaceHolderAPI() {
         this.isHookPlaceholder = Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null;
         if (isHookPlaceholder()) {
-            this.getLogger().info("Detected PlaceholderAPI...");
-            this.getLogger().info("Hooking with PlaceholderAPI...");
-            this.getLogger().info("Register parameters with PlaceholderAPI...");
+            this.getLogger().info("[Hooker] Detected PlaceholderAPI...");
+            this.getLogger().info("[Hooker] Hooking with PlaceholderAPI...");
+            this.getLogger().info("[Hooker] Register parameters with PlaceholderAPI...");
             OptEcoExpansion expansion = new OptEcoExpansion(this);
 
-            this.getLogger().info("Active PlaceholderAPI...");
+            this.getLogger().info("[Hooker] Active PlaceholderAPI hook...");
             expansion.register();
 
         }
@@ -195,7 +189,7 @@ public class OptEco extends JavaPlugin {
         OptEcoUpdater updater = new OptEcoUpdater(Integer.parseInt(UPDATE_ID));
         updater.getVersion(version -> {
             if (!this.getDescription().getVersion().equalsIgnoreCase(version)) {
-                logger.warning("Detected new update, download at https://www.spigotmc.org/resources/76179");
+                logger.warning(String.format("Detected new update (%s), download at https://www.spigotmc.org/resources/76179", version));
             } else {
                 logger.fine("Nothing to update!");
             }
@@ -233,15 +227,11 @@ public class OptEco extends JavaPlugin {
     private void registerExecutors() {
         executors.put("opteco", new OptEcoCommand());
         executors.put("points", new OptEcoCommand());
-        executors.forEach((cmd, exec)->this.getCommand(cmd).setExecutor(exec));
+        executors.forEach((cmd, exec)-> Objects.requireNonNull(this.getCommand(cmd)).setExecutor(exec));
     }
 
     public Debugger getDebugger() {
         return debugger;
-    }
-
-    public boolean isProtocolLibEnabled() {
-        return isProtocolLibEnabled;
     }
 
     public static OptEco getInstance() {

@@ -22,7 +22,7 @@ public enum OptEcoConfiguration {
     SQL_ACCOUNT_TABLE_NAME          ("settings.sql.accountTable", "opteco"),
     SQL_TRANSACT_TABLE_NAME         ("settings.sql.transactTable", "opteco_transaction"),
 
-    SQL_CLOSE_CONNECT_TIMEOUT       ("settings.sql.connectionPool.timeout", 5),
+    SQL_CLOSE_CONNECT_TIMEOUT       ("settings.sql.connectionPool.timeout", 60),
 
     COUNTDOWN_ENABLE                ("settings.countdown.enable", true),
     COUNTDOWN_TYPE                  ("settings.countdown.type", "message"),

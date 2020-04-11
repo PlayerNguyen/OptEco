@@ -29,30 +29,24 @@ public class TransactionStorageYaml implements TransactionStorage {
         if (getTransaction(transaction.getId()) != null) {
             updateTransaction(transaction);
         } else {
-            this.getTransactionLoader().saveTransaction(transaction);
+            createStorageTransaction(transaction);
         }
     }
 
     /**
      * Get the transaction list
      *
-     * @param id The id you want to search
      * @return {@link Transaction}
      */
     @Override
-    public ArrayList<TransactionResult> getList(String id) {
+    public ArrayList<TransactionResult> getList() {
         ArrayList<TransactionResult> results = new ArrayList<>();
-        getTransactionLoader().getStorageTransactions().forEach(e->{
-            if (e.equalsIgnoreCase(id)) {
-                results.add(getTransaction(e));
-            }
-        });
+        getTransactionLoader().getStorageTransactions().forEach(e->results.add(getTransaction(e)));
         return results;
     }
 
     /**
      * Get the transaction storage in database via id. It's work by find the first value and put it. <br>
-     * Whether it's two and more same id, please using {@link #getList(String)}
      *
      * @param id id of transaction
      * @return The transaction
@@ -73,5 +67,10 @@ public class TransactionStorageYaml implements TransactionStorage {
         if (getTransaction(transaction.getId()) == null)
             throw new NullPointerException("cannot found transaction");
         return getTransactionLoader().saveTransaction(transaction);
+    }
+
+    @Override
+    public boolean createStorageTransaction(Transaction transaction) {
+        return this.getTransactionLoader().saveTransaction(transaction);
     }
 }
