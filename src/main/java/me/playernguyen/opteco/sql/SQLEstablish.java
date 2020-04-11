@@ -5,16 +5,13 @@ import me.playernguyen.opteco.OptEcoImplementation;
 import me.playernguyen.opteco.schedule.CloseConnectionRunnable;
 
 import javax.annotation.Nullable;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ArrayList;
 
 public abstract class SQLEstablish extends OptEcoImplementation implements IEstablish {
 
     public final long TIME_OUT_CLOSE_CONNECTION =
-            20L * getPlugin().getConfigurationLoader().getInt(OptEcoConfiguration.SQL_ACCOUNT_TABLE_NAME);
+            20L * getPlugin().getConfigurationLoader().getInt(OptEcoConfiguration.SQL_CLOSE_CONNECT_TIMEOUT);
 
     private String url;
     private String tableName;
@@ -40,6 +37,7 @@ public abstract class SQLEstablish extends OptEcoImplementation implements IEsta
     public abstract Connection openConnect()
             throws SQLException, ClassNotFoundException;
 
+    public abstract ArrayList<String> getTables();
 
     /**
      * Execute a SQL with ResultSet
@@ -86,12 +84,12 @@ public abstract class SQLEstablish extends OptEcoImplementation implements IEsta
     }
 
     /**
-     * Create a temporary statement and clean it after timeout to execute SQL lines
+     * Create a temporary statement and clean it after timeout to execute SQL lines. This for static calling query like DDL
      * @return Statement class
      */
-    protected @Nullable Statement createStatement() {
-        try {
-            Connection connection = this.openConnect();
+    @Nullable
+    private Statement createStatement() {
+        try ( Connection connection = this.openConnect()) {
             Statement statement = connection.createStatement();
             // Call the connection timeout
             CloseConnectionRunnable closeConnectionRunnable = new CloseConnectionRunnable(connection);
@@ -102,6 +100,11 @@ public abstract class SQLEstablish extends OptEcoImplementation implements IEsta
             e.printStackTrace();
             return null;
         }
+    }
+
+    private PreparedStatement prepareStatement() {
+
+        return null;
     }
 
     /**
@@ -116,7 +119,7 @@ public abstract class SQLEstablish extends OptEcoImplementation implements IEsta
      * Create the table if it not existed
      * @return The state {@link CreateTableState}
      */
-    public CreateTableState createTableIfNotExist() {
+    private CreateTableState createTableIfNotExist() {
         if (getTables().contains(getTableName())) {
             return CreateTableState.EXISTED;
         }
@@ -141,7 +144,7 @@ public abstract class SQLEstablish extends OptEcoImplementation implements IEsta
      *     <ul>
      *          <li>If table are set, log skip create</li>
      *          <li>If table created, log created</li>
-     *          <li>If table failed to set, log error</li>
+     *          <li>If table failed to set, log error and disabling plugin</li>
      *     </ul>
      *
      */
@@ -150,7 +153,8 @@ public abstract class SQLEstablish extends OptEcoImplementation implements IEsta
         switch (tableState) {
             case FAILED:
                 getPlugin().getLogger().severe(String.format("Cannot create the table %s...", this.getTableName()));
-
+                getPlugin().getLogger().severe(String.format("Disabling %s...", this.getPlugin().getDescription().getName()));
+                getPlugin().getPluginLoader().disablePlugin(getPlugin());
                 break;
             case EXISTED:
                 getPlugin().getLogger().info(String.format("The table %s has existed, skipping create...", this.getTableName()));
@@ -162,7 +166,7 @@ public abstract class SQLEstablish extends OptEcoImplementation implements IEsta
         }
     }
 
-    public ResultSet select (String what, String where) throws SQLException {
+    private ResultSet select(String what, String where) throws SQLException {
         return executeQuery(String.format(
                 "SELECT %s FROM %s WHERE %s",
                 what, getTableName(), where

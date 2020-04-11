@@ -59,6 +59,7 @@ public class MySQLEstablish extends SQLEstablish {
                 table.add(rs.getString(1));
             }
         } catch (SQLException e) {
+            e.printStackTrace();
             return null;
         }
         return table;

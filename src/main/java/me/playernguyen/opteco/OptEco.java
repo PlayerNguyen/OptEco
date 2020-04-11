@@ -43,6 +43,7 @@ public class OptEco extends JavaPlugin {
 
     private ConfigurationLoader configurationLoader;
     private LanguageLoader languageLoader;
+
     private IAccountManager accountManager;
     private StorageType storageType;
     private Debugger debugger;
@@ -86,10 +87,10 @@ public class OptEco extends JavaPlugin {
     }
 
     private void setupLoader() {
-        this.configurationLoader =
-                new ConfigurationLoader(this);
-        this.languageLoader =
-                new LanguageLoader(getConfigurationLoader().getString(OptEcoConfiguration.LANGUAGE_FILE));
+        // Configuration Loader
+        this.configurationLoader = new ConfigurationLoader();
+        // Language Loader
+        this.languageLoader = new LanguageLoader(getConfigurationLoader().getString(OptEcoConfiguration.LANGUAGE_FILE));
     }
 
     private void setupAccount() {
@@ -112,10 +113,12 @@ public class OptEco extends JavaPlugin {
 
     private void waterMarkPrint() {
         ArrayList<String> waterMarks = new ArrayList<>();
+        waterMarks.add("                     ");
         waterMarks.add(" ___     ____   _____");
         waterMarks.add("|   |   |    |    |");
         waterMarks.add("|   |   |¯¯¯¯     |");
-        waterMarks.add("|___/   |         | eco v" + getDescription().getVersion());
+        waterMarks.add("|___/   |         | Eco v" + getDescription().getVersion());
+        waterMarks.add("                     ");
         for (String waterMark : waterMarks) {
             getServer().getConsoleSender().sendMessage(ChatColor.GREEN + waterMark);
         }
@@ -255,4 +258,5 @@ public class OptEco extends JavaPlugin {
     protected void disableOptEco() {
         this.getServer().getPluginManager().disablePlugin(this);
     }
+
 }

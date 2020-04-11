@@ -33,8 +33,7 @@ public class SQLiteEstablish extends SQLEstablish {
      */
     @Override public ArrayList<String> getTables() {
         try {
-            ResultSet set =
-                    this.executeQuery("SELECT * FROM sqlite_master WHERE type='table' AND name not like 'sqlite_%'");
+            ResultSet set = this.executeQuery("SELECT * FROM sqlite_master WHERE type='table' AND name not like 'sqlite_%'");
             ArrayList<String> temp = new ArrayList<>();
             while(set.next()) {
                 temp.add(set.getString("name"));

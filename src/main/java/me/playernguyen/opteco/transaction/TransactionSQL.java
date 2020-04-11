@@ -26,17 +26,19 @@ public abstract class TransactionSQL extends OptEcoImplementation implements Tra
         try {
             if (getTransaction(transaction.getId()) != null) {
                 updateTransaction(transaction);
-            } else this.getEstablish()
-                    .execute(String.format(
-                            "INSERT INTO %s (transaction_id, sender, receiver, amount, state, time) VALUES ('%s', '%s', '%s', '%s', '%s', '%s')",
-                            getEstablish().getTableName(),
-                            transaction.getId(),
-                            transaction.getPlayer(),
-                            transaction.getTarget(),
-                            transaction.getAmount(),
-                            transaction.getState().toString(),
-                            transaction.getTime()
-                    ));
+            } else {
+                this.getEstablish()
+                        .execute(String.format(
+                                "INSERT INTO %s (transaction_id, sender, receiver, amount, state, time) VALUES ('%s', '%s', '%s', '%s', '%s', '%s')",
+                                getEstablish().getTableName(),
+                                transaction.getId(),
+                                transaction.getPlayer(),
+                                transaction.getTarget(),
+                                transaction.getAmount(),
+                                transaction.getState().toString(),
+                                transaction.getTime()
+                        ));
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }

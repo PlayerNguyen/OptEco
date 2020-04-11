@@ -45,6 +45,13 @@ public class TransactionCountRunnable extends OptEcoRunnable {
                             getInstance().getLanguageLoader().getLanguage(OptEcoLanguage.COUNTDOWN_FORMAT)
                                     .replace("%second%", String.valueOf(ticker))
                     );
+                } else if (getInstance().getConfigurationLoader().getString(OptEcoConfiguration.COUNTDOWN_TYPE)
+                        .equalsIgnoreCase("title")) {
+                    pla.sendTitle(
+                            getInstance().getLanguageLoader().getLanguage(OptEcoLanguage.COUNTDOWN_FORMAT)
+                                    .replace("%second%", String.valueOf(ticker)),
+                            ""
+                    );
                 }
             }
         }

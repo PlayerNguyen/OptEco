@@ -16,13 +16,13 @@ public class TransactionSQLiteStorage extends TransactionSQL {
     public static final ArrayList<String> TRANSACTION_INIT =
             new ArrayList<>(
                     Arrays.asList(
-                            "id INT(32) NOT NULL AUTO_INCREMENT PRIMARY KEY",
-                            "transaction_id VARCHAR(255) NOT NULL",
-                            "sender VARCHAR(255) NOT NULL",
-                            "receiver VARCHAR(255) NOT NULL",
+                            "id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT",
+                            "transaction_id VARCHAR NOT NULL",
+                            "sender VARCHAR NOT NULL",
+                            "receiver VARCHAR NOT NULL",
                             "amount REAL NOT NULL",
-                            "state VARCHAR(255) NOT NULL",
-                            "time VARCHAR(255) NOT NULL"
+                            "state VARCHAR NOT NULL",
+                            "time VARCHAR NOT NULL"
                     )
             );
 

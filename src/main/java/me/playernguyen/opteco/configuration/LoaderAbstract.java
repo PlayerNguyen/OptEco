@@ -4,6 +4,7 @@ import me.playernguyen.opteco.OptEcoImplementation;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.File;
+import java.io.IOException;
 
 public abstract class LoaderAbstract extends OptEcoImplementation {
 
@@ -61,6 +62,16 @@ public abstract class LoaderAbstract extends OptEcoImplementation {
 
     public void reload() {
         this.configuration = YamlConfiguration.loadConfiguration(file);
+    }
+
+    public boolean save () {
+        try {
+            this.getConfiguration().save(getFile());
+            return true;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 
 }

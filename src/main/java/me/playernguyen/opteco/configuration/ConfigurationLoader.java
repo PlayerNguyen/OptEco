@@ -2,6 +2,7 @@ package me.playernguyen.opteco.configuration;
 
 import me.playernguyen.opteco.OptEco;
 import me.playernguyen.opteco.OptEcoConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.File;
 
@@ -14,6 +15,8 @@ public class ConfigurationLoader extends LoaderAbstract {
     public ConfigurationLoader () {
         super(new File(OptEco.getInstance().getDataFolder(), CONFIG_FILE), HEADER_HELPER);
         saveDefault();
+
+        System.out.println(getString(OptEcoConfiguration.SQLITE_FILE));
 
     }
 
@@ -47,6 +50,15 @@ public class ConfigurationLoader extends LoaderAbstract {
 
     @Override
     public void saveDefault() {
+        getConfiguration().options().copyDefaults(true);
 
+        // Put default values if value is null
+        for (OptEcoConfiguration c : OptEcoConfiguration.values()) {
+            if (getConfiguration().get(c.getPath()) == null) {
+                getConfiguration().addDefault(c.getPath(), c.getDefaultSetting());
+            }
+        }
+
+        save();
     }
 }
