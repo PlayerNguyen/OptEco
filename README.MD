@@ -58,7 +58,7 @@ From 1.2b version of plugin, OptEco added PlaceholderAPI for server
 Check out our example website integration PHP [here](web_integration).
 
 # Links:
-* Discord: Player_Nguyen#5200
+* Discord: [Click here](https://discord.gg/C4kjQ3u)
 * [bStat](https://bstats.org/plugin/bukkit/OptEco/6793)
 * [Spigot](https://www.spigotmc.org/resources/opteco-placeholderapi-mysql-support-api-web-integration-points-system.76179/)
 
