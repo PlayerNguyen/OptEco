@@ -74,11 +74,17 @@ public abstract class AbstractCommand extends AbstractPermission implements TabC
         }
         if (commandSender instanceof Player) {
             return onPlayerCommand((Player) commandSender, command, s, strings);
+        } else if (commandSender instanceof ConsoleCommandSender) {
+            return onConsoleCommand((ConsoleCommandSender) commandSender, command, s, strings);
+        } else if (commandSender instanceof RemoteConsoleCommandSender) {
+            return onRemoteConsole((RemoteConsoleCommandSender) commandSender, command, s, strings);
         }
-        return onConsoleCommand((ConsoleCommandSender) commandSender, command, s, strings);
+        return onAny(commandSender, command, s, strings);
     }
 
 
     public abstract boolean onPlayerCommand(Player player, Command command, String s, String[] args);
     public abstract boolean onConsoleCommand(ConsoleCommandSender sender, Command command, String s, String[] args);
+    public abstract boolean onRemoteConsole(RemoteConsoleCommandSender sender, Command command, String s, String[] args);
+    public abstract boolean onAny(CommandSender sender, Command command, String s, String[] args);
 }

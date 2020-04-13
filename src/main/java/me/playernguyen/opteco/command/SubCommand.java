@@ -89,7 +89,7 @@ public abstract class SubCommand extends AbstractPermission {
           // With console execute
           else if (commandSender instanceof ConsoleCommandSender)
                return onConsoleCommand(commandSender, args);
-          // With remote player console
+          // With remote console
           else if (commandSender instanceof RemoteConsoleCommandSender)
                return onRemoteConsoleCommand((RemoteConsoleCommandSender) commandSender, args);
 

@@ -6,6 +6,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
+import org.bukkit.command.RemoteConsoleCommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
@@ -36,6 +37,16 @@ public class OptEcoCommand extends AbstractCommand {
 
     @Override
     public boolean onConsoleCommand(ConsoleCommandSender sender, Command command, String s, String[] args) {
+        return execute(sender, command, s, args);
+    }
+
+    @Override
+    public boolean onRemoteConsole(RemoteConsoleCommandSender sender, Command command, String s, String[] args) {
+        return execute(sender, command, s, args);
+    }
+
+    @Override
+    public boolean onAny(CommandSender sender, Command command, String s, String[] args) {
         return execute(sender, command, s, args);
     }
 
