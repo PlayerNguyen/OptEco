@@ -1,5 +1,6 @@
 package me.playernguyen.opteco.sql;
 
+import java.io.File;
 import me.playernguyen.opteco.OptEcoConfiguration;
 
 import java.sql.*;
@@ -47,7 +48,7 @@ public class SQLiteEstablish extends SQLEstablish {
     }
 
     private String buildUrl() {
-        return getPlugin().getDataFolder() + "\\" + getConfigurationLoader().getString(OptEcoConfiguration.SQLITE_FILE);
+        return getPlugin().getDataFolder() + File.separator + getConfigurationLoader().getString(OptEcoConfiguration.SQLITE_FILE);
     }
 
 }
