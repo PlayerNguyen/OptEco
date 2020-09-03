@@ -48,7 +48,10 @@ public class SQLiteEstablish extends SQLEstablish {
     }
 
     private String buildUrl() {
-        return getPlugin().getDataFolder() + File.separator + getConfigurationLoader().getString(OptEcoConfiguration.SQLITE_FILE);
+
+        return getPlugin().getDataFolder()
+                + File.separator
+                + getConfigurationLoader().getString(OptEcoConfiguration.SQLITE_FILE);
     }
 
 }

@@ -5,13 +5,17 @@ import me.playernguyen.opteco.account.YamlAccountManager;
 import me.playernguyen.opteco.account.mysql.MySQLAccountManager;
 import me.playernguyen.opteco.account.sqlite.SQLiteAccountManager;
 import me.playernguyen.opteco.bStats.Metrics;
+import me.playernguyen.opteco.command.CommandManager;
 import me.playernguyen.opteco.command.OptEcoCommand;
 import me.playernguyen.opteco.configuration.ConfigurationLoader;
 import me.playernguyen.opteco.configuration.LanguageLoader;
 import me.playernguyen.opteco.configuration.StorageType;
-import me.playernguyen.opteco.listener.PlayerJoinListener;
+import me.playernguyen.opteco.listener.ListenerManager;
+import me.playernguyen.opteco.listener.OptEcoListener;
+import me.playernguyen.opteco.listener.OptEcoPlayerJoinListener;
 import me.playernguyen.opteco.logger.Debugger;
 import me.playernguyen.opteco.logger.OptEcoDebugger;
+import me.playernguyen.opteco.manager.ManagerSet;
 import me.playernguyen.opteco.placeholderapi.OptEcoExpansion;
 import me.playernguyen.opteco.transaction.TransactionManager;
 import me.playernguyen.opteco.updater.OptEcoUpdater;
@@ -19,7 +23,6 @@ import me.playernguyen.opteco.utils.MessageFormat;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandExecutor;
-import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.ArrayList;
@@ -40,8 +43,8 @@ public class OptEco extends JavaPlugin {
 
     private final Logger logger = this.getLogger();
 
-    private final ArrayList<Listener> listeners = new ArrayList<>();
-    private final HashMap<String, CommandExecutor> executors = new HashMap<>();
+    private ListenerManager listenerManager;
+    private CommandManager commandManager;
     private boolean isHookPlaceholder;
 
     private ConfigurationLoader configurationLoader;
@@ -107,8 +110,6 @@ public class OptEco extends JavaPlugin {
     @Override
     public void onDisable() {
 
-
-
     }
 
     private void waterMarkPrint() {
@@ -154,14 +155,15 @@ public class OptEco extends JavaPlugin {
      * Setting to the updater
      */
     private void setupUpdater() {
+        // Enable check for update or not
         if (getConfigurationLoader().getBool(OptEcoConfiguration.CHECK_FOR_UPDATE)) {
-
+            // Checking... :))
             this.checkForUpdates();
         }
     }
 
     /**
-     * @deprecated use getInstance instead of
+     * @deprecated use {@link #getInstance()} instead of this
      * @return the instance of plugin
      */
     public static OptEco getPlugin() {
@@ -188,11 +190,19 @@ public class OptEco extends JavaPlugin {
         return transactionManager;
     }
 
+    /**
+     * Perform check for update. Using spigot resource file
+     */
     private void checkForUpdates() {
         OptEcoUpdater updater = new OptEcoUpdater(Integer.parseInt(UPDATE_ID));
         updater.getVersion(version -> {
             if (!this.getDescription().getVersion().equalsIgnoreCase(version)) {
-                logger.warning(String.format("Detected new update (%s), download at https://www.spigotmc.org/resources/76179", version));
+                Bukkit.getConsoleSender()
+                        .sendMessage(String.format(
+                                ChatColor.YELLOW +
+                                "Detected new update (%s), download at https://www.spigotmc.org/resources/76179",
+                                version)
+                        );
             } else {
                 logger.fine("Nothing to update!");
             }
@@ -223,13 +233,20 @@ public class OptEco extends JavaPlugin {
     }
 
     private void registerListener() {
-        listeners.add(new PlayerJoinListener());
-        listeners.forEach(e->Bukkit.getPluginManager().registerEvents(e, this));
+        // Initial the class
+        getLogger().info("Loading listener manager...");
+        this.listenerManager = new ListenerManager(this);
+        // Listener adding here...
+        getListenerManager().add(new OptEcoPlayerJoinListener());
+
     }
 
     private void registerExecutors() {
-        executors.put("opteco", new OptEcoCommand());
-        executors.forEach((cmd, exec)-> Objects.requireNonNull(this.getCommand(cmd)).setExecutor(exec));
+        // Initial the command manager
+        getLogger().info("Loading command manager...");
+        this.commandManager = new CommandManager();
+        // Insert here :))
+        getCommandManager().add(new OptEcoCommand());
     }
 
     public Debugger getDebugger() {
@@ -251,4 +268,11 @@ public class OptEco extends JavaPlugin {
         this.getServer().getPluginManager().disablePlugin(this);
     }
 
+    public ManagerSet<OptEcoListener> getListenerManager() {
+        return listenerManager;
+    }
+
+    public CommandManager getCommandManager() {
+        return commandManager;
+    }
 }

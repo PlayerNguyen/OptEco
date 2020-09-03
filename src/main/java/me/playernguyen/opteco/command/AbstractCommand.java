@@ -8,19 +8,25 @@ import org.bukkit.entity.Player;
 import java.util.ArrayList;
 import java.util.stream.Collectors;
 
-public abstract class AbstractCommand extends AbstractPermission implements TabCompleter, CommandExecutor {
+public abstract class AbstractCommand extends AbstractPermission
+        implements TabCompleter, CommandExecutor {
 
-    private MessageFormat messageFormat;
+    private final String command;
+    private final MessageFormat messageFormat;
+    private final ArrayList<SubCommand> subCommands = new ArrayList<>();
 
-    public AbstractCommand () {
+    public AbstractCommand (String command) {
+        this.command = command;
         this.messageFormat = getPlugin().getMessageFormat();
+    }
+
+    public String getCommand() {
+        return command;
     }
 
     public MessageFormat getMessageFormat() {
         return messageFormat;
     }
-
-    private ArrayList<SubCommand> subCommands = new ArrayList<>();
 
     public boolean addSubCommand(SubCommand subCommand) {
         return subCommands.add(subCommand);

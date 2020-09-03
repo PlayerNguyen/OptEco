@@ -15,6 +15,7 @@ import java.util.List;
 public class OptEcoCommand extends AbstractCommand {
 
     public OptEcoCommand () {
+        super("opteco");
         for (OptEcoPermission perm :
                 OptEcoPermission.values()) {
             addPermissions(perm);

@@ -7,7 +7,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 
-public class PlayerJoinListener extends OptEcoImplementation implements Listener {
+public class OptEcoPlayerJoinListener extends OptEcoListener {
 
     /**
      * On player join into the server
