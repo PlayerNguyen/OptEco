@@ -1,6 +1,5 @@
 package me.playernguyen.opteco.sql;
 
-import me.playernguyen.opteco.OptEcoConfiguration;
 import me.playernguyen.opteco.OptEcoImplementation;
 
 import javax.annotation.Nullable;
@@ -12,12 +11,9 @@ import java.util.ArrayList;
 
 public abstract class SQLEstablish extends OptEcoImplementation implements IEstablish {
 
-    public final long TIME_OUT_CLOSE_CONNECTION =
-            20L * getPlugin().getConfigurationLoader().getInt(OptEcoConfiguration.SQL_CLOSE_CONNECT_TIMEOUT);
-
     private String url;
-    private String tableName;
-    private ArrayList<String> init;
+    private final String tableName;
+    private final ArrayList<String> init;
 
     public SQLEstablish (String tableName, ArrayList<String> initialDataList) {
         this.url = "";

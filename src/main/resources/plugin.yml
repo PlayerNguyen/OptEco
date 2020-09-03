@@ -10,5 +10,5 @@ softdepend:
 commands:
   opteco:
     usage: /opteco help
-  points:
-    usage: /opteco help
+    description: The OptEco main command
+    alias: [points, pts, p]

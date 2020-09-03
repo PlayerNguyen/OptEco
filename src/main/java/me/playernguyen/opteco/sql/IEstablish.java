@@ -4,6 +4,10 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+/**
+ * The represent class to establish the SQL connection
+ *
+ */
 public interface IEstablish {
 
     String getURL();

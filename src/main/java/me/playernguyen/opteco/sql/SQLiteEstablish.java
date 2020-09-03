@@ -22,7 +22,7 @@ public class SQLiteEstablish extends SQLEstablish {
         // Import class
         Class.forName("org.sqlite.JDBC");
         // Open connect
-        getDebugger().info("['Connection::SQLite] Create the connection of MySQL");
+        getDebugger().info("['Connection::SQLite] Create the connection of SQLite");
         return DriverManager.getConnection(getURL());
     }
 

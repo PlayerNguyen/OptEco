@@ -30,8 +30,8 @@ public enum OptEcoConfiguration {
     DEBUG                           ("debug", false),
     LANGUAGE_FILE                   ("language", "lang");
 
-    private String path;
-    private Object wh;
+    private final String path;
+    private final Object wh;
 
     OptEcoConfiguration(String path, Object wh) {
         this.path = path;

@@ -27,6 +27,9 @@ import java.util.HashMap;
 import java.util.Objects;
 import java.util.logging.Logger;
 
+/**
+ * Main class of OptEco plugin
+ */
 public class OptEco extends JavaPlugin {
 
     public static OptEco instance;
@@ -37,8 +40,8 @@ public class OptEco extends JavaPlugin {
 
     private final Logger logger = this.getLogger();
 
-    private ArrayList<Listener> listeners = new ArrayList<>();
-    private HashMap<String, CommandExecutor> executors = new HashMap<>();
+    private final ArrayList<Listener> listeners = new ArrayList<>();
+    private final HashMap<String, CommandExecutor> executors = new HashMap<>();
     private boolean isHookPlaceholder;
 
     private ConfigurationLoader configurationLoader;
@@ -61,10 +64,6 @@ public class OptEco extends JavaPlugin {
         this.setupUpdater();
         this.setupStorage();
         this.setupAccount();
-
-        /*
-         *  Register hook with people (I mean plugins)
-         */
         this.hookingPlaceHolderAPI();
 
         this.setupMetric();
@@ -117,7 +116,7 @@ public class OptEco extends JavaPlugin {
         waterMarks.add("                        ");
         waterMarks.add(" ___     ___   _______  ");
         waterMarks.add("|   |   |    )    |     " + ChatColor.DARK_GRAY + "Support Bukkit - Spigot - PaperMC");
-        waterMarks.add("|   |   |‾‾‾      |     " + ChatColor.DARK_GRAY + "__________ ");
+        waterMarks.add("|   |   |---/     |     " + ChatColor.DARK_GRAY + "__________ ");
         waterMarks.add("|___/   |         |     Eco"+ ChatColor.RED + " v" + getDescription().getVersion());
         waterMarks.add("                     ");
         for (String waterMark : waterMarks) {
@@ -143,17 +142,21 @@ public class OptEco extends JavaPlugin {
         return isHookPlaceholder;
     }
 
+    /**
+     * Metrics class (bStats)
+     * @return the {@link Metrics} class
+     */
     public Metrics getMetrics() {
         return metrics;
     }
 
+    /**
+     * Setting to the updater
+     */
     private void setupUpdater() {
         if (getConfigurationLoader().getBool(OptEcoConfiguration.CHECK_FOR_UPDATE)) {
-            /*
-            Check for update
-             */
-            this.checkForUpdates(
-            );
+
+            this.checkForUpdates();
         }
     }
 
@@ -226,7 +229,6 @@ public class OptEco extends JavaPlugin {
 
     private void registerExecutors() {
         executors.put("opteco", new OptEcoCommand());
-        executors.put("points", new OptEcoCommand());
         executors.forEach((cmd, exec)-> Objects.requireNonNull(this.getCommand(cmd)).setExecutor(exec));
     }
 

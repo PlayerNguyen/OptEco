@@ -6,7 +6,10 @@ import me.playernguyen.opteco.configuration.StorageType;
 import me.playernguyen.opteco.logger.Debugger;
 import me.playernguyen.opteco.transaction.TransactionManager;
 
-public abstract class OptEcoImplementation {
+/**
+ * The implementation class to implement from {@link OptEco} class instance
+ */
+public abstract class OptEcoImplementation  {
 
     /**
      * Plugin implementation

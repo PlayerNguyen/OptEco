@@ -10,7 +10,6 @@ import java.util.ArrayList;
 public class MessageFormat extends OptEcoImplementation {
 
     private final char SPACE_CHARACTER = ' ';
-    // Maybe: ✱
     private final char START_LIST_CHARACTER = '>';
 
     public MessageFormat () { }
