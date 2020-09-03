@@ -3,14 +3,14 @@ package me.playernguyen.opteco.account.mysql;
 import me.playernguyen.opteco.account.Account;
 import org.bukkit.Bukkit;
 
-public class SQLResultAccout {
+public class SQLResultAccount {
 
-    private String id;
-    private String name;
-    private String balance;
-    private String uuid;
+    private final String id;
+    private final String name;
+    private final String balance;
+    private final String uuid;
 
-    public SQLResultAccout(String id, String name, String balance, String uuid) {
+    public SQLResultAccount(String id, String name, String balance, String uuid) {
         this.id = id;
         this.name = name;
         this.balance = balance;

@@ -8,7 +8,7 @@ import java.util.ArrayList;
  * The represent class to establish the SQL connection
  *
  */
-public interface IEstablish {
+public interface OptEcoEstablish {
 
     String getURL();
 

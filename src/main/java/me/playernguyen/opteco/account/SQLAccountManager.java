@@ -1,9 +1,8 @@
-package me.playernguyen.opteco.sql;
+package me.playernguyen.opteco.account;
 
 import me.playernguyen.opteco.OptEcoImplementation;
-import me.playernguyen.opteco.account.Account;
-import me.playernguyen.opteco.account.ISQLAccountManager;
-import me.playernguyen.opteco.account.mysql.SQLResultAccout;
+import me.playernguyen.opteco.account.mysql.SQLResultAccount;
+import me.playernguyen.opteco.sql.SQLEstablish;
 import org.bukkit.Bukkit;
 
 import javax.annotation.Nullable;
@@ -11,9 +10,10 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.UUID;
 
-public abstract class SQLAccountManager extends OptEcoImplementation implements ISQLAccountManager {
+public abstract class SQLAccountManager extends OptEcoImplementation
+        implements ISQLAccountManager {
 
-    private SQLEstablish establish;
+    private final SQLEstablish establish;
 
     public SQLAccountManager(SQLEstablish establish) {
         // Put the connection into data
@@ -38,7 +38,7 @@ public abstract class SQLAccountManager extends OptEcoImplementation implements 
         if (who == null) throw new NullPointerException("UUID mustn't be null");
         getDebugger().info("Get account within UUID -> " + who.toString());
 
-        SQLResultAccout resultAccount = getAccountResult(who);
+        SQLResultAccount resultAccount = getAccountResult(who);
         // Whether player null, return new player and save
         if (resultAccount == null) {
             Account account = new Account(who);
@@ -54,7 +54,7 @@ public abstract class SQLAccountManager extends OptEcoImplementation implements 
         if (who == null) throw new NullPointerException("UUID mustn't be null");
 
         getDebugger().info("Get accountIdentify within UUID -> " + who.toString());
-        SQLResultAccout resultAccount = getAccountResult(who);
+        SQLResultAccount resultAccount = getAccountResult(who);
 
         // Return data
         if (resultAccount != null) {
@@ -150,7 +150,7 @@ public abstract class SQLAccountManager extends OptEcoImplementation implements 
         return this.setBalance(uuid, this.getBalance(uuid)+amount);
     }
 
-    private SQLResultAccout getAccountResult(UUID who) {
+    private SQLResultAccount getAccountResult(UUID who) {
         try (Connection connection = getEstablish().openConnect()) {
 
             PreparedStatement statement = connection.prepareStatement(
@@ -165,7 +165,7 @@ public abstract class SQLAccountManager extends OptEcoImplementation implements 
             ArrayList<String> result = parseResult(resultSet);
             if (result == null || result.size() == 0) return null;
 
-            return new SQLResultAccout(result.get(0), result.get(1), result.get(2), result.get(3));
+            return new SQLResultAccount(result.get(0), result.get(1), result.get(2), result.get(3));
 
         } catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();
@@ -194,4 +194,6 @@ public abstract class SQLAccountManager extends OptEcoImplementation implements 
             return null;
         }
     }
+
+
 }

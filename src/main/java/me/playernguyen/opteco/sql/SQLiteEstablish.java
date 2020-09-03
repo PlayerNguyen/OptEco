@@ -47,6 +47,10 @@ public class SQLiteEstablish extends SQLEstablish {
         return temp;
     }
 
+    /**
+     * Build the url for SQLite
+     * @return the url path
+     */
     private String buildUrl() {
 
         return getPlugin().getDataFolder()

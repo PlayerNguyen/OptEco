@@ -3,7 +3,7 @@ package me.playernguyen.opteco.account.mysql;
 import me.playernguyen.opteco.OptEco;
 import me.playernguyen.opteco.OptEcoConfiguration;
 import me.playernguyen.opteco.sql.MySQLEstablish;
-import me.playernguyen.opteco.sql.SQLAccountManager;
+import me.playernguyen.opteco.account.SQLAccountManager;
 
 import java.util.ArrayList;
 import java.util.Arrays;
