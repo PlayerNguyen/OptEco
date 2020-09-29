@@ -4,14 +4,13 @@ import me.playernguyen.opteco.OptEcoImplementation;
 import me.playernguyen.opteco.schedule.TransactionCountRunnable;
 import me.playernguyen.opteco.transaction.mysql.TransactionMySQLStorage;
 import me.playernguyen.opteco.transaction.sqlite.TransactionSQLiteStorage;
-import me.playernguyen.opteco.transaction.yaml.TransactionStorageYaml;
 
 import java.util.ArrayList;
 import java.util.UUID;
 
 public class TransactionManager extends OptEcoImplementation {
 
-    private ArrayList<Transaction> transactions = new ArrayList<>();
+    private final ArrayList<Transaction> transactions = new ArrayList<>();
     private TransactionStorage transactionStorage;
 
     public TransactionManager() {
@@ -24,9 +23,6 @@ public class TransactionManager extends OptEcoImplementation {
             case SQLITE: {
                 this.transactionStorage = new TransactionSQLiteStorage();
                 break;
-            }
-            case YAML: {
-                this.transactionStorage = new TransactionStorageYaml();
             }
         }
 

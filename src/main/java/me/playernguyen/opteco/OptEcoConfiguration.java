@@ -28,7 +28,7 @@ public enum OptEcoConfiguration {
     COUNTDOWN_TYPE("settings.countdown.type", "message"),
 
     DEBUG("debug", false),
-    LANGUAGE_FILE("language", "lang");
+    LANGUAGE_FILE("language", "lang.yml");
 
     private final String path;
     private final Object wh;

@@ -12,17 +12,17 @@ import java.util.UUID;
 
 public class Transaction extends OptEcoImplementation {
 
-    private final long DELAY = 20L;
-    private final long PERIOD = 20L;
-    private final int ID_RANDOM_LENGTH = 16;
+    private static final long DELAY = 20L;
+    private static final long PERIOD = 20L;
+    private static final int ID_RANDOM_LENGTH = 16;
 
     private final UUID player;
     private final UUID target;
     private final Double amount;
     private final BukkitRunnable runnable;
     private TransactionState state = TransactionState.PENDING;
-    private String id;
-    private long time;
+    private final String id;
+    private final long time;
 
     public Transaction(UUID player, UUID target, Double amount, BukkitRunnable runnable) {
         this.player = player;
@@ -36,7 +36,7 @@ public class Transaction extends OptEcoImplementation {
         // Init with pending state
         this.setState(TransactionState.PENDING);
         // Call an async task to count down
-        this.runnable.runTaskTimerAsynchronously(getPlugin(), this.DELAY, this.PERIOD);
+        this.runnable.runTaskTimerAsynchronously(getPlugin(), DELAY, PERIOD);
         // Call the event
         OptEcoPlayerPendingEvent e = new OptEcoPlayerPendingEvent(getPlayer(), this);
         Bukkit.getServer().getPluginManager().callEvent(e);

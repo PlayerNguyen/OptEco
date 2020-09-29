@@ -1,7 +1,6 @@
 package me.playernguyen.opteco;
 
 import me.playernguyen.opteco.account.IAccountManager;
-import me.playernguyen.opteco.account.YamlAccountManager;
 import me.playernguyen.opteco.account.mysql.MySQLAccountManager;
 import me.playernguyen.opteco.account.sqlite.SQLiteAccountManager;
 import me.playernguyen.opteco.bStats.Metrics;
@@ -45,10 +44,8 @@ public class OptEco extends JavaPlugin {
     private ListenerManager listenerManager;
     private CommandManager commandManager;
     private boolean isHookPlaceholder;
-
     private ConfigurationLoader configurationLoader;
     private LanguageLoader languageLoader;
-
     private IAccountManager accountManager;
     private StorageType storageType;
     private Debugger debugger;
@@ -67,7 +64,6 @@ public class OptEco extends JavaPlugin {
         this.hookPlaceHolderAPI();
         this.hookBossShopPro();
         this.setupMetric();
-
         this.waterMarkPrint();
     }
 
@@ -78,7 +74,7 @@ public class OptEco extends JavaPlugin {
         if (plugin != null) {
             // Announce to user
             logger.info("[Hooker] Found BossShopPro v."
-                    + plugin.getDescription().getVersion() + "...");
+                    + plugin.getDescription().getVersion() + " !");
             // Register API
             new OptEcoBossShopPro(this).register();
         }
@@ -233,10 +229,6 @@ public class OptEco extends JavaPlugin {
 
     private void registerAccountManager() {
         switch (storageType) {
-            case YAML: {
-                this.accountManager = new YamlAccountManager();
-                break;
-            }
             case SQLITE: {
                 this.accountManager = new SQLiteAccountManager();
                 break;

@@ -1,19 +1,17 @@
 package me.playernguyen.opteco.configuration;
 
-import me.playernguyen.opteco.OptEco;
 import me.playernguyen.opteco.OptEcoLanguage;
 import org.bukkit.ChatColor;
 
-import java.io.File;
 import java.io.IOException;
 
 public class LanguageLoader extends LoaderAbstract {
 
     public static final char COLOR_SYMBOL = '&';
 
-
     public LanguageLoader(String file) {
-        super(new File(OptEco.getInstance().getDataFolder(), file + ".yml"));
+//        super(new File(OptEco.getInstance().getDataFolder(), file));
+        super(file, "Auto-generated language by OptEco", "language", false);
         saveDefault();
     }
 

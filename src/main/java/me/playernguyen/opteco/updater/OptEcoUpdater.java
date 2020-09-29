@@ -14,18 +14,19 @@ public class OptEcoUpdater extends OptEcoImplementation {
     public static final String UPDATE_LINK = "https://www.spigotmc.org/resources/";
     public static final String UPDATE_URL = "https://api.spigotmc.org/legacy/update.php?resource=";
 
-    private int resourceId;
+    private final int resourceId;
 
     public OptEcoUpdater(int resourceId) {
         getPlugin().getDebugger().info("Creating connection check for updates...");
         this.resourceId = resourceId;
-        getPlugin().getDebugger().info("Check for updates id " + resourceId);
+        getPlugin().getDebugger().info("Checking for updates ưith id " + resourceId);
     }
 
     public void getVersion(final Consumer<String> consumer) {
-        getPlugin().getDebugger().info("Create runTaskAsynchronously and look for updates...");
+        getPlugin().getDebugger().info("Creating runTaskAsynchronously and looking for updates...");
         Bukkit.getScheduler().runTaskAsynchronously(getPlugin(), () -> {
-            try (InputStream inputStream = new URL(UPDATE_URL + this.resourceId).openStream(); Scanner scanner = new Scanner(inputStream)) {
+            try (InputStream inputStream = new URL(UPDATE_URL + this.resourceId).openStream();
+                 Scanner scanner = new Scanner(inputStream)) {
                 if (scanner.hasNext()) {
                     String next = scanner.next();
                     getPlugin().getDebugger().info("Found next version of: " + next);

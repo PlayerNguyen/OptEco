@@ -53,8 +53,8 @@ public enum OptEcoLanguage {
     COMMAND_DESCRIBE_CONFIRM("COMMAND.CONFIRM.DESCRIPTION", "confirm transaction"),
     COMMAND_DESCRIBE_CANCEL("COMMAND.CANCEL.DESCRIPTION", "cancel transaction");
 
-    private String path;
-    private Object wh;
+    private final String path;
+    private final Object wh;
 
     OptEcoLanguage(String path, Object wh) {
         this.path = path;
