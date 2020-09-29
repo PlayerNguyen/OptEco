@@ -4,7 +4,7 @@
 
 [![](https://jitpack.io/v/PlayerNguyen/OptEco.svg)](https://jitpack.io/#PlayerNguyen/OptEco)
 
-OptEco - Spigot Points System with API and web integration
+OptEco - Bukkit/Spigot/PaperMC Points System with API and web integration
 * Support MySQL 
 * PlaceholderAPI support
 * Fully commands and permissions
@@ -12,8 +12,8 @@ OptEco - Spigot Points System with API and web integration
 * API Support
 * Website Integration.
 * bStats (Metrics) 
-# Usage
-OptEco is easy-to-use Spigot/Bukkit/Paper plugin that get points from database(YAML, MySQL,...) 
+# About
+OptEco is a point system plugin for Bukkit/Spigot/PaperMC made with love by Player_Nguyen. 
 # Commands and permissions
 You can use `points` instead of `opteco`.
 
