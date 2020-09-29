@@ -64,7 +64,7 @@ public class OptEco extends JavaPlugin {
         this.setupUpdater();
         this.setupStorage();
         this.setupAccount();
-        this.hookingPlaceHolderAPI();
+        this.hookPlaceHolderAPI();
         this.setupMetric();
     }
 
@@ -124,7 +124,7 @@ public class OptEco extends JavaPlugin {
         }
     }
 
-    private void hookingPlaceHolderAPI() {
+    private void hookPlaceHolderAPI() {
         this.isHookPlaceholder = Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null;
         if (isHookPlaceholder()) {
             this.getLogger().info("[Hooker] Detected PlaceholderAPI...");

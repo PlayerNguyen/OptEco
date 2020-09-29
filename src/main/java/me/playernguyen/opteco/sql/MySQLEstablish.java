@@ -9,11 +9,11 @@ import java.util.ArrayList;
 public class MySQLEstablish extends SQLEstablish {
 
 
-    private String username;
-    private String password;
-    private String address;
-    private String port;
-    private String database;
+    private final String username;
+    private final String password;
+    private final String address;
+    private final String port;
+    private final String database;
 
     public MySQLEstablish (String tableName, ArrayList<String> init) {
         super(tableName, init);
