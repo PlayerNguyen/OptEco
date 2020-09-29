@@ -5,6 +5,7 @@ import java.util.Set;
 
 /**
  * The set manager, inherit from {@link Manager} class
+ *
  * @param <T> the generic types to contain
  */
 public class ManagerSet<T> implements Manager<T> {

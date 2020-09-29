@@ -43,7 +43,7 @@ public class SubCommandAdd extends SubCommand {
         return this.execute(sender, args);
     }
 
-    private boolean execute (CommandSender sender, ArrayList<String> args) {
+    private boolean execute(CommandSender sender, ArrayList<String> args) {
         if (args.size() < 2) {
             sender.sendMessage(getMessageFormat().format(getHelp()));
             return true;
@@ -61,11 +61,11 @@ public class SubCommandAdd extends SubCommand {
         if (value < 0) {
             sender.sendMessage(
                     getMessageFormat()
-                    .format(getPlugin().getLanguageLoader().getLanguage(OptEcoLanguage.VALUE_CANNOT_BE_NEGATIVE))
+                            .format(getPlugin().getLanguageLoader().getLanguage(OptEcoLanguage.VALUE_CANNOT_BE_NEGATIVE))
             );
             return true;
         }
-        if ( this.getPlugin().getAccountManager().addBalance(target.getUniqueId(), value) ) {
+        if (this.getPlugin().getAccountManager().addBalance(target.getUniqueId(), value)) {
             // Send success message
             sender.sendMessage(
                     getMessageFormat().format(getPlugin().getLanguageLoader().getLanguage(OptEcoLanguage.COMMAND_SUCCEEDED_ADD))
@@ -88,7 +88,7 @@ public class SubCommandAdd extends SubCommand {
     public List<String> onTab(CommandSender commandSender, ArrayList<String> args) {
         if (args.size() <= 0) {
             ArrayList<String> _players = new ArrayList<>();
-            for (Player player: Bukkit.getServer().getOnlinePlayers()) {
+            for (Player player : Bukkit.getServer().getOnlinePlayers()) {
                 _players.add(player.getName());
             }
             return _players;

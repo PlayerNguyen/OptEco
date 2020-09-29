@@ -7,6 +7,7 @@ public class OptEcoTransactionChangeStateEvent extends TransactionEvent {
 
     /**
      * Call while the state change
+     *
      * @param transaction The transaction
      */
     public OptEcoTransactionChangeStateEvent(Transaction transaction) {
@@ -15,6 +16,7 @@ public class OptEcoTransactionChangeStateEvent extends TransactionEvent {
 
     /**
      * Get a state of that transaction
+     *
      * @return The {@link TransactionState}
      */
     public TransactionState getState() {

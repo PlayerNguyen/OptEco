@@ -24,7 +24,8 @@ public abstract class TransactionSQL extends OptEcoImplementation implements Tra
         return establish;
     }
 
-    @Override public void push(Transaction transaction) {
+    @Override
+    public void push(Transaction transaction) {
         getDebugger().info(String.format("Push up the transaction %s into database", transaction.getId()));
         if (getTransaction(transaction.getId()) != null) {
             this.updateTransaction(transaction);
@@ -33,7 +34,8 @@ public abstract class TransactionSQL extends OptEcoImplementation implements Tra
         }
     }
 
-    @Override public ArrayList<TransactionResult> getList() {
+    @Override
+    public ArrayList<TransactionResult> getList() {
         ArrayList<TransactionResult> temp = new ArrayList<>();
         try (Connection connection = getEstablish().openConnect()) {
             PreparedStatement preparedStatement = connection.prepareStatement(
@@ -49,7 +51,8 @@ public abstract class TransactionSQL extends OptEcoImplementation implements Tra
         return temp;
     }
 
-    @Override public TransactionResult getTransaction(String id) {
+    @Override
+    public TransactionResult getTransaction(String id) {
         try (Connection connection = getEstablish().openConnect()) {
             PreparedStatement preparedStatement = connection.prepareStatement(String.format(
                     "SELECT * FROM %s WHERE transaction_id = ?",
@@ -65,13 +68,14 @@ public abstract class TransactionSQL extends OptEcoImplementation implements Tra
                 transactionResult = fromResultSetToTransaction(resultSet);
             }
             return transactionResult;
-        } catch (ClassNotFoundException|SQLException e) {
+        } catch (ClassNotFoundException | SQLException e) {
             e.printStackTrace();
         }
         return null;
     }
 
-    @Override public boolean updateTransaction(Transaction transaction) {
+    @Override
+    public boolean updateTransaction(Transaction transaction) {
         if (getTransaction(transaction.getId()) == null) {
             throw new NullPointerException("The id of transaction are null");
         }
@@ -81,8 +85,8 @@ public abstract class TransactionSQL extends OptEcoImplementation implements Tra
                     connection.prepareStatement(String.format(
                             "UPDATE %s SET transaction_id=?, sender=?, receiver=?, amount=?, state=?, time=? WHERE transaction_id=?",
                             getEstablish().getTableName()
-                    )
-            );
+                            )
+                    );
 
             generateTransactionData(transaction, preparedStatement);
             preparedStatement.setObject(7, transaction.getId());
@@ -90,7 +94,7 @@ public abstract class TransactionSQL extends OptEcoImplementation implements Tra
             // Return
             return preparedStatement.executeUpdate() >= 1;
 
-        } catch (ClassNotFoundException|SQLException e) {
+        } catch (ClassNotFoundException | SQLException e) {
             e.printStackTrace();
         }
         return false;
@@ -116,7 +120,8 @@ public abstract class TransactionSQL extends OptEcoImplementation implements Tra
 
     /**
      * Generate the transaction data and set it into prepared statement to push it up
-     * @param transaction The transaction you want to get data
+     *
+     * @param transaction       The transaction you want to get data
      * @param preparedStatement The prepared statement to put it into
      * @throws SQLException The exception
      */
@@ -130,7 +135,8 @@ public abstract class TransactionSQL extends OptEcoImplementation implements Tra
     }
 
     /**
-     *  Convert the result set to the
+     * Convert the result set to the
+     *
      * @param set The ResultSet
      * @return null if not found or catch {@link SQLException} or {@link TransactionResult} if found the data
      */

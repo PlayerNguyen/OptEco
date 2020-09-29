@@ -24,7 +24,8 @@ public class YamlAccountManager implements IYamlAccountManager {
         return accountConfiguration.toAccount();
     }
 
-    @Nullable @Override
+    @Nullable
+    @Override
     public Account getAccountIdentify(UUID uuid) {
         AccountConfiguration accountConfiguration = new AccountConfiguration(uuid);
         if (!accountConfiguration.exist()) return null;
@@ -72,7 +73,7 @@ public class YamlAccountManager implements IYamlAccountManager {
      */
     @Override
     public boolean addBalance(UUID uuid, double amount) {
-        return this.setBalance(uuid, this.getBalance(uuid)+amount);
+        return this.setBalance(uuid, this.getBalance(uuid) + amount);
     }
 
     /**
@@ -84,7 +85,7 @@ public class YamlAccountManager implements IYamlAccountManager {
      */
     @Override
     public boolean takeBalance(UUID uuid, double amount) {
-        return this.setBalance(uuid, this.getBalance(uuid)-amount);
+        return this.setBalance(uuid, this.getBalance(uuid) - amount);
     }
 
 

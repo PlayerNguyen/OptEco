@@ -10,6 +10,7 @@ public interface IAccountManager {
 
     /**
      * Save account into storage location
+     *
      * @param account {@link Account} to save
      * @return The state of saving account
      */
@@ -17,6 +18,7 @@ public interface IAccountManager {
 
     /**
      * Get account via uuid. Whether not found player, create one
+     *
      * @param player {@link UUID} the uuid if storage player
      * @return {@link Account} account of player
      */
@@ -25,6 +27,7 @@ public interface IAccountManager {
 
     /**
      * Get the account which must be existed in database. Whether not will return null
+     *
      * @return the account or null value
      */
     @Nullable
@@ -32,6 +35,7 @@ public interface IAccountManager {
 
     /**
      * Check whether the account contain or not
+     *
      * @param uuid {@link UUID} the uuid which want to check
      * @return true or false
      */
@@ -40,11 +44,11 @@ public interface IAccountManager {
     /**
      * Set balance of player. This method can be use for
      * {@link OfflinePlayer#getUniqueId()} and {@link Player#getUniqueId()}. <br>
-     *
+     * <p>
      * Please use {@link #takeBalance(UUID, double)} to minus player balance or {@link #addBalance(UUID, double)}
      * to add player point.
      *
-     * @param uuid {@link UUID} you want to set
+     * @param uuid   {@link UUID} you want to set
      * @param amount {@link Double} the amount to set
      * @return the state which set or not
      */
@@ -52,6 +56,7 @@ public interface IAccountManager {
 
     /**
      * Get the balance of player
+     *
      * @param uuid {@link UUID} player you want to set
      * @return the point amount of player
      */
@@ -59,7 +64,8 @@ public interface IAccountManager {
 
     /**
      * Add the point into player balance
-     * @param uuid who you want to add
+     *
+     * @param uuid   who you want to add
      * @param amount amount
      * @return the state of added or not
      */
@@ -67,7 +73,8 @@ public interface IAccountManager {
 
     /**
      * Take the point of player balance
-     * @param uuid who you want to take
+     *
+     * @param uuid   who you want to take
      * @param amount amount
      * @return the state of taken or not
      */

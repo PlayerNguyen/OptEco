@@ -12,7 +12,8 @@ public class MessageFormat extends OptEcoImplementation {
     private final char SPACE_CHARACTER = ' ';
     private final char START_LIST_CHARACTER = '>';
 
-    public MessageFormat () { }
+    public MessageFormat() {
+    }
 
     public String format(String string) {
         return getPlugin().getLanguageLoader().getLanguage(OptEcoLanguage.PREFIX)
@@ -36,7 +37,7 @@ public class MessageFormat extends OptEcoImplementation {
 
     public String numberFormat(double d) {
         if (d % 1 == 0) {
-            return String.valueOf((int)d);
+            return String.valueOf((int) d);
         }
         return String.format("%.2f", d);
     }

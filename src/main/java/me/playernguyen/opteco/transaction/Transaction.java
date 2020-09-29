@@ -24,7 +24,7 @@ public class Transaction extends OptEcoImplementation {
     private String id;
     private long time;
 
-    public Transaction (UUID player, UUID target, Double amount, BukkitRunnable runnable) {
+    public Transaction(UUID player, UUID target, Double amount, BukkitRunnable runnable) {
         this.player = player;
         this.target = target;
         this.amount = amount;
@@ -32,7 +32,7 @@ public class Transaction extends OptEcoImplementation {
         // Apply time
         this.time = System.currentTimeMillis();
         // Generate random id
-        this.id = "i" +RandomString.rand(ID_RANDOM_LENGTH);
+        this.id = "i" + RandomString.rand(ID_RANDOM_LENGTH);
         // Init with pending state
         this.setState(TransactionState.PENDING);
         // Call an async task to count down
@@ -77,7 +77,7 @@ public class Transaction extends OptEcoImplementation {
     }
 
     public void setState(TransactionState state) {
-        Bukkit.getScheduler().runTaskAsynchronously(getPlugin(), ()-> {
+        Bukkit.getScheduler().runTaskAsynchronously(getPlugin(), () -> {
             this.state = state;
             // Call the event without async error
             Bukkit.getScheduler().runTask(getPlugin(),
@@ -87,17 +87,18 @@ public class Transaction extends OptEcoImplementation {
 
     /**
      * Confirm the transaction
-     * @throws IllegalStateException Throw while the state are not pending
+     *
      * @return Is confirm or not
+     * @throws IllegalStateException Throw while the state are not pending
      */
     public boolean confirm() {
-        Bukkit.getScheduler().runTaskAsynchronously(getPlugin(), ()-> {
+        Bukkit.getScheduler().runTaskAsynchronously(getPlugin(), () -> {
             if (!getState().equals(TransactionState.PENDING)) {
                 throw new IllegalStateException("Cannot accept non-pending transaction!");
             }
             // Call received listener
             OptEcoPlayerReceivedEvent event = new OptEcoPlayerReceivedEvent(this);
-            Bukkit.getScheduler().runTask(getPlugin(), ()->Bukkit.getServer().getPluginManager().callEvent(event));
+            Bukkit.getScheduler().runTask(getPlugin(), () -> Bukkit.getServer().getPluginManager().callEvent(event));
             // Change state
             this.setState(TransactionState.CONFIRMED);
             // Update the information into database
@@ -105,8 +106,8 @@ public class Transaction extends OptEcoImplementation {
         });
         // Return such as ...
         return getPlugin().getAccountManager().takeBalance(getPlayer(), getAmount())
-        && getPlugin().getAccountManager().addBalance(getTarget(), getAmount())
-        && this.clean();
+                && getPlugin().getAccountManager().addBalance(getTarget(), getAmount())
+                && this.clean();
     }
 
     /***
@@ -115,7 +116,7 @@ public class Transaction extends OptEcoImplementation {
      * @return Is cancel (clean up or not)
      */
     public boolean cancel() {
-        Bukkit.getScheduler().runTaskAsynchronously(getPlugin(), ()-> {
+        Bukkit.getScheduler().runTaskAsynchronously(getPlugin(), () -> {
             if (!getState().equals(TransactionState.PENDING)) {
                 throw new IllegalStateException("Cannot cancel non-pending transaction!");
             }
@@ -130,6 +131,7 @@ public class Transaction extends OptEcoImplementation {
 
     /**
      * Clean up the transaction information
+     *
      * @return Is clean up or not
      */
     public boolean clean() {

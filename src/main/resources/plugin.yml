@@ -8,9 +8,9 @@ softdepend:
   - PlaceholderAPI
   - ProtocolLib
   - BossShopPro
-loadbefore: [BossShopPro]
+loadbefore: [ BossShopPro ]
 commands:
   opteco:
     usage: /opteco help
     description: The OptEco main command
-    aliases: [points, pts, p]
+    aliases: [ points, pts, p ]

@@ -12,7 +12,7 @@ public class OptEcoDebugger extends OptEcoImplementation implements Debugger {
 
     private String prefix;
 
-    public OptEcoDebugger (OptEco plugin) {
+    public OptEcoDebugger(OptEco plugin) {
         this.prefix = "[" + plugin.getDescription().getName() + "::Debug]";
         this.sender = getPlugin().getServer().getConsoleSender();
     }

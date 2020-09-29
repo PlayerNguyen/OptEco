@@ -49,8 +49,8 @@ public class TransactionLoader extends LoaderAbstract {
                 id,
                 UUID.fromString(Objects.requireNonNull(getConfiguration().getString(id + ".sender"))),
                 UUID.fromString(Objects.requireNonNull(getConfiguration().getString(id + ".receiver"))),
-                getConfiguration().getDouble(id+".amount"),
-                TransactionState.valueOf(getConfiguration().getString(id+".state")),
+                getConfiguration().getDouble(id + ".amount"),
+                TransactionState.valueOf(getConfiguration().getString(id + ".state")),
                 Long.parseLong(Objects.requireNonNull(getConfiguration().getString(id + ".time")))
         );
     }

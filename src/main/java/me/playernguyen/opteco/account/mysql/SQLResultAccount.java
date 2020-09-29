@@ -33,7 +33,7 @@ public class SQLResultAccount {
         return uuid;
     }
 
-    public Account toAccount () {
+    public Account toAccount() {
         return new Account(Bukkit.getOfflinePlayer(name), Double.parseDouble(balance));
     }
 

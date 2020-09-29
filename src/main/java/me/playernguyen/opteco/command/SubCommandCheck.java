@@ -65,12 +65,12 @@ public class SubCommandCheck extends SubCommand {
             return true;
         }
         sender.sendMessage(
-               getMessageFormat().format(
-                       getPlugin().getLanguageLoader().getLanguage(OptEcoLanguage.CHECK_ANOTHER)
-                               .replace("%who%", _target)
-                               .replace("%value%", getMessageFormat().numberFormat(getPlugin().getAccountManager().getBalance(target.getUniqueId())))
-                               .replace("%currency%", getPlugin().getConfigurationLoader().getString(OptEcoConfiguration.CURRENCY_SYMBOL))
-               )
+                getMessageFormat().format(
+                        getPlugin().getLanguageLoader().getLanguage(OptEcoLanguage.CHECK_ANOTHER)
+                                .replace("%who%", _target)
+                                .replace("%value%", getMessageFormat().numberFormat(getPlugin().getAccountManager().getBalance(target.getUniqueId())))
+                                .replace("%currency%", getPlugin().getConfigurationLoader().getString(OptEcoConfiguration.CURRENCY_SYMBOL))
+                )
         );
         return true;
     }

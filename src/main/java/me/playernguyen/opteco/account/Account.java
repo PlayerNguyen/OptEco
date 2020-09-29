@@ -11,35 +11,35 @@ public class Account {
     private double balance;
 
     /**
-     * @deprecated Using the balance parameter to add default
      * @param player The player to access the account
+     * @deprecated Using the balance parameter to add default
      */
-    public Account (Player player) {
+    public Account(Player player) {
         this.player = player.getUniqueId();
         this.balance = 0.0D;
     }
 
-    public Account (Player player, double balance) {
+    public Account(Player player, double balance) {
         this.player = player.getUniqueId();
         this.balance = balance;
     }
 
-    public Account (OfflinePlayer player) {
+    public Account(OfflinePlayer player) {
         this.player = player.getUniqueId();
         this.balance = 0.0D;
     }
 
-    public Account (OfflinePlayer player, double d) {
+    public Account(OfflinePlayer player, double d) {
         this.player = player.getUniqueId();
         this.balance = d;
     }
 
-    public Account (UUID uuid) {
+    public Account(UUID uuid) {
         this.player = uuid;
         this.balance = 0.0D;
     }
 
-    public Account (UUID uuid, double balance) {
+    public Account(UUID uuid, double balance) {
         this.player = uuid;
         this.balance = balance;
     }
@@ -56,5 +56,7 @@ public class Account {
         this.balance = balance;
     }
 
-    public void setPlayer(Player player) { this.player = player.getUniqueId(); }
+    public void setPlayer(Player player) {
+        this.player = player.getUniqueId();
+    }
 }

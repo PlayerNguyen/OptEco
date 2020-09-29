@@ -15,7 +15,7 @@ public abstract class AbstractCommand extends AbstractPermission
     private final MessageFormat messageFormat;
     private final ArrayList<SubCommand> subCommands = new ArrayList<>();
 
-    public AbstractCommand (String command) {
+    public AbstractCommand(String command) {
         this.command = command;
         this.messageFormat = getPlugin().getMessageFormat();
     }
@@ -51,9 +51,8 @@ public abstract class AbstractCommand extends AbstractPermission
 
     public ArrayList<String> getSubAsHelp(CommandSender sender) {
         ArrayList<String> _arr = new ArrayList<>();
-        for (SubCommand subCommand: getSubCommands()) {
-            if (subCommand.checkPermission(sender))
-            {
+        for (SubCommand subCommand : getSubCommands()) {
+            if (subCommand.checkPermission(sender)) {
                 _arr.add(subCommand.getHelp());
             }
         }
@@ -90,7 +89,10 @@ public abstract class AbstractCommand extends AbstractPermission
 
 
     public abstract boolean onPlayerCommand(Player player, Command command, String s, String[] args);
+
     public abstract boolean onConsoleCommand(ConsoleCommandSender sender, Command command, String s, String[] args);
+
     public abstract boolean onRemoteConsole(RemoteConsoleCommandSender sender, Command command, String s, String[] args);
+
     public abstract boolean onAny(CommandSender sender, Command command, String s, String[] args);
 }

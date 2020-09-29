@@ -27,7 +27,7 @@ public class SubCommandPayConfirm extends SubCommand {
     @Override
     public boolean onPlayerCommand(Player player, ArrayList<String> args) {
         // If don't have any transaction
-        if ( ! getPlugin().getTransactionManager().hasTransaction(player.getUniqueId()) ) {
+        if (!getPlugin().getTransactionManager().hasTransaction(player.getUniqueId())) {
             player.sendMessage(
                     getMessageFormat()
                             .format(getPlugin().getLanguageLoader().getLanguage(OptEcoLanguage.PAY_TRANSACTION_NOT_EXIST))

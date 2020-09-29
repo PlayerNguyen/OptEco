@@ -13,6 +13,7 @@ public class TransactionManager extends OptEcoImplementation {
 
     private ArrayList<Transaction> transactions = new ArrayList<>();
     private TransactionStorage transactionStorage;
+
     public TransactionManager() {
         // Setup database
         switch (getStorageType()) {
@@ -54,11 +55,11 @@ public class TransactionManager extends OptEcoImplementation {
         return null;
     }
 
-    public boolean hasTransaction (UUID player) {
-        return this.getTransaction (player) != null;
+    public boolean hasTransaction(UUID player) {
+        return this.getTransaction(player) != null;
     }
 
-    public boolean removeTransaction (UUID player) {
+    public boolean removeTransaction(UUID player) {
         return this.getTransactions().remove(getTransaction(player));
     }
 }

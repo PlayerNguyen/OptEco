@@ -42,7 +42,7 @@ public class SubCommandTake extends SubCommand {
         return this.execute(sender, args);
     }
 
-    private boolean execute (CommandSender sender, ArrayList<String> args) {
+    private boolean execute(CommandSender sender, ArrayList<String> args) {
 
         if (args.size() < 2) {
             sender.sendMessage(getMessageFormat().format(getHelp()));
@@ -50,21 +50,21 @@ public class SubCommandTake extends SubCommand {
         }
 
         String _target = args.get(0);
-        OfflinePlayer target =  Bukkit.getOfflinePlayer(_target);
+        OfflinePlayer target = Bukkit.getOfflinePlayer(_target);
         String _value = args.get(1);
         if (target == null) {
             sender.sendMessage(
                     getMessageFormat()
-                    .format(getPlugin().getLanguageLoader().getLanguage(OptEcoLanguage.VAR_PLAYER_NOT_FOUND))
-                    .replace("%who%", _target)
+                            .format(getPlugin().getLanguageLoader().getLanguage(OptEcoLanguage.VAR_PLAYER_NOT_FOUND))
+                            .replace("%who%", _target)
             );
             return true;
         }
         if (ValidationChecker.isNotNumber(_value)) {
             sender.sendMessage(
                     getMessageFormat()
-                    .format(getPlugin().getLanguageLoader().getLanguage(OptEcoLanguage.VAR_NOT_A_NUMBER))
-                    .replace("%value%", _value)
+                            .format(getPlugin().getLanguageLoader().getLanguage(OptEcoLanguage.VAR_NOT_A_NUMBER))
+                            .replace("%value%", _value)
             );
             return true;
         }
@@ -77,8 +77,8 @@ public class SubCommandTake extends SubCommand {
             return true;
         }
         // If sender don't have enough points
-        if ( (getPlugin().getAccountManager().getBalance(target.getUniqueId()) - Double.parseDouble(_value)) <
-                getPlugin().getConfigurationLoader().getDouble(OptEcoConfiguration.MIN_BALANCE) ) {
+        if ((getPlugin().getAccountManager().getBalance(target.getUniqueId()) - Double.parseDouble(_value)) <
+                getPlugin().getConfigurationLoader().getDouble(OptEcoConfiguration.MIN_BALANCE)) {
             sender.sendMessage(
                     getMessageFormat()
                             .format(getPlugin().getLanguageLoader().getLanguage(OptEcoLanguage.TAKE_NOT_ENOUGH))
@@ -89,7 +89,7 @@ public class SubCommandTake extends SubCommand {
         if (getPlugin().getAccountManager().takeBalance(target.getUniqueId(), value)) {
             sender.sendMessage(
                     getMessageFormat()
-                    .format(getPlugin().getLanguageLoader().getLanguage(OptEcoLanguage.TAKE_SUCCESS))
+                            .format(getPlugin().getLanguageLoader().getLanguage(OptEcoLanguage.TAKE_SUCCESS))
                             .replace("%value%", _value)
                             .replace("%who%", target.getName())
                             .replace("%currency%", getPlugin().getConfigurationLoader().getString(OptEcoConfiguration.CURRENCY_SYMBOL))
@@ -111,7 +111,7 @@ public class SubCommandTake extends SubCommand {
     public List<String> onTab(CommandSender commandSender, ArrayList<String> args) {
         if (args.size() <= 0) {
             ArrayList<String> _players = new ArrayList<>();
-            for (Player player: Bukkit.getServer().getOnlinePlayers()) {
+            for (Player player : Bukkit.getServer().getOnlinePlayers()) {
                 _players.add(player.getName());
             }
             return _players;

@@ -9,8 +9,10 @@ public class OptEcoAPI implements IOptEcoAPI {
 
     private final UUID player;
     private final OptEco plugin;
+
     /**
      * Get the OptEco API
+     *
      * @param uuid who you want to get?
      */
     public OptEcoAPI(UUID uuid) {

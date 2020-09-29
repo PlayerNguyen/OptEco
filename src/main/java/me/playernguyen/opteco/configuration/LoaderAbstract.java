@@ -64,7 +64,7 @@ public abstract class LoaderAbstract extends OptEcoImplementation {
         this.configuration = YamlConfiguration.loadConfiguration(file);
     }
 
-    public boolean save () {
+    public boolean save() {
         try {
             this.getConfiguration().save(getFile());
             return true;

@@ -10,7 +10,8 @@ public class AbstractPermission extends OptEcoImplementation {
 
     private ArrayList<OptEcoPermission> permissions = new ArrayList<>();
 
-    public AbstractPermission() { }
+    public AbstractPermission() {
+    }
 
     public ArrayList<OptEcoPermission> getPermissions() {
         return permissions;

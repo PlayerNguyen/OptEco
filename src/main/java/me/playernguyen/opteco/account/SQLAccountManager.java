@@ -28,6 +28,7 @@ public abstract class SQLAccountManager extends OptEcoImplementation
 
     /**
      * Establish of SQL data
+     *
      * @return {@link SQLEstablish} class
      */
     public SQLEstablish getEstablish() {
@@ -49,7 +50,8 @@ public abstract class SQLAccountManager extends OptEcoImplementation
         return resultAccount.toAccount();
     }
 
-    @Nullable @Override
+    @Nullable
+    @Override
     public Account getAccountIdentify(UUID who) {
         if (who == null) throw new NullPointerException("UUID mustn't be null");
 
@@ -66,10 +68,12 @@ public abstract class SQLAccountManager extends OptEcoImplementation
 
     /**
      * Save data of account into storage location
+     *
      * @param account Which account to save?
      * @return The state of saving
      */
-    @Override public boolean save(Account account) {
+    @Override
+    public boolean save(Account account) {
         String player = Bukkit.getOfflinePlayer(account.getPlayer()).getName();
         double balance = account.getBalance();
         String uuid = account.getPlayer().toString();
@@ -97,7 +101,7 @@ public abstract class SQLAccountManager extends OptEcoImplementation
                 System.out.println(i);
                 return i >= 1;
 
-            } catch (ClassNotFoundException|SQLException e) {
+            } catch (ClassNotFoundException | SQLException e) {
                 e.printStackTrace();
             }
         } else {
@@ -119,14 +123,15 @@ public abstract class SQLAccountManager extends OptEcoImplementation
                 // DDL return 0
                 return preparedStatement.executeUpdate() == 0;
 
-            } catch (ClassNotFoundException|SQLException e) {
+            } catch (ClassNotFoundException | SQLException e) {
                 e.printStackTrace();
             }
         }
         return false;
     }
 
-    @Override public boolean hasAccount(UUID uuid) {
+    @Override
+    public boolean hasAccount(UUID uuid) {
         return getAccount(uuid) != null;
     }
 
@@ -142,12 +147,12 @@ public abstract class SQLAccountManager extends OptEcoImplementation
 
     @Override
     public boolean takeBalance(UUID uuid, double amount) {
-        return this.setBalance(uuid, this.getBalance(uuid)-amount);
+        return this.setBalance(uuid, this.getBalance(uuid) - amount);
     }
 
     @Override
     public boolean addBalance(UUID uuid, double amount) {
-        return this.setBalance(uuid, this.getBalance(uuid)+amount);
+        return this.setBalance(uuid, this.getBalance(uuid) + amount);
     }
 
     private SQLResultAccount getAccountResult(UUID who) {
@@ -175,6 +180,7 @@ public abstract class SQLAccountManager extends OptEcoImplementation
 
     /**
      * Parsing result set as an ArrayList
+     *
      * @param rs ResultSet
      * @return array list of result
      */

@@ -41,7 +41,7 @@ public class TransactionStorageYaml implements TransactionStorage {
     @Override
     public ArrayList<TransactionResult> getList() {
         ArrayList<TransactionResult> results = new ArrayList<>();
-        getTransactionLoader().getStorageTransactions().forEach(e->results.add(getTransaction(e)));
+        getTransactionLoader().getStorageTransactions().forEach(e -> results.add(getTransaction(e)));
         return results;
     }
 

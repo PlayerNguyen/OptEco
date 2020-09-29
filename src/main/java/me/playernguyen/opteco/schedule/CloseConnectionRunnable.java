@@ -18,7 +18,8 @@ public class CloseConnectionRunnable extends OptEcoRunnable {
     /**
      * This to close the connection after timeout
      */
-    @Override public void run() {
+    @Override
+    public void run() {
         try {
             if (getConnection() != null && !getConnection().isClosed()) {
                 getInstance().getDebugger().info(String.format("Closing connection with task #%s...", getTaskId()));

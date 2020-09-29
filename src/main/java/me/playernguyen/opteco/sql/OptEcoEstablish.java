@@ -6,7 +6,6 @@ import java.util.ArrayList;
 
 /**
  * The represent class to establish the SQL connection
- *
  */
 public interface OptEcoEstablish {
 
@@ -17,7 +16,6 @@ public interface OptEcoEstablish {
     String getTableName();
 
     ArrayList<String> getTables();
-
 
 
 }

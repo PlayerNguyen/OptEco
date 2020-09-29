@@ -134,7 +134,7 @@ public class OptEco extends JavaPlugin {
         waterMarks.add(" ___     ___   _______  ");
         waterMarks.add("|   |   |    )    |     " + ChatColor.DARK_GRAY + "Support Bukkit - Spigot - PaperMC");
         waterMarks.add("|   |   |---/     |     " + ChatColor.DARK_GRAY + "__________ ");
-        waterMarks.add("|___/   |         |     Eco"+ ChatColor.RED + " v" + getDescription().getVersion());
+        waterMarks.add("|___/   |         |     Eco" + ChatColor.RED + " v" + getDescription().getVersion());
         waterMarks.add("                     ");
         for (String waterMark : waterMarks) {
             getServer().getConsoleSender().sendMessage(ChatColor.YELLOW + waterMark);
@@ -161,6 +161,7 @@ public class OptEco extends JavaPlugin {
 
     /**
      * Metrics class (bStats)
+     *
      * @return the {@link Metrics} class
      */
     public Metrics getMetrics() {
@@ -178,8 +179,8 @@ public class OptEco extends JavaPlugin {
     }
 
     /**
-     * @deprecated use {@link #getInstance()} instead of this
      * @return the instance of plugin
+     * @deprecated use {@link #getInstance()} instead of this
      */
     public static OptEco getPlugin() {
         return (OptEco) Bukkit.getServer().getPluginManager().getPlugin(PLUGIN_NAME);
@@ -215,7 +216,7 @@ public class OptEco extends JavaPlugin {
                 Bukkit.getConsoleSender()
                         .sendMessage(String.format(
                                 ChatColor.YELLOW +
-                                "Detected new update (%s), download at https://www.spigotmc.org/resources/76179",
+                                        "Detected new update (%s), download at https://www.spigotmc.org/resources/76179",
                                 version)
                         );
             } else {

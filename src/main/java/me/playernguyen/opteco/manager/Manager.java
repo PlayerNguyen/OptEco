@@ -8,18 +8,21 @@ import java.util.stream.Stream;
 
 /**
  * The represent class to contain items.
+ *
  * @param <T> the generics type to contain
  */
-public interface Manager<T> extends Iterable<T>{
+public interface Manager<T> extends Iterable<T> {
 
     /**
      * The container of items
+     *
      * @return the container of item which contain all items inside
      */
     Collection<T> getContainer();
 
     /**
      * Add new item into the container.
+     *
      * @param item item to put into
      */
     default void add(T item) {
@@ -28,6 +31,7 @@ public interface Manager<T> extends Iterable<T>{
 
     /**
      * Remove the item inside container
+     *
      * @param item item to pull out
      */
     default void remove(T item) {
@@ -36,6 +40,7 @@ public interface Manager<T> extends Iterable<T>{
 
     /**
      * Stream the collection
+     *
      * @return the streamer of collection
      */
     default Stream<T> stream() {
@@ -44,6 +49,7 @@ public interface Manager<T> extends Iterable<T>{
 
     /**
      * Iterator the container
+     *
      * @return the {@link Collection#iterator()} class
      */
     @NotNull

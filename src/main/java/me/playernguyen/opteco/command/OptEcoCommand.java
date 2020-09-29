@@ -14,7 +14,7 @@ import java.util.List;
 
 public class OptEcoCommand extends AbstractCommand {
 
-    public OptEcoCommand () {
+    public OptEcoCommand() {
         super("opteco");
         for (OptEcoPermission perm :
                 OptEcoPermission.values()) {
@@ -51,7 +51,7 @@ public class OptEcoCommand extends AbstractCommand {
         return execute(sender, command, s, args);
     }
 
-    private boolean execute (CommandSender sender, Command command, String s, String[] args) {
+    private boolean execute(CommandSender sender, Command command, String s, String[] args) {
         if (args.length < 1) {
             getMessageFormat().sendCuteList(sender, getSubAsHelp(sender), ChatColor.GRAY);
             return true;
@@ -72,7 +72,7 @@ public class OptEcoCommand extends AbstractCommand {
     public List<String> onTabComplete(CommandSender commandSender, Command command, String s, String[] strings) {
         if (strings.length < 2) {
             ArrayList<String> allowCommand = new ArrayList<>();
-            for (SubCommand subCommand: getSubCommands()) {
+            for (SubCommand subCommand : getSubCommands()) {
                 if (subCommand.checkPermission(commandSender)) allowCommand.add(subCommand.getCommand());
             }
             return allowCommand;

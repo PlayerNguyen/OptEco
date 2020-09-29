@@ -11,13 +11,13 @@ import java.util.UUID;
 
 public class AccountConfiguration extends OptEcoImplementation {
 
-    public static final String ACCOUNT_STORE_FOLDER =  "account";
+    public static final String ACCOUNT_STORE_FOLDER = "account";
 
     private final OfflinePlayer player;
     private File file;
     private YamlConfiguration configuration;
 
-    public AccountConfiguration (UUID uuid) {
+    public AccountConfiguration(UUID uuid) {
 
         this.player = Bukkit.getOfflinePlayer(uuid);
 
@@ -40,7 +40,7 @@ public class AccountConfiguration extends OptEcoImplementation {
     }
 
     private void load(File folder) {
-        this.file = new File(folder, player.getName()+".yml");
+        this.file = new File(folder, player.getName() + ".yml");
         this.configuration = YamlConfiguration.loadConfiguration(this.file);
     }
 

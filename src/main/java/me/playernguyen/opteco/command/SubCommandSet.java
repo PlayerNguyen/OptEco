@@ -41,7 +41,7 @@ public class SubCommandSet extends SubCommand {
         return this.execute(sender, args);
     }
 
-    private boolean execute (CommandSender sender, ArrayList<String> args) {
+    private boolean execute(CommandSender sender, ArrayList<String> args) {
         if (args.size() < 2) {
             sender.sendMessage(getMessageFormat().format(getHelp()));
             return true;

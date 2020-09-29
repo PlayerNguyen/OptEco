@@ -9,11 +9,12 @@ import java.util.ArrayList;
 public class SQLiteEstablish extends SQLEstablish {
 
 
-    public SQLiteEstablish (String tableName, ArrayList<String> init) {
+    public SQLiteEstablish(String tableName, ArrayList<String> init) {
         super(tableName, init);
     }
 
-    @Override public Connection openConnect() throws SQLException, ClassNotFoundException {
+    @Override
+    public Connection openConnect() throws SQLException, ClassNotFoundException {
         setURL("jdbc:sqlite:" + buildUrl());
         // If null
         if (getURL() == null) {
@@ -28,16 +29,18 @@ public class SQLiteEstablish extends SQLEstablish {
 
     /**
      * Get the table list
+     *
      * @return table list
      */
-    @Override public ArrayList<String> getTables() {
+    @Override
+    public ArrayList<String> getTables() {
         ArrayList<String> temp = new ArrayList<>();
         try (Connection connection = this.openConnect()) {
             PreparedStatement preparedStatement = connection
                     .prepareStatement("SELECT * FROM sqlite_master WHERE type='table' AND name not like 'sqlite_%'");
             ResultSet resultSet = preparedStatement.executeQuery();
 
-            while(resultSet.next()) {
+            while (resultSet.next()) {
                 temp.add(resultSet.getString("name"));
             }
 
@@ -49,6 +52,7 @@ public class SQLiteEstablish extends SQLEstablish {
 
     /**
      * Build the url for SQLite
+     *
      * @return the url path
      */
     private String buildUrl() {

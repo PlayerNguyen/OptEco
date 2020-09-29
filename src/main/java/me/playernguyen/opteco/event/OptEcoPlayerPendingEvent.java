@@ -13,7 +13,7 @@ public class OptEcoPlayerPendingEvent extends Event {
     private UUID player;
     private Transaction transaction;
 
-    public OptEcoPlayerPendingEvent (UUID player, Transaction transaction) {
+    public OptEcoPlayerPendingEvent(UUID player, Transaction transaction) {
         this.player = player;
         this.transaction = transaction;
     }

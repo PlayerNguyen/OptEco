@@ -34,7 +34,7 @@ public class TransactionCountRunnable extends OptEcoRunnable {
 
     @Override
     public void run() {
-        ticker --;
+        ticker--;
 
         if (getInstance().getConfigurationLoader().getBool(OptEcoConfiguration.COUNTDOWN_ENABLE)) {
             Player pla = Bukkit.getPlayer(getPlayer());

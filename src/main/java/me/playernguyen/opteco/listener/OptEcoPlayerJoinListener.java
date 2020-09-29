@@ -9,9 +9,11 @@ public class OptEcoPlayerJoinListener extends OptEcoListener {
 
     /**
      * On player join into the server
+     *
      * @param e {@link PlayerJoinEvent} event
      */
-    @EventHandler public void onPlayerJoinEvent(PlayerJoinEvent e) {
+    @EventHandler
+    public void onPlayerJoinEvent(PlayerJoinEvent e) {
         Player player = e.getPlayer();
         // If account not found
         if (!getPlugin().getAccountManager().hasAccount(player.getUniqueId())) {
