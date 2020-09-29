@@ -12,7 +12,7 @@ OptEco - Bukkit/Spigot/PaperMC Points System with API and web integration
 * API Support
 * Website Integration.
 * bStats (Metrics) 
-# About
+# 💵 About
 OptEco is a point system plugin for Bukkit/Spigot/PaperMC made with love by Player_Nguyen. 
 # Commands and permissions
 You can use `points` instead of `opteco`.
