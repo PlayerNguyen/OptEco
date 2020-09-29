@@ -5,11 +5,11 @@ import org.bukkit.ChatColor;
 
 import java.io.IOException;
 
-public class LanguageLoader extends LoaderAbstract {
+public class OptEcoLanguageLoader extends OptEcoLoaderAbstract {
 
     public static final char COLOR_SYMBOL = '&';
 
-    public LanguageLoader(String file) {
+    public OptEcoLanguageLoader(String file) {
 //        super(new File(OptEco.getInstance().getDataFolder(), file));
         super(file, "Auto-generated language by OptEco", "language", false);
         saveDefault();

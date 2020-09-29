@@ -1,6 +1,6 @@
 package me.playernguyen.opteco.transaction.yaml;
 
-import me.playernguyen.opteco.configuration.TransactionLoader;
+import me.playernguyen.opteco.configuration.OptEcoTransactionLoader;
 import me.playernguyen.opteco.transaction.Transaction;
 import me.playernguyen.opteco.transaction.TransactionResult;
 import me.playernguyen.opteco.transaction.TransactionStorage;
@@ -9,13 +9,13 @@ import java.util.ArrayList;
 
 public class TransactionStorageYaml implements TransactionStorage {
 
-    private TransactionLoader transactionLoader;
+    private OptEcoTransactionLoader transactionLoader;
 
     public TransactionStorageYaml() {
-        this.transactionLoader = new TransactionLoader();
+        this.transactionLoader = new OptEcoTransactionLoader();
     }
 
-    public TransactionLoader getTransactionLoader() {
+    public OptEcoTransactionLoader getTransactionLoader() {
         return transactionLoader;
     }
 

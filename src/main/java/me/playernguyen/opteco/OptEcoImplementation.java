@@ -1,7 +1,7 @@
 package me.playernguyen.opteco;
 
 import me.playernguyen.opteco.account.IAccountManager;
-import me.playernguyen.opteco.configuration.ConfigurationLoader;
+import me.playernguyen.opteco.configuration.OptEcoConfigurationLoader;
 import me.playernguyen.opteco.configuration.StorageType;
 import me.playernguyen.opteco.logger.Debugger;
 import me.playernguyen.opteco.transaction.TransactionManager;
@@ -43,7 +43,7 @@ public abstract class OptEcoImplementation {
      *
      * @return Loader class
      */
-    protected ConfigurationLoader getConfigurationLoader() {
+    protected OptEcoConfigurationLoader getConfigurationLoader() {
         return getPlugin().getConfigurationLoader();
     }
 

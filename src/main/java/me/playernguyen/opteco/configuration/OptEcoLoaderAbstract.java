@@ -9,7 +9,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
-public abstract class LoaderAbstract extends OptEcoImplementation {
+public abstract class OptEcoLoaderAbstract extends OptEcoImplementation {
 
     private File file;
     private YamlConfiguration configuration;
@@ -34,7 +34,7 @@ public abstract class LoaderAbstract extends OptEcoImplementation {
 //        this.header = header;
 //    }
 
-    public LoaderAbstract(String name, String header, String parent, boolean fromResource) {
+    public OptEcoLoaderAbstract(String name, String header, String parent, boolean fromResource) {
         // Parent handle
         // /OptEco folder
         File dataFolder = getPlugin().getDataFolder();

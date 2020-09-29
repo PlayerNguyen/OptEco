@@ -6,14 +6,14 @@ import org.bukkit.command.PluginCommand;
 
 import java.util.HashSet;
 
-public class CommandManager extends ManagerSet<AbstractCommand> {
+public class CommandManager extends ManagerSet<OptEcoAbstractCommand> {
 
     public CommandManager() {
         super(new HashSet<>());
     }
 
     @Override
-    public void add(AbstractCommand item) {
+    public void add(OptEcoAbstractCommand item) {
         // Still add
         super.add(item);
 

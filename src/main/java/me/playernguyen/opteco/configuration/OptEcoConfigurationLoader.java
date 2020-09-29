@@ -2,7 +2,7 @@ package me.playernguyen.opteco.configuration;
 
 import me.playernguyen.opteco.OptEcoConfiguration;
 
-public class ConfigurationLoader extends LoaderAbstract {
+public class OptEcoConfigurationLoader extends OptEcoLoaderAbstract {
 
     private static final String CONFIG_FILE = "config.yml";
     private static final String SYSTEM_LINE_SEPARATOR = System.lineSeparator();
@@ -10,7 +10,7 @@ public class ConfigurationLoader extends LoaderAbstract {
             " - OptEco auto-generated plugin.yml" + SYSTEM_LINE_SEPARATOR + "" +
                     " - More help at: https://github.com/PlayerNguyen/OptEco/wiki";
 
-    public ConfigurationLoader() {
+    public OptEcoConfigurationLoader() {
 //        super(new File(OptEco.getInstance().getDataFolder(), CONFIG_FILE), HEADER_HELPER);
         super(CONFIG_FILE, HEADER_HELPER, "", false);
         saveDefault();

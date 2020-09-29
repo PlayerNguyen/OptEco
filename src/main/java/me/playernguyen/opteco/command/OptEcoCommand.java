@@ -12,7 +12,7 @@ import org.bukkit.entity.Player;
 import java.util.ArrayList;
 import java.util.List;
 
-public class OptEcoCommand extends AbstractCommand {
+public class OptEcoCommand extends OptEcoAbstractCommand {
 
     public OptEcoCommand() {
         super("opteco");

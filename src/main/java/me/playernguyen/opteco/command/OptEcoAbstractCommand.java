@@ -8,14 +8,14 @@ import org.bukkit.entity.Player;
 import java.util.ArrayList;
 import java.util.stream.Collectors;
 
-public abstract class AbstractCommand extends AbstractPermission
+public abstract class OptEcoAbstractCommand extends AbstractPermission
         implements TabCompleter, CommandExecutor {
 
     private final String command;
     private final MessageFormat messageFormat;
     private final ArrayList<SubCommand> subCommands = new ArrayList<>();
 
-    public AbstractCommand(String command) {
+    public OptEcoAbstractCommand(String command) {
         this.command = command;
         this.messageFormat = getPlugin().getMessageFormat();
     }

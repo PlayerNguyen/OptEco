@@ -7,8 +7,8 @@ import me.playernguyen.opteco.bStats.Metrics;
 import me.playernguyen.opteco.bossshoppro.OptEcoBossShopPro;
 import me.playernguyen.opteco.command.CommandManager;
 import me.playernguyen.opteco.command.OptEcoCommand;
-import me.playernguyen.opteco.configuration.ConfigurationLoader;
-import me.playernguyen.opteco.configuration.LanguageLoader;
+import me.playernguyen.opteco.configuration.OptEcoConfigurationLoader;
+import me.playernguyen.opteco.configuration.OptEcoLanguageLoader;
 import me.playernguyen.opteco.configuration.StorageType;
 import me.playernguyen.opteco.listener.ListenerManager;
 import me.playernguyen.opteco.listener.OptEcoListener;
@@ -44,8 +44,8 @@ public class OptEco extends JavaPlugin {
     private ListenerManager listenerManager;
     private CommandManager commandManager;
     private boolean isHookPlaceholder;
-    private ConfigurationLoader configurationLoader;
-    private LanguageLoader languageLoader;
+    private OptEcoConfigurationLoader optEcoConfigurationLoader;
+    private OptEcoLanguageLoader optEcoLanguageLoader;
     private IAccountManager accountManager;
     private StorageType storageType;
     private Debugger debugger;
@@ -90,6 +90,11 @@ public class OptEco extends JavaPlugin {
 
     private void setupMetric() {
         this.metrics = new Metrics(getPlugin(), METRICS_ID);
+        // Create pies
+        getMetrics().addCustomChart(new Metrics.SimplePie(
+                "storage_option_type",
+                () -> getStorageType().toString())
+        );
     }
 
     private void setupInstance() {
@@ -105,9 +110,9 @@ public class OptEco extends JavaPlugin {
 
     private void setupLoader() {
         // Configuration Loader
-        this.configurationLoader = new ConfigurationLoader();
+        this.optEcoConfigurationLoader = new OptEcoConfigurationLoader();
         // Language Loader
-        this.languageLoader = new LanguageLoader(getConfigurationLoader().getString(OptEcoConfiguration.LANGUAGE_FILE));
+        this.optEcoLanguageLoader = new OptEcoLanguageLoader(getConfigurationLoader().getString(OptEcoConfiguration.LANGUAGE_FILE));
     }
 
     private void setupAccount() {
@@ -168,7 +173,6 @@ public class OptEco extends JavaPlugin {
      * Setting to the updater
      */
     private void setupUpdater() {
-        // Enable check for update or not
         if (getConfigurationLoader().getBool(OptEcoConfiguration.CHECK_FOR_UPDATE)) {
             this.checkForUpdates();
         }
@@ -182,12 +186,12 @@ public class OptEco extends JavaPlugin {
         return (OptEco) Bukkit.getServer().getPluginManager().getPlugin(PLUGIN_NAME);
     }
 
-    public ConfigurationLoader getConfigurationLoader() {
-        return configurationLoader;
+    public OptEcoConfigurationLoader getConfigurationLoader() {
+        return optEcoConfigurationLoader;
     }
 
-    public LanguageLoader getLanguageLoader() {
-        return languageLoader;
+    public OptEcoLanguageLoader getLanguageLoader() {
+        return optEcoLanguageLoader;
     }
 
     public StorageType getStorageType() {
