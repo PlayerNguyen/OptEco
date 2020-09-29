@@ -5,7 +5,6 @@ import me.playernguyen.opteco.OptEcoConfiguration;
 import me.playernguyen.opteco.OptEcoLanguage;
 import me.playernguyen.opteco.account.Account;
 import me.playernguyen.opteco.permission.OptEcoPermission;
-import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.RemoteConsoleCommandSender;
 import org.bukkit.entity.Player;
