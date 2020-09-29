@@ -23,7 +23,7 @@ public enum OptEcoConfiguration {
     SQL_TRANSACT_TABLE_NAME("Settings.SQL.Table.Transactions", "opteco_transaction"),
 
     SQL_CLOSE_CONNECT_TIMEOUT("Settings.SQL.ConnectionPool.Timeout", 60),
-
+    COMMAND_LIMIT_TOP("Settings.Preferences.LimitTopCommand", 5),
     COUNTDOWN_ENABLE("Settings.Payment.Pending.Countdown.Enable", true),
     COUNTDOWN_TYPE("Settings.Payment.Pending.Countdown.Type", "message"),
 

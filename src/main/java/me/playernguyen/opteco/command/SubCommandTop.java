@@ -1,6 +1,7 @@
 package me.playernguyen.opteco.command;
 
 import me.playernguyen.opteco.OptEco;
+import me.playernguyen.opteco.OptEcoConfiguration;
 import me.playernguyen.opteco.OptEcoLanguage;
 import me.playernguyen.opteco.account.Account;
 import me.playernguyen.opteco.permission.OptEcoPermission;
@@ -49,7 +50,9 @@ public class SubCommandTop extends SubCommand {
 
     private boolean execute (CommandSender sender, ArrayList<String> args) {
         sender.sendMessage(getPlugin().getLanguageLoader().getLanguage(OptEcoLanguage.RED_BAR));
-        List<Account> accounts = getPlugin().getAccountManager().topPlayer(5);
+        List<Account> accounts = getPlugin().getAccountManager().topPlayer(
+                getPlugin().getConfigurationLoader().getInt(OptEcoConfiguration.COMMAND_LIMIT_TOP)
+        );
         int i = 0;
         for (Account account : accounts) {
             i++;
