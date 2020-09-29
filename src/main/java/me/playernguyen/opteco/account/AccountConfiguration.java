@@ -13,7 +13,7 @@ public class AccountConfiguration extends OptEcoImplementation {
 
     public static final String ACCOUNT_STORE_FOLDER =  "account";
 
-    private OfflinePlayer player;
+    private final OfflinePlayer player;
     private File file;
     private YamlConfiguration configuration;
 

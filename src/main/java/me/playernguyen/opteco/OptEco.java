@@ -22,12 +22,9 @@ import me.playernguyen.opteco.updater.OptEcoUpdater;
 import me.playernguyen.opteco.utils.MessageFormat;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.command.CommandExecutor;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Objects;
 import java.util.logging.Logger;
 
 /**
@@ -68,7 +65,6 @@ public class OptEco extends JavaPlugin {
         this.setupStorage();
         this.setupAccount();
         this.hookingPlaceHolderAPI();
-
         this.setupMetric();
     }
 
@@ -109,6 +105,9 @@ public class OptEco extends JavaPlugin {
 
     @Override
     public void onDisable() {
+        // Unregister listen
+        listenerManager.unregisterAll();
+
 
     }
 

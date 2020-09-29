@@ -7,8 +7,8 @@ import java.util.UUID;
 
 public class OptEcoAPI implements IOptEcoAPI {
 
-    private UUID player;
-    private OptEco plugin;
+    private final UUID player;
+    private final OptEco plugin;
     /**
      * Get the OptEco API
      * @param uuid who you want to get?

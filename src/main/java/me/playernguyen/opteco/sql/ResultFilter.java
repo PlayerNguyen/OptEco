@@ -8,10 +8,10 @@ import java.util.List;
 
 public class ResultFilter {
 
-    private final List<HashMap<String, Object>> data = new ArrayList<>();
+    private final List<HashMap<String, Object>> data;
 
     public ResultFilter(ResultSet resultSet) throws SQLException {
-
+        this.data = new ArrayList<>();
         // Get col size
         int columnCount = resultSet.getMetaData().getColumnCount();
         while (resultSet.next()) {

@@ -1,10 +1,8 @@
 package me.playernguyen.opteco.listener;
 
-import me.playernguyen.opteco.OptEcoImplementation;
 import me.playernguyen.opteco.account.Account;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 
 public class OptEcoPlayerJoinListener extends OptEcoListener {
