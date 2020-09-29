@@ -48,7 +48,9 @@ public abstract class OptEcoLoaderAbstract extends OptEcoImplementation {
         }
         // Load file, configuration and header
         InputStream stream = getPlugin().getResource(name);
-        if (fromResource && stream == null) { throw new NullPointerException("Resource not found: " + name); }
+        if (fromResource && stream == null) {
+            throw new NullPointerException("Resource not found: " + name);
+        }
         this.file = new File(parentFolder, name);
         this.configuration = (fromResource) ?
                 YamlConfiguration.loadConfiguration(new InputStreamReader(stream)) :

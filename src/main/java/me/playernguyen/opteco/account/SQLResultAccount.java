@@ -1,6 +1,5 @@
 package me.playernguyen.opteco.account;
 
-import me.playernguyen.opteco.account.Account;
 import org.bukkit.Bukkit;
 
 import java.util.UUID;

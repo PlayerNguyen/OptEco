@@ -47,7 +47,7 @@ public class SubCommandTop extends SubCommand {
         return null;
     }
 
-    private boolean execute (CommandSender sender, ArrayList<String> args) {
+    private boolean execute(CommandSender sender, ArrayList<String> args) {
         sender.sendMessage(getPlugin().getLanguageLoader().getLanguage(OptEcoLanguage.RED_BAR));
         List<Account> accounts = getPlugin().getAccountManager().topPlayer(
                 getPlugin().getConfigurationLoader().getInt(OptEcoConfiguration.COMMAND_LIMIT_TOP)
@@ -59,9 +59,9 @@ public class SubCommandTop extends SubCommand {
             double balance = account.getBalance();
             sender.sendMessage(
                     getPlugin().getLanguageLoader().getLanguage(OptEcoLanguage.COMMAND_TOP_FORMAT)
-                        .replace("%id%", String.valueOf(i))
-                        .replace("%name%", name != null ? name : "<undefined>")
-                        .replace("%balance%", String.valueOf(balance))
+                            .replace("%id%", String.valueOf(i))
+                            .replace("%name%", name != null ? name : "<undefined>")
+                            .replace("%balance%", String.valueOf(balance))
             );
         }
         sender.sendMessage(getPlugin().getLanguageLoader().getLanguage(OptEcoLanguage.RED_BAR));

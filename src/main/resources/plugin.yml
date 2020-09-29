@@ -6,14 +6,11 @@ main: me.playernguyen.opteco.OptEco
 author: Player_Nguyen
 loadbefore: [ BossShopPro ]
 softdepend: [ PlaceholderAPI, BossShopPro ]
-
 commands:
   opteco:
     usage: /opteco help
     description: Command of the OptEco plugin
     aliases: [ points, pts, p ]
-
-
 permissions:
   opteco.admin:
     description: Grant access to admin tool / command

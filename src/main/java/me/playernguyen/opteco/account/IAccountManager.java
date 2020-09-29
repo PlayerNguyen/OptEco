@@ -83,6 +83,7 @@ public interface IAccountManager {
 
     /**
      * Get the top player as points
+     *
      * @param limit the limitation of searching query
      * @return the {@link Account} list which performed by search
      */
