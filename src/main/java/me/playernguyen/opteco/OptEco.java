@@ -68,6 +68,14 @@ public class OptEco extends JavaPlugin {
         this.setupMetric();
     }
 
+    @Override
+    public void onDisable() {
+        // Unregister listen
+        listenerManager.unregisterAll();
+        // Command manager
+
+    }
+
     private void setupMetric() {
         this.metrics = new Metrics(getPlugin(), METRICS_ID);
     }
@@ -101,14 +109,6 @@ public class OptEco extends JavaPlugin {
     private void registerTransaction() {
         // Setting transaction manager
         this.transactionManager = new TransactionManager();
-    }
-
-    @Override
-    public void onDisable() {
-        // Unregister listen
-        listenerManager.unregisterAll();
-
-
     }
 
     private void waterMarkPrint() {
