@@ -1,21 +1,22 @@
 package me.playernguyen.opteco.account;
 
 import me.playernguyen.opteco.OptEcoImplementation;
-import me.playernguyen.opteco.account.mysql.SQLResultAccount;
 import me.playernguyen.opteco.sql.SQLEstablish;
 import org.bukkit.Bukkit;
 
 import javax.annotation.Nullable;
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.UUID;
 
-public abstract class SQLAccountManager extends OptEcoImplementation
-        implements ISQLAccountManager {
+public abstract class SQLAccountDatabase extends OptEcoImplementation
+        implements IOptEcoAccountDatabase {
 
     private final SQLEstablish establish;
 
-    public SQLAccountManager(SQLEstablish establish) {
+    public SQLAccountDatabase(SQLEstablish establish) {
         // Put the connection into data
         this.establish = establish;
         // Create a table if not exist
@@ -155,6 +156,29 @@ public abstract class SQLAccountManager extends OptEcoImplementation
         return this.setBalance(uuid, this.getBalance(uuid) + amount);
     }
 
+    @Override
+    public List<Account> topPlayer(int limit) {
+        try (Connection connection = establish.openConnect()) {
+            PreparedStatement preparedStatement = connection.prepareStatement(String.format(
+                    "SELECT * FROM %s ORDER BY balance DESC LIMIT %d",
+                    getEstablish().getTableName(),
+                    limit
+            ));
+
+            List<Account> accounts = new LinkedList<>();
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                String uid = resultSet.getString("uuid");
+                double balance = resultSet.getDouble("balance");
+                accounts.add(new Account(UUID.fromString(uid), balance));
+            }
+            return accounts;
+        } catch (SQLException | ClassNotFoundException e) {
+            getPlugin().getDebugger().printException(e);
+        }
+        return null;
+    }
+
     private SQLResultAccount getAccountResult(UUID who) {
         try (Connection connection = getEstablish().openConnect()) {
 
@@ -165,13 +189,16 @@ public abstract class SQLAccountManager extends OptEcoImplementation
             statement.setString(1, who.toString());
 
             ResultSet resultSet = statement.executeQuery();
-
             if (resultSet == null) return null;
             ArrayList<String> result = parseResult(resultSet);
             if (result == null || result.size() == 0) return null;
 
-            return new SQLResultAccount(result.get(0), result.get(1), result.get(2), result.get(3));
-
+            return new SQLResultAccount(
+                    result.get(0),
+                    result.get(1),
+                    result.get(2),
+                    result.get(3)
+            );
         } catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();
         }
@@ -200,6 +227,4 @@ public abstract class SQLAccountManager extends OptEcoImplementation
             return null;
         }
     }
-
-
 }

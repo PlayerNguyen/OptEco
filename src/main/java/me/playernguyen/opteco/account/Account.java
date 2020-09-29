@@ -1,5 +1,6 @@
 package me.playernguyen.opteco.account;
 
+import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 
@@ -19,15 +20,6 @@ public class Account {
         this.balance = 0.0D;
     }
 
-    public Account(Player player, double balance) {
-        this.player = player.getUniqueId();
-        this.balance = balance;
-    }
-
-    public Account(OfflinePlayer player) {
-        this.player = player.getUniqueId();
-        this.balance = 0.0D;
-    }
 
     public Account(OfflinePlayer player, double d) {
         this.player = player.getUniqueId();
@@ -59,4 +51,9 @@ public class Account {
     public void setPlayer(Player player) {
         this.player = player.getUniqueId();
     }
+
+    public OfflinePlayer getOfflinePlayer() {
+        return Bukkit.getOfflinePlayer(this.player);
+    }
+
 }

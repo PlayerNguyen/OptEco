@@ -4,6 +4,7 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 
 import javax.annotation.Nullable;
+import java.util.List;
 import java.util.UUID;
 
 public interface IAccountManager {
@@ -80,4 +81,10 @@ public interface IAccountManager {
      */
     boolean takeBalance(UUID uuid, double amount);
 
+    /**
+     * Get the top player as points
+     * @param limit the limitation of searching query
+     * @return the {@link Account} list which performed by search
+     */
+    List<Account> topPlayer(int limit);
 }

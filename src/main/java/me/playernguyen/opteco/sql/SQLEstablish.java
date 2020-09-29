@@ -9,7 +9,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-public abstract class SQLEstablish extends OptEcoImplementation implements OptEcoEstablish {
+public abstract class SQLEstablish
+        extends OptEcoImplementation implements OptEcoEstablish {
 
     private String url;
     private final String tableName;

@@ -8,7 +8,7 @@ import java.util.ArrayList;
 
 public class AbstractPermission extends OptEcoImplementation {
 
-    private ArrayList<OptEcoPermission> permissions = new ArrayList<>();
+    private final ArrayList<OptEcoPermission> permissions = new ArrayList<>();
 
     public AbstractPermission() {
     }

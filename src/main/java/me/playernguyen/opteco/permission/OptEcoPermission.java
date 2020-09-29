@@ -14,9 +14,12 @@ public enum OptEcoPermission {
     RELOAD("opteco.reload"),
     SET("opteco.set"),
     CONFIRM("opteco.confirm"),
-    CANCEL("opteco.cancel");
+    CANCEL("opteco.cancel"),
+    TOP("opteco.top"),
 
-    private String permission;
+    ;
+
+    private final String permission;
 
     OptEcoPermission(String permission) {
         this.permission = permission;

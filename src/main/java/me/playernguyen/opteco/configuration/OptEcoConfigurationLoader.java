@@ -7,16 +7,14 @@ public class OptEcoConfigurationLoader extends OptEcoLoaderAbstract {
     private static final String CONFIG_FILE = "config.yml";
     private static final String SYSTEM_LINE_SEPARATOR = System.lineSeparator();
     private static final String HEADER_HELPER =
-            " - OptEco auto-generated plugin.yml" + SYSTEM_LINE_SEPARATOR + "" +
-                    " - More help at: https://github.com/PlayerNguyen/OptEco/wiki";
+            "[-] OptEco auto-generated plugin.yml" + SYSTEM_LINE_SEPARATOR +
+            "[-] 🚀 More help at https://github.com/PlayerNguyen/OptEco/wiki" + SYSTEM_LINE_SEPARATOR +
+            "[-] 🚀 Any issue at https://github.com/PlayerNguyen/OptEco/issues" + SYSTEM_LINE_SEPARATOR;
 
     public OptEcoConfigurationLoader() {
-//        super(new File(OptEco.getInstance().getDataFolder(), CONFIG_FILE), HEADER_HELPER);
         super(CONFIG_FILE, HEADER_HELPER, "", false);
         saveDefault();
     }
-
-
 
     public Object getConfig(OptEcoConfiguration configuration) {
         if (!getConfiguration().contains(configuration.getPath())) {

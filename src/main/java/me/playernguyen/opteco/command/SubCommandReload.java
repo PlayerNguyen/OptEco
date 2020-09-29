@@ -4,6 +4,7 @@ import me.playernguyen.opteco.OptEco;
 import me.playernguyen.opteco.OptEcoLanguage;
 import me.playernguyen.opteco.permission.OptEcoPermission;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.RemoteConsoleCommandSender;
 import org.bukkit.entity.Player;
@@ -48,7 +49,10 @@ public class SubCommandReload extends SubCommand {
         // Re-disable and enable
         Bukkit.getServer().getPluginManager().disablePlugin(getPlugin());
         Bukkit.getServer().getPluginManager().enablePlugin(getPlugin());
-
+        sender.sendMessage(getPlugin().getLanguageLoader().getLanguage(OptEcoLanguage.GRAY_BAR));
+        sender.sendMessage(
+                ChatColor.GRAY + " • OptEco by Player_Nguyen version " + getPlugin().getDescription().getVersion()
+        );
         sender.sendMessage(
                 getMessageFormat().format(getPlugin().getLanguageLoader().getLanguage(OptEcoLanguage.RELOAD_DONE))
         );

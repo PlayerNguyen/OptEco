@@ -2,13 +2,13 @@ package me.playernguyen.opteco.account.sqlite;
 
 import me.playernguyen.opteco.OptEco;
 import me.playernguyen.opteco.OptEcoConfiguration;
-import me.playernguyen.opteco.account.SQLAccountManager;
+import me.playernguyen.opteco.account.SQLAccountDatabase;
 import me.playernguyen.opteco.sql.SQLiteEstablish;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class SQLiteAccountManager extends SQLAccountManager {
+public class SQLiteAccountDatabase extends SQLAccountDatabase {
 
     public static final String ACCOUNT_TABLE = OptEco.getInstance()
             .getConfigurationLoader().getString(OptEcoConfiguration.SQL_ACCOUNT_TABLE_NAME);
@@ -23,7 +23,7 @@ public class SQLiteAccountManager extends SQLAccountManager {
                     )
             );
 
-    public SQLiteAccountManager() {
+    public SQLiteAccountDatabase() {
         super(new SQLiteEstablish(ACCOUNT_TABLE, SETUP_TABLE_LIST));
     }
 }

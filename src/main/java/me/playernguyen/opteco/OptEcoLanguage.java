@@ -23,6 +23,7 @@ public enum OptEcoLanguage {
     CHECK_SELF("COMMAND.CHECK.SELF", "&aYour balance now is &d%value% %currency%"),
     CHECK_ANOTHER("COMMAND.CHECK.ANOTHER", "&aPlayer %who% balance now is &d%value% %currency%"),
 
+    COMMAND_DESCRIBE_TOP("COMMAND.TOP.DESCRIPTION", "view top points"),
 
     COMMAND_DESCRIBE_PAY("COMMAND.PAY.DESCRIPTION", "transfer points to player"),
     PAY_ON_TRANSACTION("COMMAND.PAY.PAY_ON_TRANSACTION", "&cYou are on transaction with another player, please using &d/points [confirm/cancel] &cto confirm your before transaction."),
@@ -51,7 +52,12 @@ public enum OptEcoLanguage {
     COUNTDOWN_FORMAT("COUNTDOWN_FORMAT", "&8%second%..."),
 
     COMMAND_DESCRIBE_CONFIRM("COMMAND.CONFIRM.DESCRIPTION", "confirm transaction"),
-    COMMAND_DESCRIBE_CANCEL("COMMAND.CANCEL.DESCRIPTION", "cancel transaction");
+    COMMAND_DESCRIBE_CANCEL("COMMAND.CANCEL.DESCRIPTION", "cancel transaction"),
+
+    RED_BAR("RED_BAR", "&c---------------------------"),
+    GRAY_BAR("RED_BAR", "&7---------------------------"),
+    COMMAND_TOP_FORMAT("COMMAND.TOP.FORMAT", "&7%id%. &6%name%  ~  &c%balance%")
+    ;
 
     private final String path;
     private final Object wh;

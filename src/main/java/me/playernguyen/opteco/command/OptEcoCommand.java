@@ -20,6 +20,7 @@ public class OptEcoCommand extends OptEcoAbstractCommand {
                 OptEcoPermission.values()) {
             addPermissions(perm);
         }
+        // Append new command
         addSubCommand(new SubCommandAdd("add", getPlugin()));
         addSubCommand(new SubCommandTake("take", getPlugin()));
         addSubCommand(new SubCommandSet("set", getPlugin()));
@@ -29,6 +30,7 @@ public class OptEcoCommand extends OptEcoAbstractCommand {
         addSubCommand(new SubCommandPayConfirm("confirm", getPlugin()));
         addSubCommand(new SubCommandPayCancel("cancel", getPlugin()));
         addSubCommand(new SubCommandReload("reload", getPlugin()));
+        addSubCommand(new SubCommandTop("top", getPlugin()));
     }
 
     @Override
@@ -53,13 +55,20 @@ public class OptEcoCommand extends OptEcoAbstractCommand {
 
     private boolean execute(CommandSender sender, Command command, String s, String[] args) {
         if (args.length < 1) {
+            sender.sendMessage(getPlugin().getLanguageLoader().getLanguage(OptEcoLanguage.GRAY_BAR));
             getMessageFormat().sendCuteList(sender, getSubAsHelp(sender), ChatColor.GRAY);
             return true;
         }
 
         String sub = args[0];
         if (!getSubAsString().contains(sub)) {
-            sender.sendMessage(getMessageFormat().format(getPlugin().getLanguageLoader().getLanguage(OptEcoLanguage.COMMAND_NOT_FOUND)));
+            sender.sendMessage(
+                    getMessageFormat().format(getPlugin()
+                            .getLanguageLoader()
+                            .getLanguage(OptEcoLanguage.COMMAND_NOT_FOUND
+                            )
+                    )
+            );
             getMessageFormat().sendCuteList(sender, getSubAsHelp(sender), ChatColor.GRAY);
             return true;
         }

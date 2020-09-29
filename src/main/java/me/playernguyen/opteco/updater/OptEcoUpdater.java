@@ -19,7 +19,7 @@ public class OptEcoUpdater extends OptEcoImplementation {
     public OptEcoUpdater(int resourceId) {
         getPlugin().getDebugger().info("Creating connection check for updates...");
         this.resourceId = resourceId;
-        getPlugin().getDebugger().info("Checking for updates ưith id " + resourceId);
+        getPlugin().getDebugger().info("Checking for updates with id " + resourceId);
     }
 
     public void getVersion(final Consumer<String> consumer) {

@@ -1,8 +1,8 @@
 package me.playernguyen.opteco;
 
 import me.playernguyen.opteco.account.IAccountManager;
-import me.playernguyen.opteco.account.mysql.MySQLAccountManager;
-import me.playernguyen.opteco.account.sqlite.SQLiteAccountManager;
+import me.playernguyen.opteco.account.mysql.MySQLAccountDatabase;
+import me.playernguyen.opteco.account.sqlite.SQLiteAccountDatabase;
 import me.playernguyen.opteco.bStats.Metrics;
 import me.playernguyen.opteco.bossshoppro.OptEcoBossShopPro;
 import me.playernguyen.opteco.command.CommandManager;
@@ -70,11 +70,12 @@ public class OptEco extends JavaPlugin {
     private void hookBossShopPro() {
         // Find BossShopPro
         Plugin plugin = Bukkit.getPluginManager().getPlugin("BossShopPro");
-        // Whether found
+        // Whether found BossShopPro
         if (plugin != null) {
             // Announce to user
-            logger.info("[Hooker] Found BossShopPro v."
-                    + plugin.getDescription().getVersion() + " !");
+            logger.info("[Hooker] Found BossShopPro ~ v"
+                    + plugin.getDescription().getVersion() + ". Creating hook. Please make sure you has " +
+                    "config this (PointsPlugin: 'OptEco')");
             // Register API
             new OptEcoBossShopPro(this).register();
         }
@@ -234,11 +235,11 @@ public class OptEco extends JavaPlugin {
     private void registerAccountManager() {
         switch (storageType) {
             case SQLITE: {
-                this.accountManager = new SQLiteAccountManager();
+                this.accountManager = new SQLiteAccountDatabase();
                 break;
             }
             case MYSQL: {
-                this.accountManager = new MySQLAccountManager();
+                this.accountManager = new MySQLAccountDatabase();
                 break;
             }
         }
@@ -250,14 +251,13 @@ public class OptEco extends JavaPlugin {
         this.listenerManager = new ListenerManager(this);
         // Listener adding here...
         getListenerManager().add(new OptEcoPlayerJoinListener());
-
     }
 
     private void registerExecutors() {
         // Initial the command manager
         logger.info("Loading commands.");
         this.commandManager = new CommandManager();
-        // Insert here :))
+        // Append new commands
         getCommandManager().add(new OptEcoCommand());
     }
 

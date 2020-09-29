@@ -2,13 +2,13 @@ package me.playernguyen.opteco.account.mysql;
 
 import me.playernguyen.opteco.OptEco;
 import me.playernguyen.opteco.OptEcoConfiguration;
-import me.playernguyen.opteco.account.SQLAccountManager;
+import me.playernguyen.opteco.account.SQLAccountDatabase;
 import me.playernguyen.opteco.sql.MySQLEstablish;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class MySQLAccountManager extends SQLAccountManager {
+public class MySQLAccountDatabase extends SQLAccountDatabase {
 
     public static final String ACCOUNT_TABLE = OptEco.getInstance()
             .getConfigurationLoader().getString(OptEcoConfiguration.SQL_ACCOUNT_TABLE_NAME);
@@ -22,7 +22,7 @@ public class MySQLAccountManager extends SQLAccountManager {
                     )
             );
 
-    public MySQLAccountManager() {
+    public MySQLAccountDatabase() {
         super(new MySQLEstablish(ACCOUNT_TABLE, SETUP_TABLE_LIST));
     }
 
