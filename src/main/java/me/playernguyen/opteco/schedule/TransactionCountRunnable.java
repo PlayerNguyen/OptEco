@@ -9,8 +9,8 @@ import java.util.UUID;
 
 public class TransactionCountRunnable extends OptEcoRunnable {
 
-    private UUID player;
-    private UUID target;
+    private final UUID player;
+    private final UUID target;
     private int ticker;
 
     public TransactionCountRunnable(UUID player, UUID target) {

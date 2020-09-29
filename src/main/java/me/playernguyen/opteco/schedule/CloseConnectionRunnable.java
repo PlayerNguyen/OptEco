@@ -5,7 +5,7 @@ import java.sql.SQLException;
 
 public class CloseConnectionRunnable extends OptEcoRunnable {
 
-    private Connection connection;
+    private final Connection connection;
 
     public CloseConnectionRunnable(Connection connection) {
         this.connection = connection;

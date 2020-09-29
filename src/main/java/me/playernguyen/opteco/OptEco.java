@@ -5,6 +5,7 @@ import me.playernguyen.opteco.account.YamlAccountManager;
 import me.playernguyen.opteco.account.mysql.MySQLAccountManager;
 import me.playernguyen.opteco.account.sqlite.SQLiteAccountManager;
 import me.playernguyen.opteco.bStats.Metrics;
+import me.playernguyen.opteco.bossshoppro.OptEcoBossShopPro;
 import me.playernguyen.opteco.command.CommandManager;
 import me.playernguyen.opteco.command.OptEcoCommand;
 import me.playernguyen.opteco.configuration.ConfigurationLoader;
@@ -22,6 +23,7 @@ import me.playernguyen.opteco.updater.OptEcoUpdater;
 import me.playernguyen.opteco.utils.MessageFormat;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.ArrayList;
@@ -34,7 +36,7 @@ public class OptEco extends JavaPlugin {
 
     public static OptEco instance;
 
-    private static final String PLUGIN_NAME = "OptEco";
+    public static final String PLUGIN_NAME = "OptEco";
     private static final String UPDATE_ID = "76179";
     private static final int METRICS_ID = 6793;
 
@@ -57,15 +59,29 @@ public class OptEco extends JavaPlugin {
     @Override
     public void onEnable() {
         this.setupInstance();
-        this.waterMarkPrint();
-        this.getLogger().info("Loading data and configurations...");
         this.setupLoader();
         this.setupManager();
         this.setupUpdater();
         this.setupStorage();
         this.setupAccount();
         this.hookPlaceHolderAPI();
+        this.hookBossShopPro();
         this.setupMetric();
+
+        this.waterMarkPrint();
+    }
+
+    private void hookBossShopPro() {
+        // Find BossShopPro
+        Plugin plugin = Bukkit.getPluginManager().getPlugin("BossShopPro");
+        // Whether found
+        if (plugin != null) {
+            // Announce to user
+            logger.info("[Hooker] Found BossShopPro v."
+                    + plugin.getDescription().getVersion() + "...");
+            // Register API
+            new OptEcoBossShopPro(this).register();
+        }
     }
 
     @Override
@@ -73,7 +89,7 @@ public class OptEco extends JavaPlugin {
         // Unregister listen
         listenerManager.unregisterAll();
         // Command manager
-
+        commandManager.getContainer().clear();
     }
 
     private void setupMetric() {
@@ -99,7 +115,7 @@ public class OptEco extends JavaPlugin {
     }
 
     private void setupAccount() {
-        this.getLogger().info("Setup storage and accounts...");
+        this.logger.info("Setup storage and accounts...");
         this.registerAccountManager();
         this.registerListener();
         this.registerExecutors();
@@ -112,6 +128,7 @@ public class OptEco extends JavaPlugin {
     }
 
     private void waterMarkPrint() {
+        logger.info("Succeed setup OptEco v." + this.getDescription().getVersion() + " on your server");
         ArrayList<String> waterMarks = new ArrayList<>();
         waterMarks.add("                        ");
         waterMarks.add(" ___     ___   _______  ");
@@ -122,19 +139,19 @@ public class OptEco extends JavaPlugin {
         for (String waterMark : waterMarks) {
             getServer().getConsoleSender().sendMessage(ChatColor.YELLOW + waterMark);
         }
+        waterMarks.clear();
     }
 
     private void hookPlaceHolderAPI() {
         this.isHookPlaceholder = Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null;
         if (isHookPlaceholder()) {
-            this.getLogger().info("[Hooker] Detected PlaceholderAPI...");
-            this.getLogger().info("[Hooker] Hooking with PlaceholderAPI...");
-            this.getLogger().info("[Hooker] Register parameters with PlaceholderAPI...");
+            this.logger.info("[Hooker] Detected PlaceholderAPI!");
+            this.logger.info("[Hooker] Hooking with PlaceholderAPI...");
+            this.logger.info("[Hooker] Register parameters with PlaceholderAPI...");
             OptEcoExpansion expansion = new OptEcoExpansion(this);
 
-            this.getLogger().info("[Hooker] Active PlaceholderAPI hook...");
+            this.logger.info("[Hooker] Succeed PlaceholderAPI hook!");
             expansion.register();
-
         }
     }
 
@@ -156,7 +173,6 @@ public class OptEco extends JavaPlugin {
     private void setupUpdater() {
         // Enable check for update or not
         if (getConfigurationLoader().getBool(OptEcoConfiguration.CHECK_FOR_UPDATE)) {
-            // Checking... :))
             this.checkForUpdates();
         }
     }
@@ -209,9 +225,9 @@ public class OptEco extends JavaPlugin {
     }
 
     private void setupStorage() {
-        getLogger().info("Loading storage type and data....");
+        logger.info("Loading storage type.");
         this.storageType = StorageType.valueOf(getConfigurationLoader().getString(OptEcoConfiguration.STORAGE_TYPE));
-        getLogger().info("Storage type is [" + storageType.name().toLowerCase() + "]");
+        logger.info(String.format("Current storage type: %s", storageType.name().toLowerCase()));
     }
 
     private void registerAccountManager() {
@@ -233,7 +249,7 @@ public class OptEco extends JavaPlugin {
 
     private void registerListener() {
         // Initial the class
-        getLogger().info("Loading listener manager...");
+        logger.info("Loading listeners.");
         this.listenerManager = new ListenerManager(this);
         // Listener adding here...
         getListenerManager().add(new OptEcoPlayerJoinListener());
@@ -242,7 +258,7 @@ public class OptEco extends JavaPlugin {
 
     private void registerExecutors() {
         // Initial the command manager
-        getLogger().info("Loading command manager...");
+        logger.info("Loading commands.");
         this.commandManager = new CommandManager();
         // Insert here :))
         getCommandManager().add(new OptEcoCommand());
@@ -258,13 +274,6 @@ public class OptEco extends JavaPlugin {
 
     public IAccountManager getAccountManager() {
         return accountManager;
-    }
-
-    /**
-     * Disable the OptEco
-     */
-    protected void disableOptEco() {
-        this.getServer().getPluginManager().disablePlugin(this);
     }
 
     public ManagerSet<OptEcoListener> getListenerManager() {
