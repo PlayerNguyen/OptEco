@@ -12,6 +12,11 @@ OptEco - Bukkit/Spigot/PaperMC Points System with API and web integration
 * API Support
 * Website Integration.
 * bStats (Metrics) 
+
+# Requirements
+* Any operating system which can run JRE
+* **Java 8** or above
+* Bukkit core server from 1.8 to 1.16.3
 # 💵 About
 OptEco is a point system plugin for Bukkit/Spigot/PaperMC made with love by Player_Nguyen. 
 # Guide & Wiki 
