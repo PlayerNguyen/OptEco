@@ -34,4 +34,5 @@ Check out our example website integration PHP [here](web_integration).
 # Links
 - [**JavaDoc**](https://playernguyen.github.io/OptEco/me/playernguyen/opteco/api/OptEcoAPI.html)
 - [**Spigot Resource**](https://www.spigotmc.org/resources/76179/)
+
 Having any issues? Don't be shy, [create an issue now](https://github.com/PlayerNguyen/OptEco/issues).
