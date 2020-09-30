@@ -7,7 +7,7 @@ import org.bukkit.entity.Player;
 
 public class OptEcoExpansion extends PlaceholderExpansion {
 
-    private OptEco plugin;
+    private final OptEco plugin;
 
     public OptEcoExpansion(OptEco plugin) {
         this.plugin = plugin;

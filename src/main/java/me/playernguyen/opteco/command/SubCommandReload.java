@@ -51,7 +51,7 @@ public class SubCommandReload extends SubCommand {
         Bukkit.getServer().getPluginManager().enablePlugin(getPlugin());
         sender.sendMessage(getPlugin().getLanguageLoader().getLanguage(OptEcoLanguage.GRAY_BAR));
         sender.sendMessage(
-                ChatColor.GRAY + " • OptEco by Player_Nguyen version " + getPlugin().getDescription().getVersion()
+                ChatColor.GRAY + " - OptEco by Player_Nguyen version " + getPlugin().getDescription().getVersion()
         );
         sender.sendMessage(
                 getMessageFormat().format(getPlugin().getLanguageLoader().getLanguage(OptEcoLanguage.RELOAD_DONE))

@@ -29,6 +29,7 @@ public interface IAccountManager {
     /**
      * Get the account which must be existed in database. Whether not will return null
      *
+     * @param uuid  {@link UUID} the uuid to get
      * @return the account or null value
      */
     @Nullable
