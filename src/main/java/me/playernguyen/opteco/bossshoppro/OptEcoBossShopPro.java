@@ -16,12 +16,12 @@ public class OptEcoBossShopPro extends BSPointsPlugin {
 
     @Override
     public double getPoints(OfflinePlayer offlinePlayer) {
-        return optEco.getAccountManager().getBalance(offlinePlayer.getUniqueId());
+        return optEco.getAccountDatabase().getBalance(offlinePlayer.getUniqueId());
     }
 
     @Override
     public double setPoints(OfflinePlayer offlinePlayer, double v) {
-        if (optEco.getAccountManager().setBalance(offlinePlayer.getUniqueId(), v)) {
+        if (optEco.getAccountDatabase().setBalance(offlinePlayer.getUniqueId(), v)) {
             return v;
         }
         return 0;
@@ -29,7 +29,7 @@ public class OptEcoBossShopPro extends BSPointsPlugin {
 
     @Override
     public double takePoints(OfflinePlayer offlinePlayer, double v) {
-        if (optEco.getAccountManager().takeBalance(offlinePlayer.getUniqueId(), v)) {
+        if (optEco.getAccountDatabase().takeBalance(offlinePlayer.getUniqueId(), v)) {
             return v;
         }
         return 0;
@@ -37,7 +37,7 @@ public class OptEcoBossShopPro extends BSPointsPlugin {
 
     @Override
     public double givePoints(OfflinePlayer offlinePlayer, double v) {
-        if (optEco.getAccountManager().addBalance(offlinePlayer.getUniqueId(), v)) {
+        if (optEco.getAccountDatabase().addBalance(offlinePlayer.getUniqueId(), v)) {
             return v;
         }
         return 0;

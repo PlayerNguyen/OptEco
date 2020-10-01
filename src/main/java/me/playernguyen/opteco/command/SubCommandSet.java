@@ -73,7 +73,7 @@ public class SubCommandSet extends SubCommand {
             );
             return true;
         }
-        if (getPlugin().getAccountManager().setBalance(target.getUniqueId(), value)) {
+        if (getPlugin().getAccountDatabase().setBalance(target.getUniqueId(), value)) {
             sender.sendMessage(
                     getMessageFormat()
                             .format(getPlugin().getLanguageLoader().getLanguage(OptEcoLanguage.SET_SUCCESS))

@@ -1,6 +1,7 @@
 package me.playernguyen.opteco;
 
-import me.playernguyen.opteco.account.IAccountManager;
+import me.playernguyen.opteco.account.IAccountDatabase;
+import me.playernguyen.opteco.account.OptEcoAccountManager;
 import me.playernguyen.opteco.account.mysql.MySQLAccountDatabase;
 import me.playernguyen.opteco.account.sqlite.SQLiteAccountDatabase;
 import me.playernguyen.opteco.bStats.Metrics;
@@ -46,7 +47,8 @@ public class OptEco extends JavaPlugin {
     private boolean isHookPlaceholder;
     private OptEcoConfigurationLoader optEcoConfigurationLoader;
     private OptEcoLanguageLoader optEcoLanguageLoader;
-    private IAccountManager accountManager;
+    private IAccountDatabase accountDatabase;
+    private OptEcoAccountManager accountManager;
     private StorageType storageType;
     private Debugger debugger;
     private MessageFormat messageFormat;
@@ -118,10 +120,15 @@ public class OptEco extends JavaPlugin {
 
     private void setupAccount() {
         this.logger.info("Setup storage and accounts...");
-        this.registerAccountManager();
+        this.registerAccountDatabase();
         this.registerListener();
         this.registerExecutors();
         this.registerTransaction();
+        this.registerCache();
+    }
+
+    private void registerCache() {
+        this.accountManager = new OptEcoAccountManager();
     }
 
     private void registerTransaction() {
@@ -232,14 +239,14 @@ public class OptEco extends JavaPlugin {
         logger.info(String.format("Current storage type: %s", storageType.name().toLowerCase()));
     }
 
-    private void registerAccountManager() {
+    private void registerAccountDatabase() {
         switch (storageType) {
             case SQLITE: {
-                this.accountManager = new SQLiteAccountDatabase();
+                this.accountDatabase = new SQLiteAccountDatabase();
                 break;
             }
             case MYSQL: {
-                this.accountManager = new MySQLAccountDatabase();
+                this.accountDatabase = new MySQLAccountDatabase();
                 break;
             }
         }
@@ -269,8 +276,8 @@ public class OptEco extends JavaPlugin {
         return instance;
     }
 
-    public IAccountManager getAccountManager() {
-        return accountManager;
+    public IAccountDatabase getAccountDatabase() {
+        return accountDatabase;
     }
 
     public ManagerSet<OptEcoListener> getListenerManager() {
@@ -279,5 +286,9 @@ public class OptEco extends JavaPlugin {
 
     public CommandManager getCommandManager() {
         return commandManager;
+    }
+
+    public OptEcoAccountManager getAccountManager() {
+        return accountManager;
     }
 }

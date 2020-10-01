@@ -105,8 +105,8 @@ public class Transaction extends OptEcoImplementation {
             this.getTransactionManager().getTransactionStorage().push(this);
         });
         // Return such as ...
-        return getPlugin().getAccountManager().takeBalance(getPlayer(), getAmount())
-                && getPlugin().getAccountManager().addBalance(getTarget(), getAmount())
+        return getPlugin().getAccountDatabase().takeBalance(getPlayer(), getAmount())
+                && getPlugin().getAccountDatabase().addBalance(getTarget(), getAmount())
                 && this.clean();
     }
 

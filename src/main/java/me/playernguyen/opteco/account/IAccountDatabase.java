@@ -7,7 +7,7 @@ import javax.annotation.Nullable;
 import java.util.List;
 import java.util.UUID;
 
-public interface IAccountManager {
+public interface IAccountDatabase {
 
     /**
      * Save account into storage location

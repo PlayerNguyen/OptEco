@@ -80,31 +80,9 @@ public abstract class SQLAccountDatabase extends OptEcoImplementation
         String uuid = account.getPlayer().toString();
 
         getDebugger().info("Save account " + player + " with uuid " + uuid);
-
         if (this.getAccountIdentify(account.getPlayer()) != null) {
             // Having the account
-            try (Connection connection = getEstablish().openConnect()) {
-
-                String query =
-                        String.format("UPDATE %s SET player=?, balance=?, uuid=? WHERE uuid='%s'",
-                                getEstablish().getTableName(),
-                                uuid
-                        );
-                getDebugger().info("Call " + query);
-                PreparedStatement preparedStatement = connection.prepareStatement(query);
-
-                preparedStatement.setObject(1, player);
-                preparedStatement.setObject(2, balance);
-                preparedStatement.setObject(3, uuid);
-
-                // DML return more than 1
-                int i = preparedStatement.executeUpdate();
-                System.out.println(i);
-                return i >= 1;
-
-            } catch (ClassNotFoundException | SQLException e) {
-                e.printStackTrace();
-            }
+            return this.update(account);
         } else {
             // If no, create
             try (Connection connection = getEstablish().openConnect()) {
@@ -127,6 +105,36 @@ public abstract class SQLAccountDatabase extends OptEcoImplementation
             } catch (ClassNotFoundException | SQLException e) {
                 e.printStackTrace();
             }
+        }
+        return false;
+    }
+
+    public boolean update(Account account) {
+        String player = Bukkit.getOfflinePlayer(account.getPlayer()).getName();
+        double balance = account.getBalance();
+        String uuid = account.getPlayer().toString();
+
+        
+
+        try (Connection connection = getEstablish().openConnect()) {
+
+            String query =
+                    String.format("UPDATE %s SET player=?, balance=?, uuid=? WHERE uuid='%s'",
+                            getEstablish().getTableName(),
+                            uuid
+                    );
+            getDebugger().info("Call " + query);
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+
+            preparedStatement.setObject(1, player);
+            preparedStatement.setObject(2, balance);
+            preparedStatement.setObject(3, uuid);
+
+            // DML return more than 1
+            int i = preparedStatement.executeUpdate();
+            return i >= 1;
+        } catch (ClassNotFoundException | SQLException e) {
+            e.printStackTrace();
         }
         return false;
     }

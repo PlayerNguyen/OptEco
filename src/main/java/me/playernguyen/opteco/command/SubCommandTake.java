@@ -77,7 +77,7 @@ public class SubCommandTake extends SubCommand {
             return true;
         }
         // If sender don't have enough points
-        if ((getPlugin().getAccountManager().getBalance(target.getUniqueId()) - Double.parseDouble(_value)) <
+        if ((getPlugin().getAccountDatabase().getBalance(target.getUniqueId()) - Double.parseDouble(_value)) <
                 getPlugin().getConfigurationLoader().getDouble(OptEcoConfiguration.MIN_BALANCE)) {
             sender.sendMessage(
                     getMessageFormat()
@@ -86,7 +86,7 @@ public class SubCommandTake extends SubCommand {
             );
             return true;
         }
-        if (getPlugin().getAccountManager().takeBalance(target.getUniqueId(), value)) {
+        if (getPlugin().getAccountDatabase().takeBalance(target.getUniqueId(), value)) {
             sender.sendMessage(
                     getMessageFormat()
                             .format(getPlugin().getLanguageLoader().getLanguage(OptEcoLanguage.TAKE_SUCCESS))

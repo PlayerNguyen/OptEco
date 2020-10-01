@@ -14,28 +14,6 @@
           </set>
         </option>
       </GradleProjectSettings>
-      <GradleProjectSettings>
-        <option name="distributionType" value="DEFAULT_WRAPPED" />
-        <option name="externalProjectPath" value="$PROJECT_DIR$/OptEcoTestPlugin" />
-        <option name="gradleHome" value="/usr/local/Cellar/gradle/6.6.1/libexec" />
-        <option name="gradleJvm" value="14" />
-        <option name="modules">
-          <set>
-            <option value="$PROJECT_DIR$/OptEcoTestPlugin" />
-          </set>
-        </option>
-      </GradleProjectSettings>
-      <GradleProjectSettings>
-        <option name="distributionType" value="DEFAULT_WRAPPED" />
-        <option name="externalProjectPath" value="$PROJECT_DIR$/OptEcoTestedPlugin" />
-        <option name="gradleHome" value="/usr/local/Cellar/gradle/6.6.1/libexec" />
-        <option name="gradleJvm" value="14" />
-        <option name="modules">
-          <set>
-            <option value="$PROJECT_DIR$/OptEcoTestedPlugin" />
-          </set>
-        </option>
-      </GradleProjectSettings>
     </option>
   </component>
 </project>

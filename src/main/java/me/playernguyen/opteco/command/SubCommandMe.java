@@ -29,7 +29,7 @@ public class SubCommandMe extends SubCommand {
         player.sendMessage(
                 getMessageFormat().format(
                         getPlugin().getLanguageLoader().getLanguage(OptEcoLanguage.CHECK_SELF)
-                                .replace("%value%", getMessageFormat().numberFormat(getPlugin().getAccountManager().getBalance(player.getUniqueId())))
+                                .replace("%value%", getMessageFormat().numberFormat(getPlugin().getAccountDatabase().getBalance(player.getUniqueId())))
                                 .replace("%currency%", getPlugin().getConfigurationLoader().getString(OptEcoConfiguration.CURRENCY_SYMBOL))
                 )
         );

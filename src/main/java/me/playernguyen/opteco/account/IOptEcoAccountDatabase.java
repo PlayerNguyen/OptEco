@@ -1,6 +1,6 @@
 package me.playernguyen.opteco.account;
 
-public interface IOptEcoAccountDatabase extends IAccountManager {
+public interface IOptEcoAccountDatabase extends IAccountDatabase {
 
 
 }

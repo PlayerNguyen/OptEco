@@ -65,7 +65,7 @@ public class SubCommandAdd extends SubCommand {
             );
             return true;
         }
-        if (this.getPlugin().getAccountManager().addBalance(target.getUniqueId(), value)) {
+        if (this.getPlugin().getAccountDatabase().addBalance(target.getUniqueId(), value)) {
             // Send success message
             sender.sendMessage(
                     getMessageFormat().format(getPlugin().getLanguageLoader().getLanguage(OptEcoLanguage.COMMAND_SUCCEEDED_ADD))

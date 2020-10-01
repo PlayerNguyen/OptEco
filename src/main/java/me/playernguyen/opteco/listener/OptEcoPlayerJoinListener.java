@@ -15,11 +15,17 @@ public class OptEcoPlayerJoinListener extends OptEcoListener {
     @EventHandler
     public void onPlayerJoinEvent(PlayerJoinEvent e) {
         Player player = e.getPlayer();
+        Account account;
         // If account not found
-        if (!getPlugin().getAccountManager().hasAccount(player.getUniqueId())) {
+        if (!getPlugin().getAccountDatabase().hasAccount(player.getUniqueId())) {
             // Init new account
-            getPlugin().getAccountManager().save(new Account(player.getUniqueId()));
+            account = new Account(player.getUniqueId(), 0);
+            getPlugin().getAccountDatabase().save(account);
+        } else {
+            account = getPlugin().getAccountDatabase().getAccountIdentify(player.getUniqueId());
         }
+        // Get account manager
+        this.getAccountManager().add(account);
     }
 
 }

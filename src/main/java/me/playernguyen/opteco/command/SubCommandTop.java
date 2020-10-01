@@ -49,7 +49,7 @@ public class SubCommandTop extends SubCommand {
 
     private boolean execute(CommandSender sender, ArrayList<String> args) {
         sender.sendMessage(getPlugin().getLanguageLoader().getLanguage(OptEcoLanguage.RED_BAR));
-        List<Account> accounts = getPlugin().getAccountManager().topPlayer(
+        List<Account> accounts = getPlugin().getAccountDatabase().topPlayer(
                 getPlugin().getConfigurationLoader().getInt(OptEcoConfiguration.COMMAND_LIMIT_TOP)
         );
         int i = 0;

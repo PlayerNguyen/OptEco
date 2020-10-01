@@ -27,6 +27,8 @@ public enum OptEcoConfiguration {
     COUNTDOWN_ENABLE("Settings.Payment.Pending.Countdown.Enable", true),
     COUNTDOWN_TYPE("Settings.Payment.Pending.Countdown.Type", "message"),
 
+    REFRESH_TIME("Setings.Preferences.Cache.RefreshTime", 5),
+
     DEBUG("Settings.Debug", false),
     LANGUAGE_FILE("Settings.Preferences.Language", "language.yml");
 

@@ -28,7 +28,7 @@ public class OptEcoAPI implements IOptEcoAPI {
     @Override
     public boolean hasAccount() {
         return this.plugin
-                .getAccountManager().hasAccount(player);
+                .getAccountDatabase().hasAccount(player);
     }
 
     /**
@@ -41,7 +41,7 @@ public class OptEcoAPI implements IOptEcoAPI {
     public boolean setPoints(double amount) {
         if (amount <= 0) throw new IllegalArgumentException("amount must greater than 0");
         return this.plugin
-                .getAccountManager().setBalance(player, amount);
+                .getAccountDatabase().setBalance(player, amount);
     }
 
     /**
@@ -52,7 +52,7 @@ public class OptEcoAPI implements IOptEcoAPI {
     @Override
     public double getPoints() {
         return this.plugin
-                .getAccountManager().getBalance(player);
+                .getAccountDatabase().getBalance(player);
     }
 
     /**
@@ -85,7 +85,7 @@ public class OptEcoAPI implements IOptEcoAPI {
     @Override
     public boolean addPoints(double amount) {
         if (amount <= 0) throw new IllegalArgumentException("amount must greater than 0");
-        return this.plugin.getAccountManager().addBalance(getPlayer(), amount);
+        return this.plugin.getAccountDatabase().addBalance(getPlayer(), amount);
     }
 
     /**
@@ -97,7 +97,7 @@ public class OptEcoAPI implements IOptEcoAPI {
     @Override
     public boolean takePoints(double amount) {
         if (amount <= 0) throw new IllegalArgumentException("amount must greater than 0");
-        return this.plugin.getAccountManager().takeBalance(getPlayer(), amount);
+        return this.plugin.getAccountDatabase().takeBalance(getPlayer(), amount);
     }
 
     /**

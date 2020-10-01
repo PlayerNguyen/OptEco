@@ -31,7 +31,7 @@ public class SubCommandCheck extends SubCommand {
             player.sendMessage(
                     getMessageFormat().format(
                             getPlugin().getLanguageLoader().getLanguage(OptEcoLanguage.CHECK_SELF)
-                                    .replace("%value%", String.valueOf(getPlugin().getAccountManager().getBalance(player.getUniqueId())))
+                                    .replace("%value%", String.valueOf(getPlugin().getAccountDatabase().getBalance(player.getUniqueId())))
                                     .replace("%currency%", getPlugin().getConfigurationLoader().getString(OptEcoConfiguration.CURRENCY_SYMBOL))
                     )
             );
@@ -68,7 +68,7 @@ public class SubCommandCheck extends SubCommand {
                 getMessageFormat().format(
                         getPlugin().getLanguageLoader().getLanguage(OptEcoLanguage.CHECK_ANOTHER)
                                 .replace("%who%", _target)
-                                .replace("%value%", getMessageFormat().numberFormat(getPlugin().getAccountManager().getBalance(target.getUniqueId())))
+                                .replace("%value%", getMessageFormat().numberFormat(getPlugin().getAccountDatabase().getBalance(target.getUniqueId())))
                                 .replace("%currency%", getPlugin().getConfigurationLoader().getString(OptEcoConfiguration.CURRENCY_SYMBOL))
                 )
         );

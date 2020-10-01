@@ -82,7 +82,7 @@ public class SubCommandPay extends SubCommand {
             return true;
         }
         // If sender don't have enough points
-        if ((getPlugin().getAccountManager().getBalance(player.getUniqueId()) - Double.parseDouble(_value))
+        if ((getPlugin().getAccountDatabase().getBalance(player.getUniqueId()) - Double.parseDouble(_value))
                 < getPlugin().getConfigurationLoader().getDouble(OptEcoConfiguration.MIN_BALANCE)) {
             player.sendMessage(
                     getMessageFormat()
