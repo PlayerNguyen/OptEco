@@ -1,7 +1,7 @@
 package me.playernguyen.opteco;
 
 import me.playernguyen.opteco.account.IAccountDatabase;
-import me.playernguyen.opteco.account.OptEcoAccountManager;
+import me.playernguyen.opteco.account.OptEcoCacheAccountManager;
 import me.playernguyen.opteco.configuration.OptEcoConfigurationLoader;
 import me.playernguyen.opteco.configuration.StorageType;
 import me.playernguyen.opteco.logger.Debugger;
@@ -59,9 +59,9 @@ public abstract class OptEcoImplementation {
 
     /**
      * Get account manager which Manager cache accounts
-     * @return {@link OptEcoAccountManager} class
+     * @return {@link OptEcoCacheAccountManager} class
      */
-    protected OptEcoAccountManager getAccountManager() {
+    protected OptEcoCacheAccountManager getAccountManager() {
         return getPlugin().getAccountManager();
     }
 

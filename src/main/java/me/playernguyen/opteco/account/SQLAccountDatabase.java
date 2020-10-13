@@ -3,6 +3,7 @@ package me.playernguyen.opteco.account;
 import me.playernguyen.opteco.OptEcoImplementation;
 import me.playernguyen.opteco.sql.SQLEstablish;
 import org.bukkit.Bukkit;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 import java.sql.*;
@@ -36,19 +37,16 @@ public abstract class SQLAccountDatabase extends OptEcoImplementation
         return establish;
     }
 
-    public Account getAccount(UUID who) {
-        if (who == null) throw new NullPointerException("UUID mustn't be null");
+    public Account requestAccountInformation(UUID who) {
+        if (who == null)
+            throw new NullPointerException("UUID mustn't be null");
         getDebugger().info("Get account within UUID -> " + who.toString());
 
-        SQLResultAccount resultAccount = getAccountResult(who);
-        // Whether player null, return new player and save
-        if (resultAccount == null) {
-            Account account = new Account(who);
-            this.save(account);
-            return account;
-        }
-        // If not, return the data player in database
-        return resultAccount.toAccount();
+        SQLResultAccount resultAccount = requestAccount(who);
+        Account account = (resultAccount == null) ? new Account(who) : resultAccount.toAccount();
+        // Save
+        this.save(account);
+        return account;
     }
 
     @Nullable
@@ -57,7 +55,7 @@ public abstract class SQLAccountDatabase extends OptEcoImplementation
         if (who == null) throw new NullPointerException("UUID mustn't be null");
 
         getDebugger().info("Get accountIdentify within UUID -> " + who.toString());
-        SQLResultAccount resultAccount = getAccountResult(who);
+        SQLResultAccount resultAccount = requestAccount(who);
 
         // Return data
         if (resultAccount != null) {
@@ -67,12 +65,6 @@ public abstract class SQLAccountDatabase extends OptEcoImplementation
         return null;
     }
 
-    /**
-     * Save data of account into storage location
-     *
-     * @param account Which account to save?
-     * @return The state of saving
-     */
     @Override
     public boolean save(Account account) {
         String player = Bukkit.getOfflinePlayer(account.getPlayer()).getName();
@@ -88,7 +80,8 @@ public abstract class SQLAccountDatabase extends OptEcoImplementation
             try (Connection connection = getEstablish().openConnect()) {
 
                 String query =
-                        String.format("INSERT INTO %s (player, balance, uuid) VALUES (?, ?, ?) ", getEstablish().getTableName());
+                        String.format("INSERT INTO %s (player, balance, uuid) VALUES (?, ?, ?) ",
+                                getEstablish().getTableName());
                 getDebugger().info("Call " + query);
                 PreparedStatement preparedStatement
                         = connection.prepareStatement(
@@ -113,8 +106,6 @@ public abstract class SQLAccountDatabase extends OptEcoImplementation
         String player = Bukkit.getOfflinePlayer(account.getPlayer()).getName();
         double balance = account.getBalance();
         String uuid = account.getPlayer().toString();
-
-        
 
         try (Connection connection = getEstablish().openConnect()) {
 
@@ -141,7 +132,7 @@ public abstract class SQLAccountDatabase extends OptEcoImplementation
 
     @Override
     public boolean hasAccount(UUID uuid) {
-        return getAccount(uuid) != null;
+        return requestAccountInformation(uuid) != null;
     }
 
     @Override
@@ -151,7 +142,7 @@ public abstract class SQLAccountDatabase extends OptEcoImplementation
 
     @Override
     public double getBalance(UUID uuid) {
-        return this.getAccount(uuid).getBalance();
+        return this.requestAccountInformation(uuid).getBalance();
     }
 
     @Override
@@ -187,20 +178,27 @@ public abstract class SQLAccountDatabase extends OptEcoImplementation
         return null;
     }
 
-    private SQLResultAccount getAccountResult(UUID who) {
+    /**
+     * Request an account from database.
+     * @param who the uuid who want to request
+     * @return whether found account, return {@link SQLResultAccount} class
+     *          or null if found nothing
+     */
+    private SQLResultAccount requestAccount(@NotNull UUID who) {
+        // create connection
         try (Connection connection = getEstablish().openConnect()) {
-
+            // prepare to launch
             PreparedStatement statement = connection.prepareStatement(
                     String.format("SELECT * FROM %s WHERE uuid=?", getEstablish().getTableName())
             );
-
+            // settings
             statement.setString(1, who.toString());
-
+            // launch and get response information
             ResultSet resultSet = statement.executeQuery();
             if (resultSet == null) return null;
             ArrayList<String> result = parseResult(resultSet);
             if (result == null || result.size() == 0) return null;
-
+            // fetch data
             return new SQLResultAccount(
                     result.get(0),
                     result.get(1),

@@ -23,8 +23,7 @@ public interface IAccountDatabase {
      * @param player {@link UUID} the uuid if storage player
      * @return {@link Account} account of player
      */
-
-    Account getAccount(UUID player);
+    Account requestAccountInformation(UUID player);
 
     /**
      * Get the account which must be existed in database. Whether not will return null

@@ -1,7 +1,5 @@
 package me.playernguyen.opteco.account;
 
-import org.bukkit.Bukkit;
-
 import java.util.UUID;
 
 public class SQLResultAccount {
@@ -35,7 +33,7 @@ public class SQLResultAccount {
     }
 
     public Account toAccount() {
-        return new Account(Bukkit.getOfflinePlayer(UUID.fromString(uuid)), Double.parseDouble(balance));
+        return new Account(UUID.fromString(uuid), Double.parseDouble(balance));
     }
 
 }

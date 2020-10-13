@@ -10,33 +10,27 @@ public class Account {
 
     private UUID player;
     private double balance;
-    private long lastUpdate;
 
     /**
      * @param player The player to access the account
      * @deprecated Using the balance parameter to add default
      */
     public Account(Player player) {
-        this(player, 0d, System.currentTimeMillis());
+        this(player.getUniqueId(), 0d);
     }
 
 
-    public Account(OfflinePlayer player, double d, long lastUpdate) {
-        this(player.getUniqueId(), d, lastUpdate);
+    public Account(OfflinePlayer player, double d) {
+        this(player.getUniqueId(), d);
     }
 
     public Account(UUID uuid) {
-        this(uuid, 0d, System.currentTimeMillis());
-    }
-
-    public Account(UUID uuid, double balance, long lastUpdate) {
-        this.player = uuid;
-        this.balance = balance;
-        this.lastUpdate = lastUpdate;
+        this(uuid, 0d);
     }
 
     public Account(UUID uuid, double balance) {
-        this(uuid, balance, System.currentTimeMillis());
+        this.player = uuid;
+        this.balance = balance;
     }
 
     public UUID getPlayer() {
@@ -59,11 +53,11 @@ public class Account {
         return Bukkit.getOfflinePlayer(this.player);
     }
 
-    public long getLastUpdate() {
-        return lastUpdate;
-    }
-
-    public void setLastUpdate(long lastUpdate) {
-        this.lastUpdate = lastUpdate;
+    @Override
+    public String toString() {
+        return "Account{" +
+                "player=" + player +
+                ", balance=" + balance +
+                '}';
     }
 }

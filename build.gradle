@@ -36,7 +36,7 @@ dependencies {
 }
 
 group = 'com.playernguyen'
-version = '1.6b'
+version = '2.0b'
 sourceCompatibility = '1.8'
 
 publishing {

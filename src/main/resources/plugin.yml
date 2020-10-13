@@ -1,5 +1,5 @@
 name: OptEco
-version: 1.6b
+version: 2.0b
 api-version: 1.13
 description: "The points system plugin"
 main: me.playernguyen.opteco.OptEco

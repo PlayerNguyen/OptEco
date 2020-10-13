@@ -1,7 +1,7 @@
 package me.playernguyen.opteco;
 
 import me.playernguyen.opteco.account.IAccountDatabase;
-import me.playernguyen.opteco.account.OptEcoAccountManager;
+import me.playernguyen.opteco.account.OptEcoCacheAccountManager;
 import me.playernguyen.opteco.account.mysql.MySQLAccountDatabase;
 import me.playernguyen.opteco.account.sqlite.SQLiteAccountDatabase;
 import me.playernguyen.opteco.bStats.Metrics;
@@ -13,7 +13,7 @@ import me.playernguyen.opteco.configuration.OptEcoLanguageLoader;
 import me.playernguyen.opteco.configuration.StorageType;
 import me.playernguyen.opteco.listener.ListenerManager;
 import me.playernguyen.opteco.listener.OptEcoListener;
-import me.playernguyen.opteco.listener.OptEcoPlayerJoinListener;
+import me.playernguyen.opteco.listener.OptEcoPlayerListener;
 import me.playernguyen.opteco.logger.Debugger;
 import me.playernguyen.opteco.logger.OptEcoDebugger;
 import me.playernguyen.opteco.manager.ManagerSet;
@@ -48,7 +48,7 @@ public class OptEco extends JavaPlugin {
     private OptEcoConfigurationLoader optEcoConfigurationLoader;
     private OptEcoLanguageLoader optEcoLanguageLoader;
     private IAccountDatabase accountDatabase;
-    private OptEcoAccountManager accountManager;
+    private OptEcoCacheAccountManager accountManager;
     private StorageType storageType;
     private Debugger debugger;
     private MessageFormat messageFormat;
@@ -128,7 +128,7 @@ public class OptEco extends JavaPlugin {
     }
 
     private void registerCache() {
-        this.accountManager = new OptEcoAccountManager();
+        this.accountManager = new OptEcoCacheAccountManager(this);
     }
 
     private void registerTransaction() {
@@ -257,7 +257,7 @@ public class OptEco extends JavaPlugin {
         logger.info("Loading listeners.");
         this.listenerManager = new ListenerManager(this);
         // Listener adding here...
-        getListenerManager().add(new OptEcoPlayerJoinListener());
+        getListenerManager().add(new OptEcoPlayerListener());
     }
 
     private void registerExecutors() {
@@ -288,7 +288,7 @@ public class OptEco extends JavaPlugin {
         return commandManager;
     }
 
-    public OptEcoAccountManager getAccountManager() {
+    public OptEcoCacheAccountManager getAccountManager() {
         return accountManager;
     }
 }
