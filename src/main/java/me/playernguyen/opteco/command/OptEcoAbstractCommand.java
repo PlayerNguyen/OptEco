@@ -4,6 +4,7 @@ import me.playernguyen.opteco.OptEcoLanguage;
 import me.playernguyen.opteco.utils.MessageFormat;
 import org.bukkit.command.*;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.stream.Collectors;
@@ -69,8 +70,7 @@ public abstract class OptEcoAbstractCommand extends AbstractPermission
         return _args;
     }
 
-
-    public boolean onCommand(CommandSender commandSender, Command command, String s, String[] strings) {
+    public boolean onCommand(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String s, String[] strings) {
         if (!checkPermission(commandSender)) {
             commandSender.sendMessage(
                     getMessageFormat().format(getPlugin().getLanguageLoader().getLanguage(OptEcoLanguage.NO_PERMISSION))

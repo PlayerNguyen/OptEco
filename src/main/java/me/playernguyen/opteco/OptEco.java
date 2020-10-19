@@ -23,6 +23,7 @@ import me.playernguyen.opteco.updater.OptEcoUpdater;
 import me.playernguyen.opteco.utils.MessageFormat;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -129,6 +130,10 @@ public class OptEco extends JavaPlugin {
 
     private void registerCache() {
         this.accountManager = new OptEcoCacheAccountManager(this);
+        // Update cache
+        for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
+            accountManager.add(onlinePlayer.getUniqueId());
+        }
     }
 
     private void registerTransaction() {
@@ -291,4 +296,5 @@ public class OptEco extends JavaPlugin {
     public OptEcoCacheAccountManager getAccountManager() {
         return accountManager;
     }
+
 }

@@ -2,7 +2,8 @@ package me.playernguyen.opteco.account;
 
 /**
  * Cache account is one-way data to store item which pull down from database.
- *
+ * OptEco storing temporary data and last change, when it out-of-date, the app will pull data down then
+ * update it
  */
 public class OptEcoCacheAccount {
 

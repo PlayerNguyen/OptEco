@@ -3,6 +3,7 @@ package me.playernguyen.opteco.placeholderapi;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import me.playernguyen.opteco.OptEco;
 import me.playernguyen.opteco.OptEcoConfiguration;
+import me.playernguyen.opteco.account.OptEcoCacheAccount;
 import org.bukkit.entity.Player;
 
 public class OptEcoExpansion extends PlaceholderExpansion {
@@ -35,7 +36,9 @@ public class OptEcoExpansion extends PlaceholderExpansion {
         }
         // %opteco_points%
         if (params.equalsIgnoreCase("points")) {
-            return this.plugin.getMessageFormat().numberFormat(this.plugin.getAccountDatabase().getBalance(p.getUniqueId()));
+            OptEcoCacheAccount optEcoCacheAccount = OptEco.getInstance().getAccountManager().get(p.getUniqueId());
+            double balance = optEcoCacheAccount.getBalance();
+            return this.plugin.getMessageFormat().numberFormat(balance);
         }
         // %opteco_version%
         if (params.equalsIgnoreCase("version")) {

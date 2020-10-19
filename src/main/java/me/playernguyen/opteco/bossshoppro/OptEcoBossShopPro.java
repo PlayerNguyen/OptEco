@@ -1,6 +1,7 @@
 package me.playernguyen.opteco.bossshoppro;
 
 import me.playernguyen.opteco.OptEco;
+import me.playernguyen.opteco.account.OptEcoCacheAccount;
 import org.black_ixx.bossshop.pointsystem.BSPointsPlugin;
 import org.bukkit.OfflinePlayer;
 
@@ -16,7 +17,10 @@ public class OptEcoBossShopPro extends BSPointsPlugin {
 
     @Override
     public double getPoints(OfflinePlayer offlinePlayer) {
-        return optEco.getAccountDatabase().getBalance(offlinePlayer.getUniqueId());
+        OptEcoCacheAccount optEcoCacheAccount = optEco.getAccountManager().get(offlinePlayer.getUniqueId());
+
+//        return optEco.getAccountDatabase().getBalance(offlinePlayer.getUniqueId());
+        return optEcoCacheAccount.getBalance();
     }
 
     @Override

@@ -3,6 +3,7 @@ package me.playernguyen.opteco.command;
 import me.playernguyen.opteco.OptEco;
 import me.playernguyen.opteco.OptEcoConfiguration;
 import me.playernguyen.opteco.OptEcoLanguage;
+import me.playernguyen.opteco.account.OptEcoCacheAccount;
 import me.playernguyen.opteco.permission.OptEcoPermission;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.RemoteConsoleCommandSender;
@@ -26,11 +27,17 @@ public class SubCommandMe extends SubCommand {
 
     @Override
     public boolean onPlayerCommand(Player player, ArrayList<String> args) {
+        // Player information
+        OptEcoCacheAccount optEcoCacheAccount = getPlugin().getAccountManager().get(player.getUniqueId());
         player.sendMessage(
                 getMessageFormat().format(
                         getPlugin().getLanguageLoader().getLanguage(OptEcoLanguage.CHECK_SELF)
-                                .replace("%value%", getMessageFormat().numberFormat(getPlugin().getAccountDatabase().getBalance(player.getUniqueId())))
-                                .replace("%currency%", getPlugin().getConfigurationLoader().getString(OptEcoConfiguration.CURRENCY_SYMBOL))
+                                .replace("%value%", getMessageFormat()
+                                        .numberFormat(optEcoCacheAccount.getBalance())
+                                ).replace("%currency%", getPlugin()
+                                        .getConfigurationLoader()
+                                        .getString(OptEcoConfiguration.CURRENCY_SYMBOL)
+                                )
                 )
         );
         return true;

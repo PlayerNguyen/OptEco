@@ -3,6 +3,7 @@ package me.playernguyen.opteco.command;
 import me.playernguyen.opteco.OptEco;
 import me.playernguyen.opteco.OptEcoConfiguration;
 import me.playernguyen.opteco.OptEcoLanguage;
+import me.playernguyen.opteco.account.OptEcoCacheAccount;
 import me.playernguyen.opteco.permission.OptEcoPermission;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
@@ -26,12 +27,13 @@ public class SubCommandCheck extends SubCommand {
 
     @Override
     public boolean onPlayerCommand(Player player, ArrayList<String> args) {
-
         if (args.size() < 1) {
+            OptEcoCacheAccount optEcoCacheAccount = getAccountManager().get(player.getUniqueId());
+            double val = optEcoCacheAccount.getBalance();
             player.sendMessage(
                     getMessageFormat().format(
                             getPlugin().getLanguageLoader().getLanguage(OptEcoLanguage.CHECK_SELF)
-                                    .replace("%value%", String.valueOf(getPlugin().getAccountDatabase().getBalance(player.getUniqueId())))
+                                    .replace("%value%", getMessageFormat().numberFormat(val))
                                     .replace("%currency%", getPlugin().getConfigurationLoader().getString(OptEcoConfiguration.CURRENCY_SYMBOL))
                     )
             );
@@ -51,12 +53,14 @@ public class SubCommandCheck extends SubCommand {
     }
 
     private boolean exec(CommandSender sender, ArrayList<String> args) {
+        // The argument are missing
         if (args.size() < 1) {
             sender.sendMessage(getMessageFormat().format(getHelp()));
             return true;
         }
         String _target = args.get(0);
         Player target = Bukkit.getServer().getPlayerExact(_target);
+        // Player are not online
         if (target == null) {
             sender.sendMessage(
                     getMessageFormat().format(getPlugin().getLanguageLoader().getLanguage(OptEcoLanguage.VAR_PLAYER_NOT_FOUND)
@@ -64,11 +68,16 @@ public class SubCommandCheck extends SubCommand {
             );
             return true;
         }
+        OptEcoCacheAccount optEcoCacheAccount = getPlugin().getAccountManager().get(target.getUniqueId());
+        if (optEcoCacheAccount == null)
+            throw new NullPointerException("Cache player not found: " + target.getUniqueId());
+        double val = optEcoCacheAccount.getBalance();
+        // Send the message to check
         sender.sendMessage(
                 getMessageFormat().format(
                         getPlugin().getLanguageLoader().getLanguage(OptEcoLanguage.CHECK_ANOTHER)
                                 .replace("%who%", _target)
-                                .replace("%value%", getMessageFormat().numberFormat(getPlugin().getAccountDatabase().getBalance(target.getUniqueId())))
+                                .replace("%value%", getMessageFormat().numberFormat(val))
                                 .replace("%currency%", getPlugin().getConfigurationLoader().getString(OptEcoConfiguration.CURRENCY_SYMBOL))
                 )
         );

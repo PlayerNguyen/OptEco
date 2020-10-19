@@ -31,18 +31,20 @@ public class OptEcoCacheAccountManager {
         if (cacheAccount == null)
             throw new NullPointerException("UUID not found: " + uuid);
         // Return the system times - stored time >= refresh time
+        OptEco.getInstance().getDebugger().info("Out-date session: " + uuid + " with last update at " +
+                cacheAccount.getLastUpdate());
         return (System.currentTimeMillis() - cacheAccount.getLastUpdate())
-                >= optEco.getConfigurationLoader().getInt(OptEcoConfiguration.REFRESH_TIME);
+                >= optEco.getConfigurationLoader().getInt(OptEcoConfiguration.REFRESH_TIME) * 1000;
     }
 
     public void refresh(UUID uuid) {
         // Check unless null
-        if (this.get(uuid) == null) {
+        if (this.map.get(uuid) == null) {
             throw new NullPointerException("UUID not found to refresh");
         }
         // Account replace
         Account account = getOptEco().getAccountDatabase().requestAccountInformation(uuid);
-        getMap().replace(uuid, new OptEcoCacheAccount(account.getBalance(), System.currentTimeMillis()));
+        this.getMap().replace(uuid, new OptEcoCacheAccount(account.getBalance(), System.currentTimeMillis()));
     }
 
     public OptEcoCacheAccount get(UUID uuid) {
@@ -51,9 +53,8 @@ public class OptEcoCacheAccountManager {
         if (cacheAccount == null)
             throw new NullPointerException("Map not contains uuid" + uuid.toString());
         // Is outdated, refresh then reload
-        if (outdated(uuid)) {
+        if (outdated(uuid))
             refresh(uuid);
-        }
         return cacheAccount;
     }
 

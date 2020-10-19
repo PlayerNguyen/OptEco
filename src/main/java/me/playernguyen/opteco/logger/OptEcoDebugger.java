@@ -10,7 +10,7 @@ public class OptEcoDebugger extends OptEcoImplementation implements Debugger {
 
     private CommandSender sender;
 
-    private String prefix;
+    private final String prefix;
 
     public OptEcoDebugger(OptEco plugin) {
         this.prefix = "[" + plugin.getDescription().getName() + "::Debug]";
@@ -24,7 +24,7 @@ public class OptEcoDebugger extends OptEcoImplementation implements Debugger {
     }
 
     public void info(String s) {
-        log(ChatColor.DARK_GRAY + s);
+        log(ChatColor.GRAY + s);
     }
 
     public void error(String s) {

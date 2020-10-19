@@ -3,6 +3,7 @@ package me.playernguyen.opteco.command;
 import me.playernguyen.opteco.OptEco;
 import me.playernguyen.opteco.OptEcoConfiguration;
 import me.playernguyen.opteco.OptEcoLanguage;
+import me.playernguyen.opteco.account.OptEcoCacheAccount;
 import me.playernguyen.opteco.permission.OptEcoPermission;
 import me.playernguyen.opteco.utils.ValidationChecker;
 import org.bukkit.Bukkit;
@@ -77,7 +78,10 @@ public class SubCommandTake extends SubCommand {
             return true;
         }
         // If sender don't have enough points
-        if ((getPlugin().getAccountDatabase().getBalance(target.getUniqueId()) - Double.parseDouble(_value)) <
+//        if ((getPlugin().getAccountDatabase().getBalance(target.getUniqueId()) - Double.parseDouble(_value)) <
+        OptEcoCacheAccount optEcoCacheAccount = getAccountManager().get(target.getUniqueId());
+        double balance = optEcoCacheAccount.getBalance();
+        if ((balance - Double.parseDouble(_value)) <
                 getPlugin().getConfigurationLoader().getDouble(OptEcoConfiguration.MIN_BALANCE)) {
             sender.sendMessage(
                     getMessageFormat()

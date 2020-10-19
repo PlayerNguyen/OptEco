@@ -2,6 +2,7 @@ package me.playernguyen.opteco.api;
 
 import me.playernguyen.opteco.OptEco;
 import me.playernguyen.opteco.OptEcoConfiguration;
+import me.playernguyen.opteco.account.OptEcoCacheAccount;
 
 import java.util.UUID;
 
@@ -51,8 +52,9 @@ public class OptEcoAPI implements IOptEcoAPI {
      */
     @Override
     public double getPoints() {
-        return this.plugin
-                .getAccountDatabase().getBalance(player);
+        OptEcoCacheAccount optEcoCacheAccount = this.plugin
+                .getAccountManager().get(player);
+        return (optEcoCacheAccount != null) ? optEcoCacheAccount.getBalance() : 0.0d;
     }
 
     /**

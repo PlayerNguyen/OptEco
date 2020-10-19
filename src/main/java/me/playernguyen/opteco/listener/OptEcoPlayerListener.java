@@ -18,6 +18,7 @@ public class OptEcoPlayerListener extends OptEcoListener {
 
         // Get account manager
         this.getAccountManager().add(player.getUniqueId());
+        getDebugger().warn("Add the player data into manager...");
     }
 
     /**
@@ -29,6 +30,7 @@ public class OptEcoPlayerListener extends OptEcoListener {
         Player player = e.getPlayer();
         // Remove account from manager
         this.getAccountManager().remove(player.getUniqueId());
+        getDebugger().warn("Remove the player data into manager...");
     }
 
 }
