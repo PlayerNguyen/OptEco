@@ -11,7 +11,8 @@ import java.util.ArrayList;
 public interface TransactionStorage {
 
     /**
-     * Push the transaction into the database. If the transaction is available, calling {@link #updateTransaction(Transaction)}.
+     * Push the transaction into the database. If the transaction is available,
+     * calling {@link #updateTransaction(Transaction)}.
      *
      * @param transaction {@link Transaction} the transaction class
      */

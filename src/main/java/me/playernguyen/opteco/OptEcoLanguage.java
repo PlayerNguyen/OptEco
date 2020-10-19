@@ -56,7 +56,10 @@ public enum OptEcoLanguage {
 
     RED_BAR("RED_BAR", "&c---------------------------"),
     GRAY_BAR("RED_BAR", "&7---------------------------"),
-    COMMAND_TOP_FORMAT("COMMAND.TOP.FORMAT", "&7%id%. &6%name%  ~  &c%balance%");
+    COMMAND_TOP_FORMAT("COMMAND.TOP.FORMAT", "&7%id%. &6%name%  ~  &c%balance%"),
+
+    UNACCEPTED_VALUE_PAYMENT("COMMAND.UNACCEPTED_VALUE", "&cThis value is unaccepted in transaction")
+    ;
 
     private final String path;
     private final Object wh;

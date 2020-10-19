@@ -9,6 +9,7 @@ public enum OptEcoConfiguration {
     MIN_BALANCE("Settings.Preferences.MinimumReachPoint", -15.0),
     PAYMENT_CONFIRM("Settings.Payment.Pending.Duration", 15),
     CURRENCY_SYMBOL("Settings.CurrencySymbol", "ps"),
+    MINIMUM_TRANSACT_VALUE("Settings.Preferences.MinimumCanTransact", 0.1),
     STORAGE_TYPE("Settings.Storage.Type", StorageType.SQLITE.toString()),
 
     MYSQL_HOST("Settings.SQL.MySQL.Host", "localhost"),
@@ -27,7 +28,7 @@ public enum OptEcoConfiguration {
     COUNTDOWN_ENABLE("Settings.Payment.Pending.Countdown.Enable", true),
     COUNTDOWN_TYPE("Settings.Payment.Pending.Countdown.Type", "message"),
 
-    REFRESH_TIME("Setings.Preferences.Cache.RefreshTime", 5),
+    REFRESH_TIME("Settings.Preferences.Cache.RefreshTime", 5),
 
     DEBUG("Settings.Debug", false),
     LANGUAGE_FILE("Settings.Preferences.Language", "language.yml");

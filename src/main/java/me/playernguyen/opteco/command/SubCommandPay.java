@@ -75,10 +75,19 @@ public class SubCommandPay extends SubCommand {
             return true;
         }
         // If the value is negative
-        if (Double.parseDouble(_value) < 0) {
+        double dummyValue = Double.parseDouble(_value);
+        if (dummyValue < 0) {
             player.sendMessage(
                     getMessageFormat()
                             .format(getPlugin().getLanguageLoader().getLanguage(OptEcoLanguage.VALUE_CANNOT_BE_NEGATIVE))
+            );
+            return true;
+        }
+        // If lower than the minimum transact
+        if (dummyValue < getConfigurationLoader().getDouble(OptEcoConfiguration.MINIMUM_TRANSACT_VALUE)) {
+            player.sendMessage(
+                    getMessageFormat()
+                        .format(getLanguageLoader().getLanguage(OptEcoLanguage.UNACCEPTED_VALUE_PAYMENT))
             );
             return true;
         }
@@ -86,7 +95,7 @@ public class SubCommandPay extends SubCommand {
         OptEcoCacheAccount optEcoCacheAccount = getAccountManager().get(player.getUniqueId());
         double balance = optEcoCacheAccount.getBalance();
 //        if ((getPlugin().getAccountDatabase().getBalance(player.getUniqueId()) - Double.parseDouble(_value))
-        if ((balance - Double.parseDouble(_value))
+        if ((balance - dummyValue)
                 < getPlugin().getConfigurationLoader().getDouble(OptEcoConfiguration.MIN_BALANCE)) {
             player.sendMessage(
                     getMessageFormat()
@@ -100,7 +109,7 @@ public class SubCommandPay extends SubCommand {
                 .format(getPlugin().getLanguageLoader().getLanguage(OptEcoLanguage.PAY_CONFIRM_DISPLAY))
                 .replaceAll("%value%", String.valueOf(getPlugin().getConfigurationLoader().getInt(OptEcoConfiguration.PAYMENT_CONFIRM)))
         );
-        this.getPlugin().getTransactionManager().addTransaction(player.getUniqueId(), target.getUniqueId(), Double.parseDouble(_value));
+        this.getPlugin().getTransactionManager().addTransaction(player.getUniqueId(), target.getUniqueId(), dummyValue);
         return true;
     }
 

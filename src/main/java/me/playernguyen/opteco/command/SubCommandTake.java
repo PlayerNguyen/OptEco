@@ -81,6 +81,7 @@ public class SubCommandTake extends SubCommand {
 //        if ((getPlugin().getAccountDatabase().getBalance(target.getUniqueId()) - Double.parseDouble(_value)) <
         OptEcoCacheAccount optEcoCacheAccount = getAccountManager().get(target.getUniqueId());
         double balance = optEcoCacheAccount.getBalance();
+
         if ((balance - Double.parseDouble(_value)) <
                 getPlugin().getConfigurationLoader().getDouble(OptEcoConfiguration.MIN_BALANCE)) {
             sender.sendMessage(

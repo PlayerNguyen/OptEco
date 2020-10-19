@@ -25,7 +25,6 @@ public class TransactionManager extends OptEcoImplementation {
                 break;
             }
         }
-
     }
 
     public TransactionStorage getTransactionStorage() {

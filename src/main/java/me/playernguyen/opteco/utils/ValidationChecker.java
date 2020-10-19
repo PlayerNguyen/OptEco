@@ -12,5 +12,14 @@ public class ValidationChecker {
         return !Pattern.compile("-?\\d+(\\.\\d+)?").matcher(s).matches();
     }
 
+    public static boolean isInteger(String str) {
+        try {
+            int i = Integer.parseInt(str);
+            return true;
+        } catch (NumberFormatException e) {
+            return false;
+        }
+    }
+
 
 }

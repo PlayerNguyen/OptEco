@@ -3,6 +3,7 @@ package me.playernguyen.opteco;
 import me.playernguyen.opteco.account.IAccountDatabase;
 import me.playernguyen.opteco.account.OptEcoCacheAccountManager;
 import me.playernguyen.opteco.configuration.OptEcoConfigurationLoader;
+import me.playernguyen.opteco.configuration.OptEcoLanguageLoader;
 import me.playernguyen.opteco.configuration.StorageType;
 import me.playernguyen.opteco.logger.Debugger;
 import me.playernguyen.opteco.transaction.TransactionManager;
@@ -72,6 +73,10 @@ public abstract class OptEcoImplementation {
      */
     protected TransactionManager getTransactionManager() {
         return getPlugin().getTransactionManager();
+    }
+
+    protected OptEcoLanguageLoader getLanguageLoader() {
+        return getPlugin().getLanguageLoader();
     }
 
 }

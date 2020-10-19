@@ -5,7 +5,7 @@ import java.sql.SQLException;
 
 public class ResultSetUtil {
 
-    private ResultSet set;
+    private final ResultSet set;
 
     public ResultSetUtil(ResultSet set) {
         this.set = set;
