@@ -77,7 +77,7 @@ public class SubCommandSet extends SubCommand {
             sender.sendMessage(
                     getMessageFormat()
                             .format(getPlugin().getLanguageLoader().getLanguage(OptEcoLanguage.SET_SUCCESS))
-                            .replace("%value%", _value)
+                            .replace("%value%", Double.toString(value))
                             .replace("%who%", target.getName())
                             .replace("%currency%", getPlugin().getConfigurationLoader().getString(OptEcoConfiguration.CURRENCY_SYMBOL))
             );

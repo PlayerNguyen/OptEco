@@ -11,6 +11,10 @@ commands:
     usage: /opteco help
     description: Command of the OptEco plugin
     aliases: [ points, pts, p ]
+  playerpointtoopteco:
+    usage: /ppto
+    description: To convert all data to the OptEco with one command
+    aliases: [ppto, pptoopteco, pptoopt]
 permissions:
   opteco.admin:
     description: Grant access to admin tool / command

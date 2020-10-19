@@ -80,6 +80,16 @@ public class OptEcoCacheAccountManager {
         this.map.put(uuid, OptEcoCacheAccount.loadFromAccount(account));
     }
 
+    public void pushNewOne(UUID uuid, double balance) {
+        // Push new account with balance value
+        Account account =
+                new Account(uuid, balance);
+
+        // Save account
+        this.getOptEco().getDebugger().info("Saving " + uuid + " with balance " + balance + ".");
+        this.getOptEco().getAccountDatabase().save(account);
+    }
+
     public void remove(UUID uuid) {
         // notnull check, not found throw exception
         if (!exist(uuid)) {

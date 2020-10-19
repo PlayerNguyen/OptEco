@@ -8,6 +8,7 @@ import me.playernguyen.opteco.bStats.Metrics;
 import me.playernguyen.opteco.bossshoppro.OptEcoBossShopPro;
 import me.playernguyen.opteco.command.CommandManager;
 import me.playernguyen.opteco.command.OptEcoCommand;
+import me.playernguyen.opteco.command.PlayerPointToOptEcoCommand;
 import me.playernguyen.opteco.configuration.OptEcoConfigurationLoader;
 import me.playernguyen.opteco.configuration.OptEcoLanguageLoader;
 import me.playernguyen.opteco.configuration.StorageType;
@@ -28,6 +29,9 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Random;
+import java.util.UUID;
 import java.util.logging.Logger;
 
 /**
@@ -66,8 +70,19 @@ public class OptEco extends JavaPlugin {
         this.setupAccount();
         this.hookPlaceHolderAPI();
         this.hookBossShopPro();
+        this.announcePlayerPoints();
         this.setupMetric();
         this.waterMarkPrint();
+    }
+
+    private void announcePlayerPoints() {
+        // Find BossShopPro
+        Plugin plugin = Bukkit.getPluginManager().getPlugin("PlayerPoints");
+        // Whether found PlayerPoints
+        if (plugin != null) {
+            Bukkit.getConsoleSender().sendMessage(ChatColor.GOLD + "Detect PlayerPoints, using " +
+                    ChatColor.RED + "/ppto " + ChatColor.GOLD + "to convert the data.");
+        }
     }
 
     private void hookBossShopPro() {
@@ -271,6 +286,7 @@ public class OptEco extends JavaPlugin {
         this.commandManager = new CommandManager();
         // Append new commands
         getCommandManager().add(new OptEcoCommand());
+        getCommandManager().add(new PlayerPointToOptEcoCommand());
     }
 
     public Debugger getDebugger() {

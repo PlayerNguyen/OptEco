@@ -17,6 +17,8 @@ public enum OptEcoPermission {
     CANCEL("opteco.cancel"),
     TOP("opteco.top"),
 
+    PPTO("opteco.ppto")
+
     ;
 
     private final String permission;

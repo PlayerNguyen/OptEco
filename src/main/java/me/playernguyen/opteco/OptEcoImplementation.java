@@ -8,6 +8,8 @@ import me.playernguyen.opteco.configuration.StorageType;
 import me.playernguyen.opteco.logger.Debugger;
 import me.playernguyen.opteco.transaction.TransactionManager;
 
+import java.util.logging.Logger;
+
 /**
  * The implementation class to implement from {@link OptEco} class instance
  */
@@ -75,8 +77,21 @@ public abstract class OptEcoImplementation {
         return getPlugin().getTransactionManager();
     }
 
+    /**
+     * Get language loader class
+     * @return {@link OptEcoLanguageLoader} class
+     */
     protected OptEcoLanguageLoader getLanguageLoader() {
         return getPlugin().getLanguageLoader();
     }
+
+    /**
+     *
+     * @return The logger of OptEco
+     */
+    protected Logger getLogger() {
+        return getPlugin().getLogger();
+    }
+
 
 }
