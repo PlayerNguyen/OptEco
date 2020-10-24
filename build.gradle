@@ -13,7 +13,6 @@ version = '2.0.1b'
 
 sourceCompatibility = '1.8'
 
-
 repositories {
     mavenLocal()
     maven {
@@ -51,7 +50,7 @@ publishing {
 }
 
 processResources {
-    from (sourceSets.main.resources.srcDirs) {
-        filter(ReplaceTokens, tokens: ['VERSION' : project.version])
+    from(sourceSets.main.resources.srcDirs) {
+        filter(ReplaceTokens, tokens: ['VERSION': project.version])
     }
 }
