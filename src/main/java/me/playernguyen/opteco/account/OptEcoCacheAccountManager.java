@@ -71,10 +71,11 @@ public class OptEcoCacheAccountManager {
         // If not found account, create one and put to manager
         //   Check account on database,
         //     If exist -> get current,
-        //     Not exist -> create new with zero value
+        //     Not exist -> create new with start balance
         Account account = (this.getOptEco().getAccountDatabase().hasAccount(uuid)) ?
                 this.getOptEco().getAccountDatabase().requestAccountInformation(uuid) :
-                new Account(uuid, 0d);
+                new Account(uuid, getOptEco().getConfigurationLoader().getDouble(OptEcoConfiguration
+                        .START_BALANCE));
 
         // Then return account
         this.map.put(uuid, OptEcoCacheAccount.loadFromAccount(account));

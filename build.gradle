@@ -9,7 +9,7 @@ plugins {
 }
 
 group = 'com.playernguyen'
-version = '2.0b'
+version = '2.0.1b'
 
 sourceCompatibility = '1.8'
 

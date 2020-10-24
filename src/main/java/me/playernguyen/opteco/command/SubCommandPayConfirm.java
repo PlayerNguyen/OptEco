@@ -40,25 +40,29 @@ public class SubCommandPayConfirm extends SubCommand {
         if (transaction.confirm()) {
             Player tranSender = Bukkit.getPlayer(transaction.getPlayer());
             Player tranReceiver = Bukkit.getPlayer(transaction.getTarget());
-            if (tranReceiver != null) {
+            if (tranSender != null) {
                 tranSender.sendMessage(
                         getMessageFormat().format(getPlugin().getLanguageLoader().getLanguage(OptEcoLanguage.PAY_SUCCESS))
-                                .replace("%who%", tranReceiver.getName())
-                                .replace("%value%", getMessageFormat().numberFormat(transaction.getAmount()))
-                                .replace("%currency%", getPlugin().getConfigurationLoader()
-                                        .getString(OptEcoConfiguration.CURRENCY_SYMBOL)
-                                )
-                );
-            }
-            if (tranReceiver != null) {
-                tranReceiver.sendMessage(
-                        getMessageFormat().format(getPlugin().getLanguageLoader().getLanguage(OptEcoLanguage.PAY_SUCCESS_TARGET))
                                 .replace("%who%", tranSender.getName())
                                 .replace("%value%", getMessageFormat().numberFormat(transaction.getAmount()))
                                 .replace("%currency%", getPlugin().getConfigurationLoader()
                                         .getString(OptEcoConfiguration.CURRENCY_SYMBOL)
                                 )
                 );
+                // Refresh the cache account
+                this.getAccountManager().refresh(tranSender.getUniqueId());
+            }
+            if (tranReceiver != null) {
+                tranReceiver.sendMessage(
+                        getMessageFormat().format(getPlugin().getLanguageLoader().getLanguage(OptEcoLanguage.PAY_SUCCESS_TARGET))
+                                .replace("%who%", tranReceiver.getName())
+                                .replace("%value%", getMessageFormat().numberFormat(transaction.getAmount()))
+                                .replace("%currency%", getPlugin().getConfigurationLoader()
+                                        .getString(OptEcoConfiguration.CURRENCY_SYMBOL)
+                                )
+                );
+                // Refresh the cache account
+                this.getAccountManager().refresh(tranReceiver.getUniqueId());
             }
         } else {
             Player tranSender = Bukkit.getPlayer(transaction.getPlayer());

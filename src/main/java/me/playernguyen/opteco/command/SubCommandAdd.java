@@ -73,6 +73,8 @@ public class SubCommandAdd extends SubCommand {
                             .replace("%currency%", getPlugin().getConfigurationLoader().getString(OptEcoConfiguration.CURRENCY_SYMBOL))
                             .replace("%who%", args.get(0))
             );
+            // Refresh the cache account
+            this.getAccountManager().refresh(target.getUniqueId());
         } else {
             sender.sendMessage(
                     getMessageFormat().format(getPlugin().getLanguageLoader().getLanguage(OptEcoLanguage.COMMAND_FAILED_ADD))

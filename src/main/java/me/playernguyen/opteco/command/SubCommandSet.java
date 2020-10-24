@@ -81,6 +81,8 @@ public class SubCommandSet extends SubCommand {
                             .replace("%who%", target.getName())
                             .replace("%currency%", getPlugin().getConfigurationLoader().getString(OptEcoConfiguration.CURRENCY_SYMBOL))
             );
+            // Refresh the cache account
+            this.getAccountManager().refresh(target.getUniqueId());
         } else {
             sender.sendMessage(
                     getMessageFormat()
