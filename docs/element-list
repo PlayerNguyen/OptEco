@@ -13,6 +13,7 @@ me.playernguyen.opteco.logger
 me.playernguyen.opteco.manager
 me.playernguyen.opteco.permission
 me.playernguyen.opteco.placeholderapi
+me.playernguyen.opteco.playerpoints
 me.playernguyen.opteco.schedule
 me.playernguyen.opteco.sql
 me.playernguyen.opteco.transaction
