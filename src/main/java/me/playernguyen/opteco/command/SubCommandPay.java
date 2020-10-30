@@ -5,7 +5,7 @@ import me.playernguyen.opteco.OptEcoConfiguration;
 import me.playernguyen.opteco.OptEcoLanguage;
 import me.playernguyen.opteco.account.OptEcoCacheAccount;
 import me.playernguyen.opteco.permission.OptEcoPermission;
-import me.playernguyen.opteco.utils.ValidationChecker;
+import me.playernguyen.opteco.utils.MathUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
@@ -66,7 +66,7 @@ public class SubCommandPay extends SubCommand {
             return true;
         }
         // If the value is not number
-        if (ValidationChecker.isNotNumber(_value)) {
+        if (MathUtils.isNotNumber(_value)) {
             player.sendMessage(
                     getMessageFormat()
                             .format(getPlugin().getLanguageLoader().getLanguage(OptEcoLanguage.VAR_NOT_A_NUMBER))
@@ -84,7 +84,7 @@ public class SubCommandPay extends SubCommand {
             return true;
         }
         // If lower than the minimum transact
-        if (dummyValue < getConfigurationLoader().getDouble(OptEcoConfiguration.MINIMUM_TRANSACT_VALUE)) {
+        if ((dummyValue % 1) < getConfigurationLoader().getDouble(OptEcoConfiguration.MINIMUM_TRANSACT_VALUE)) {
             player.sendMessage(
                     getMessageFormat()
                         .format(getLanguageLoader().getLanguage(OptEcoLanguage.UNACCEPTED_VALUE_PAYMENT))

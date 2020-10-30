@@ -10,7 +10,7 @@ public enum OptEcoConfiguration {
     PAYMENT_CONFIRM("Settings.Payment.Pending.Duration", 15),
     CURRENCY_SYMBOL("Settings.CurrencySymbol", "ps"),
     MINIMUM_TRANSACT_VALUE("Settings.Preferences.MinimumCanTransact", 0.1),
-    STORAGE_TYPE("Settings.Storage.Type", StorageType.SQLITE.toString()),
+    STORAGE_TYPE("Settings.Storage.Type", StorageType.SQLITE.toString().toLowerCase()),
 
     MYSQL_HOST("Settings.SQL.MySQL.Host", "localhost"),
     MYSQL_DATABASE("Settings.SQL.MySQL.Database", "dbname"),

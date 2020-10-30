@@ -4,7 +4,7 @@ import me.playernguyen.opteco.OptEco;
 import me.playernguyen.opteco.OptEcoConfiguration;
 import me.playernguyen.opteco.OptEcoLanguage;
 import me.playernguyen.opteco.permission.OptEcoPermission;
-import me.playernguyen.opteco.utils.ValidationChecker;
+import me.playernguyen.opteco.utils.MathUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
@@ -50,7 +50,7 @@ public class SubCommandAdd extends SubCommand {
         }
         OfflinePlayer target = Bukkit.getServer().getOfflinePlayer(args.get(0));
         String _value = args.get(1);
-        if (ValidationChecker.isNotNumber(_value)) {
+        if (MathUtils.isNotNumber(_value)) {
             sender.sendMessage(getMessageFormat().format(
                     getPlugin().getLanguageLoader().getLanguage(OptEcoLanguage.VAR_NOT_A_NUMBER)
                             .replace("%value%", _value)

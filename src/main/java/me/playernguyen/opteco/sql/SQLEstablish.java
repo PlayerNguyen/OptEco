@@ -23,9 +23,9 @@ public abstract class SQLEstablish
         // If the table is empty
         if (tableName.equals("")) throw new NullPointerException("Table name cannot be null");
 
+
     }
 
-    @Nullable
     public String getURL() {
         return url;
     }

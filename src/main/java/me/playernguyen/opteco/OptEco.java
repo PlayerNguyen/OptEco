@@ -21,6 +21,7 @@ import me.playernguyen.opteco.manager.ManagerSet;
 import me.playernguyen.opteco.placeholderapi.OptEcoExpansion;
 import me.playernguyen.opteco.transaction.TransactionManager;
 import me.playernguyen.opteco.updater.OptEcoUpdater;
+import me.playernguyen.opteco.utils.MathUtils;
 import me.playernguyen.opteco.utils.MessageFormat;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -169,6 +170,12 @@ public class OptEco extends JavaPlugin {
             getServer().getConsoleSender().sendMessage(ChatColor.YELLOW + waterMark);
         }
         waterMarks.clear();
+        if (this.getDescription().getVersion().toLowerCase().contains("-dev")) {
+            Bukkit.getServer().getConsoleSender().sendMessage(ChatColor.RED + "--------------------------------");
+            Bukkit.getServer().getConsoleSender().sendMessage(ChatColor.RED + "[!] OptEco Dev Build");
+            Bukkit.getServer().getConsoleSender().sendMessage(ChatColor.RED + "[!] This version is not stable.");
+            Bukkit.getServer().getConsoleSender().sendMessage(ChatColor.RED + "--------------------------------");
+        }
     }
 
     private void hookPlaceHolderAPI() {
@@ -255,7 +262,21 @@ public class OptEco extends JavaPlugin {
 
     private void setupStorage() {
         logger.info("Loading storage type.");
-        this.storageType = StorageType.valueOf(getConfigurationLoader().getString(OptEcoConfiguration.STORAGE_TYPE));
+        String var0 = this.getConfigurationLoader().getString(OptEcoConfiguration.STORAGE_TYPE);
+        this.storageType = StorageType.fromString(var0);
+        if (this.storageType == null) {
+            Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "*****************************************");
+            Bukkit.getConsoleSender().sendMessage(
+                    ChatColor.RED + "[!] " + String.format("Storage type not found %s. Using SQLite instead!", var0)
+            );
+            Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "*****************************************");
+            this.storageType = StorageType.SQLITE;
+            // Set to default setting (SQLite)
+            this.getConfigurationLoader().getConfiguration().set(OptEcoConfiguration.STORAGE_TYPE.getPath(),
+                    OptEcoConfiguration.STORAGE_TYPE.getDefaultSetting());
+            this.getConfigurationLoader().save();
+        }
+
         logger.info(String.format("Current storage type: %s", storageType.name().toLowerCase()));
     }
 

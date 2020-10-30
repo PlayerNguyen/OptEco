@@ -3,7 +3,7 @@ package me.playernguyen.opteco.utils;
 
 import java.util.regex.Pattern;
 
-public class ValidationChecker {
+public class MathUtils {
 
     public static boolean isNotNumber(String s) {
         if (s == null) {

@@ -6,10 +6,13 @@ import org.apache.tools.ant.filters.ReplaceTokens
 plugins {
     id 'java'
     id 'maven-publish'
+    id 'java-library'
 }
 
+def devBuild = false
+
 group = 'com.playernguyen'
-version = '2.0.1b'
+version = ('2.0.2b') + ((devBuild) ? "-devbuild": "")
 
 sourceCompatibility = '1.8'
 
@@ -38,6 +41,8 @@ dependencies {
     implementation 'org.jetbrains:annotations:19.0.0'
     compileOnly 'me.clip:placeholderapi:2.10.4'
     compileOnly 'com.destroystokyo.paper:paper-api:1.15.2-R0.1-SNAPSHOT'
+    compile 'com.zaxxer:HikariCP:3.4.5'
+
     compileOnly files('lib/BossShopPro.jar')
 }
 
@@ -53,4 +58,10 @@ processResources {
     from(sourceSets.main.resources.srcDirs) {
         filter(ReplaceTokens, tokens: ['VERSION': project.version])
     }
+}
+
+task fatJar(type: Jar) {
+    baseName = project.name
+    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+    with jar
 }
