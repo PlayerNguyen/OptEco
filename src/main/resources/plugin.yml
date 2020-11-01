@@ -1,7 +1,7 @@
 name: OptEco
 version: @VERSION@
 api-version: 1.13
-description: "The points system plugin"
+description: "The powerful points system plugin of Minecraft Server"
 main: me.playernguyen.opteco.OptEco
 author: Player_Nguyen
 loadbefore: [ BossShopPro ]
