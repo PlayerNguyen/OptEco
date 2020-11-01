@@ -1,6 +1,5 @@
 package me.playernguyen.opteco.sql;
 
-import com.zaxxer.hikari.HikariDataSource;
 import me.playernguyen.opteco.OptEcoConfiguration;
 
 import java.io.File;
@@ -9,27 +8,23 @@ import java.util.ArrayList;
 
 public class SQLiteEstablish extends SQLEstablish {
 
-    private final HikariDataSource dataSource;
 
     public SQLiteEstablish(String tableName, ArrayList<String> init) {
         super(tableName, init);
-        // Set up source
-        this.dataSource = new HikariDataSource();
-        // If null
-        if (getURL() == null) {
-            throw new NullPointerException("The url mustn't be null");
-        }
-
-        setURL("jdbc:sqlite:" + buildUrl());
-        this.dataSource.setDataSourceClassName("org.sqlite.SQLiteDataSource");
-        this.dataSource.setJdbcUrl(getURL());
     }
 
     @Override
     public Connection openConnect() throws SQLException, ClassNotFoundException {
+        setURL("jdbc:sqlite:" + buildUrl());
+        // If null
+        if (getURL() == null) {
+            throw new NullPointerException("The url mustn't be null");
+        }
+        // Import class
+        Class.forName("org.sqlite.JDBC");
         // Open connect
         getDebugger().info("['Connection::SQLite] Create the connection of SQLite");
-        return dataSource.getConnection();
+        return DriverManager.getConnection(getURL());
     }
 
     /**
