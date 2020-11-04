@@ -132,7 +132,9 @@ public class OptEco extends JavaPlugin {
         // Configuration Loader
         this.optEcoConfigurationLoader = new OptEcoConfigurationLoader();
         // Language Loader
-        this.optEcoLanguageLoader = new OptEcoLanguageLoader(getConfigurationLoader().getString(OptEcoConfiguration.LANGUAGE_FILE));
+        this.optEcoLanguageLoader = new OptEcoLanguageLoader(
+                getConfigurationLoader().getString(OptEcoConfiguration.LANGUAGE_FILE)
+        );
     }
 
     private void setupAccount() {

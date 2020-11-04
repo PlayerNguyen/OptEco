@@ -1,9 +1,0 @@
-<component name="ArtifactManager">
-  <artifact type="jar" name="OptEco">
-    <output-path>D:/Nguyn/MCSV</output-path>
-    <root id="archive" name="OptEco.jar">
-      <element id="module-output" name="OptEco" />
-      <element id="file-copy" path="$PROJECT_DIR$/src/main/resources/plugin.yml" />
-    </root>
-  </artifact>
-</component>
