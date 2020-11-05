@@ -132,7 +132,7 @@ public abstract class SQLAccountDatabase extends OptEcoImplementation
 
     @Override
     public boolean hasAccount(UUID uuid) {
-        return requestAccountInformation(uuid) != null;
+        return getAccountIdentify(uuid) != null;
     }
 
     @Override
