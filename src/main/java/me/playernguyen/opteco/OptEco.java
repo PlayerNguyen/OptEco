@@ -21,7 +21,6 @@ import me.playernguyen.opteco.manager.ManagerSet;
 import me.playernguyen.opteco.placeholderapi.OptEcoExpansion;
 import me.playernguyen.opteco.transaction.TransactionManager;
 import me.playernguyen.opteco.updater.OptEcoUpdater;
-import me.playernguyen.opteco.utils.MathUtils;
 import me.playernguyen.opteco.utils.MessageFormat;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -30,9 +29,6 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Random;
-import java.util.UUID;
 import java.util.logging.Logger;
 
 /**
@@ -160,7 +156,7 @@ public class OptEco extends JavaPlugin {
     }
 
     private void waterMarkPrint() {
-        logger.info("Succeed setup OptEco v." + this.getDescription().getVersion() + " on your server");
+        logger.info("Succeed setup OptEco v" + this.getDescription().getVersion() + " on your server");
         ArrayList<String> waterMarks = new ArrayList<>();
         waterMarks.add("                        ");
         waterMarks.add(" ___     ___   _______  ");

@@ -78,7 +78,9 @@ public class SubCommandCheck extends SubCommand {
                         getPlugin().getLanguageLoader().getLanguage(OptEcoLanguage.CHECK_ANOTHER)
                                 .replace("%who%", _target)
                                 .replace("%value%", getMessageFormat().numberFormat(val))
-                                .replace("%currency%", getPlugin().getConfigurationLoader().getString(OptEcoConfiguration.CURRENCY_SYMBOL))
+                                .replace("%currency%", getPlugin().getConfigurationLoader()
+                                        .getString(OptEcoConfiguration.CURRENCY_SYMBOL)
+                                )
                 )
         );
         return true;
