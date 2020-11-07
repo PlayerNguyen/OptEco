@@ -160,8 +160,8 @@ public class OptEco extends JavaPlugin {
         ArrayList<String> waterMarks = new ArrayList<>();
         waterMarks.add("                        ");
         waterMarks.add(" ___     ___   _______  ");
-        waterMarks.add("|   |   |    )    |     " + ChatColor.DARK_GRAY + "Support Bukkit - Spigot - PaperMC");
-        waterMarks.add("|   |   |---/     |     " + ChatColor.DARK_GRAY + "__________ ");
+        waterMarks.add("|   |   |    )    |     " + ChatColor.AQUA + "Supported Bukkit - Spigot - PaperMC");
+        waterMarks.add("|   |   |---/     |     " + ChatColor.AQUA + "__________ ");
         waterMarks.add("|___/   |         |     Eco" + ChatColor.RED + " v" + getDescription().getVersion());
         waterMarks.add("                     ");
         for (String waterMark : waterMarks) {
