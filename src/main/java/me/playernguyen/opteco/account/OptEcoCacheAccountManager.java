@@ -44,9 +44,8 @@ public class OptEcoCacheAccountManager {
         }
         // Account replace
         Account account = getOptEco().getAccountDatabase().getAccountIdentify(uuid);
-        double accountmoney = 0;
-        if(account != null) accountmoney = account.getBalance();
-        this.getMap().replace(uuid, new OptEcoCacheAccount(accountmoney, System.currentTimeMillis()));
+        double accountMoney = (account != null) ? account.getBalance() : 0;
+        this.getMap().replace(uuid, new OptEcoCacheAccount(accountMoney, System.currentTimeMillis()));
     }
 
     public OptEcoCacheAccount get(UUID uuid) {
@@ -76,9 +75,9 @@ public class OptEcoCacheAccountManager {
         //     Not exist -> create new with start balance (if start_balance != 0)
         Account account = null;
         if (this.getOptEco().getAccountDatabase().hasAccount(uuid)) {
-        	account = this.getOptEco().getAccountDatabase().requestAccountInformation(uuid);
-        } else if(this.getOptEco().getConfigurationLoader().getDouble(OptEcoConfiguration.START_BALANCE) != 0) {
-        	account = new Account(uuid, getOptEco().getConfigurationLoader().getDouble(OptEcoConfiguration
+            account = this.getOptEco().getAccountDatabase().requestAccountInformation(uuid);
+        } else if (this.getOptEco().getConfigurationLoader().getDouble(OptEcoConfiguration.START_BALANCE) != 0) {
+            account = new Account(uuid, getOptEco().getConfigurationLoader().getDouble(OptEcoConfiguration
                     .START_BALANCE));
         }
 
