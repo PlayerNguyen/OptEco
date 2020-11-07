@@ -43,8 +43,10 @@ public class OptEcoCacheAccountManager {
             throw new NullPointerException("UUID not found to refresh");
         }
         // Account replace
-        Account account = getOptEco().getAccountDatabase().requestAccountInformation(uuid);
-        this.getMap().replace(uuid, new OptEcoCacheAccount(account.getBalance(), System.currentTimeMillis()));
+        Account account = getOptEco().getAccountDatabase().getAccountIdentify(uuid);
+        double accountmoney = 0;
+        if(account != null) accountmoney = account.getBalance();
+        this.getMap().replace(uuid, new OptEcoCacheAccount(accountmoney, System.currentTimeMillis()));
     }
 
     public OptEcoCacheAccount get(UUID uuid) {
@@ -71,11 +73,14 @@ public class OptEcoCacheAccountManager {
         // If not found account, create one and put to manager
         //   Check account on database,
         //     If exist -> get current,
-        //     Not exist -> create new with start balance
-        Account account = (this.getOptEco().getAccountDatabase().hasAccount(uuid)) ?
-                this.getOptEco().getAccountDatabase().requestAccountInformation(uuid) :
-                new Account(uuid, getOptEco().getConfigurationLoader().getDouble(OptEcoConfiguration
-                        .START_BALANCE));
+        //     Not exist -> create new with start balance (if start_balance != 0)
+        Account account = null;
+        if (this.getOptEco().getAccountDatabase().hasAccount(uuid)) {
+        	account = this.getOptEco().getAccountDatabase().requestAccountInformation(uuid);
+        } else if(this.getOptEco().getConfigurationLoader().getDouble(OptEcoConfiguration.START_BALANCE) != 0) {
+        	account = new Account(uuid, getOptEco().getConfigurationLoader().getDouble(OptEcoConfiguration
+                    .START_BALANCE));
+        }
 
         // Then return account
         this.map.put(uuid, OptEcoCacheAccount.loadFromAccount(account));
