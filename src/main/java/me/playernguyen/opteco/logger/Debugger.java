@@ -10,6 +10,8 @@ public interface Debugger {
 
     void error(String var1);
 
+    void notice(String var1);
+
     void printException(Exception exception);
 
 }

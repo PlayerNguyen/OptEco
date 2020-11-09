@@ -18,6 +18,7 @@ public class MySQLEstablish extends SQLEstablish {
     private final String port;
     private final String database;
 
+
     public MySQLEstablish(String tableName, ArrayList<String> init) {
         super(tableName, init);
 
@@ -35,7 +36,7 @@ public class MySQLEstablish extends SQLEstablish {
         dataSource.addDataSourceProperty("databaseName", database);
         dataSource.addDataSourceProperty("user", username);
         dataSource.addDataSourceProperty("password", password);
-
+        dataSource.setPoolName(this.getPlugin().getName());
     }
 
 //    @Override
@@ -60,7 +61,8 @@ public class MySQLEstablish extends SQLEstablish {
 
     @Override
     public Connection openConnect() throws SQLException, ClassNotFoundException {
-        getDebugger().info("['Connection::MySQL] Open connection...");
+        getDebugger().info("['Connection::MySQL] Getting connection...");
+        // Return
         return dataSource.getConnection();
     }
 
@@ -71,7 +73,6 @@ public class MySQLEstablish extends SQLEstablish {
     private String getPassword() {
         return password;
     }
-
 
     /**
      * Linear adding tables of SQL

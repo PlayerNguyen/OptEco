@@ -3,6 +3,7 @@ package me.playernguyen.opteco.command;
 import me.playernguyen.opteco.OptEco;
 import me.playernguyen.opteco.OptEcoConfiguration;
 import me.playernguyen.opteco.OptEcoLanguage;
+import me.playernguyen.opteco.event.OptEcoPointChangedEvent;
 import me.playernguyen.opteco.permission.OptEcoPermission;
 import me.playernguyen.opteco.utils.MathUtils;
 import org.bukkit.Bukkit;
@@ -74,7 +75,8 @@ public class SubCommandAdd extends SubCommand {
                             .replace("%who%", args.get(0))
             );
             // Refresh the cache account
-            this.getAccountManager().refresh(target.getUniqueId());
+            if (target.isOnline())
+                this.getAccountManager().refresh(target.getUniqueId());
         } else {
             sender.sendMessage(
                     getMessageFormat().format(getPlugin().getLanguageLoader().getLanguage(OptEcoLanguage.COMMAND_FAILED_ADD))

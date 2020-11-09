@@ -1,6 +1,7 @@
 package me.playernguyen.opteco.account;
 
 import me.playernguyen.opteco.OptEcoImplementation;
+import me.playernguyen.opteco.event.OptEcoPointChangedEvent;
 import me.playernguyen.opteco.sql.SQLEstablish;
 import org.bukkit.Bukkit;
 import org.jetbrains.annotations.NotNull;
@@ -136,8 +137,8 @@ public abstract class SQLAccountDatabase extends OptEcoImplementation
     }
 
     @Override
-    public boolean setBalance(UUID uuid, double amount) {
-        return this.save(new Account(uuid, amount));
+    public boolean setBalance(UUID uuid, double newBalance) {
+        return this.save(new Account(uuid, newBalance));
     }
 
     @Override
@@ -147,11 +148,27 @@ public abstract class SQLAccountDatabase extends OptEcoImplementation
 
     @Override
     public boolean takeBalance(UUID uuid, double amount) {
+        // Take balance
+        // Call event
+        Bukkit.getPluginManager().callEvent(new OptEcoPointChangedEvent(
+                uuid,
+                this.getBalance(uuid),
+                this.getBalance(uuid) - amount,
+                OptEcoPointChangedEvent.ModifyType.DECREASE
+        ));
         return this.setBalance(uuid, this.getBalance(uuid) - amount);
     }
 
     @Override
     public boolean addBalance(UUID uuid, double amount) {
+        // Add new balance
+        // Call event
+        Bukkit.getPluginManager().callEvent(new OptEcoPointChangedEvent(
+                uuid,
+                this.getBalance(uuid),
+                this.getBalance(uuid) + amount,
+                OptEcoPointChangedEvent.ModifyType.INCREASE
+        ));
         return this.setBalance(uuid, this.getBalance(uuid) + amount);
     }
 

@@ -16,24 +16,6 @@ public abstract class OptEcoLoaderAbstract extends OptEcoImplementation {
 
     private String header;
 
-//    public LoaderAbstract(File file) {
-//        this.file = file;
-//        this.configuration = YamlConfiguration.loadConfiguration(file);
-//        this.header = "";
-//    }
-//
-//    public LoaderAbstract(String filename) {
-//        this.file = new File(getPlugin().getDataFolder(), filename + ".yml");
-//        this.configuration = YamlConfiguration.loadConfiguration(file);
-//        this.header = "";
-//    }
-//
-//    public LoaderAbstract(String filename, String header) {
-//        this.file = new File(getPlugin().getDataFolder(), filename + ".yml");
-//        this.configuration = YamlConfiguration.loadConfiguration(file);
-//        this.header = header;
-//    }
-
     public OptEcoLoaderAbstract(String name, String header, String parent, boolean fromResource) {
         // Parent handle
         // /OptEco folder
@@ -117,6 +99,10 @@ public abstract class OptEcoLoaderAbstract extends OptEcoImplementation {
 
     public int getInt(OptEcoConfiguration configuration) {
         return getConfiguration().getInt(configuration.getPath());
+    }
+
+    public long getLong(OptEcoConfiguration configuration) {
+        return getConfiguration().getLong(configuration.getPath());
     }
 
 }

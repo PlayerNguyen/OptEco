@@ -83,14 +83,32 @@ public class SubCommandPay extends SubCommand {
             );
             return true;
         }
-        // If lower than the minimum transact
-        if ((dummyValue % 1) < getConfigurationLoader().getDouble(OptEcoConfiguration.MINIMUM_TRANSACT_VALUE)) {
+//        // If lower than the minimum transact
+//        System.out.println(dummyValue % 1);
+//        System.out.println(getConfigurationLoader().getDouble(OptEcoConfiguration.MINIMUM_TRANSACT_VALUE));
+//        System.out.println(
+//                dummyValue % 1 != 0 &&
+//                (dummyValue % 1) < getConfigurationLoader().getDouble(OptEcoConfiguration.MINIMUM_TRANSACT_VALUE));
+//
+//        if ((dummyValue % 1) >= getConfigurationLoader().getDouble(OptEcoConfiguration.MINIMUM_TRANSACT_VALUE)) {
+//            player.sendMessage(
+//                    getMessageFormat()
+//                        .format(getLanguageLoader().getLanguage(OptEcoLanguage.UNACCEPTED_VALUE_PAYMENT))
+//            );
+//            return true;
+//        }
+        // Whether player is using double in not double mode
+        if (!getConfigurationLoader().getBool(OptEcoConfiguration.USE_DOUBLE)
+                && (dummyValue % 1) != 0
+        ) {
             player.sendMessage(
-                    getMessageFormat()
-                        .format(getLanguageLoader().getLanguage(OptEcoLanguage.UNACCEPTED_VALUE_PAYMENT))
+                    getMessageFormat().format(
+                            getLanguageLoader().getLanguage(OptEcoLanguage.MUST_BE_INTEGER)
+                    )
             );
             return true;
         }
+
         // If sender don't have enough points
         OptEcoCacheAccount optEcoCacheAccount = getAccountManager().get(player.getUniqueId());
         double balance = optEcoCacheAccount.getBalance();

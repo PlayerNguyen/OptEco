@@ -6,6 +6,7 @@ import me.playernguyen.opteco.configuration.OptEcoConfigurationLoader;
 import me.playernguyen.opteco.configuration.OptEcoLanguageLoader;
 import me.playernguyen.opteco.configuration.StorageType;
 import me.playernguyen.opteco.logger.Debugger;
+import me.playernguyen.opteco.schedule.ScheduleManager;
 import me.playernguyen.opteco.transaction.TransactionManager;
 
 import java.util.logging.Logger;
@@ -91,6 +92,13 @@ public abstract class OptEcoImplementation {
      */
     protected Logger getLogger() {
         return getPlugin().getLogger();
+    }
+
+    /**
+     * @return Schedule manager
+     */
+    protected ScheduleManager getScheduleManager() {
+        return this.getPlugin().getScheduleManager();
     }
 
 

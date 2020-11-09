@@ -35,9 +35,9 @@ public class SubCommandMe extends SubCommand {
                                 .replace("%value%", getMessageFormat()
                                         .numberFormat(optEcoCacheAccount.getBalance())
                                 ).replace("%currency%", getPlugin()
-                                        .getConfigurationLoader()
-                                        .getString(OptEcoConfiguration.CURRENCY_SYMBOL)
-                                )
+                                .getConfigurationLoader()
+                                .getString(OptEcoConfiguration.CURRENCY_SYMBOL)
+                        )
                 )
         );
         return true;

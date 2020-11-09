@@ -36,6 +36,11 @@ public class OptEcoDebugger extends OptEcoImplementation implements Debugger {
     }
 
     @Override
+    public void notice(String var1) {
+        log(ChatColor.AQUA + var1);
+    }
+
+    @Override
     public void printException(Exception exception) {
         this.error(exception.getClass().getSimpleName() + " -> " + exception.getMessage());
         exception.printStackTrace();

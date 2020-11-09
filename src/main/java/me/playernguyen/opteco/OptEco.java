@@ -19,6 +19,7 @@ import me.playernguyen.opteco.logger.Debugger;
 import me.playernguyen.opteco.logger.OptEcoDebugger;
 import me.playernguyen.opteco.manager.ManagerSet;
 import me.playernguyen.opteco.placeholderapi.OptEcoExpansion;
+import me.playernguyen.opteco.schedule.ScheduleManager;
 import me.playernguyen.opteco.transaction.TransactionManager;
 import me.playernguyen.opteco.updater.OptEcoUpdater;
 import me.playernguyen.opteco.utils.MessageFormat;
@@ -28,6 +29,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.logging.Logger;
 
@@ -56,6 +58,7 @@ public class OptEco extends JavaPlugin {
     private MessageFormat messageFormat;
     private TransactionManager transactionManager;
     private Metrics metrics;
+    private ScheduleManager scheduleManager;
 
     @Override
     public void onEnable() {
@@ -63,6 +66,7 @@ public class OptEco extends JavaPlugin {
         this.setupLoader();
         this.setupManager();
         this.setupUpdater();
+        this.setupSchedule();
         this.setupStorage();
         this.setupAccount();
         this.hookPlaceHolderAPI();
@@ -70,6 +74,10 @@ public class OptEco extends JavaPlugin {
         this.announcePlayerPoints();
         this.setupMetric();
         this.waterMarkPrint();
+    }
+
+    private void setupSchedule() {
+        this.scheduleManager = new ScheduleManager(this);
     }
 
     private void announcePlayerPoints() {
@@ -330,6 +338,10 @@ public class OptEco extends JavaPlugin {
 
     public OptEcoCacheAccountManager getAccountManager() {
         return accountManager;
+    }
+
+    public ScheduleManager getScheduleManager() {
+        return scheduleManager;
     }
 
 }

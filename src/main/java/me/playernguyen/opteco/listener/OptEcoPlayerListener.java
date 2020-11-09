@@ -1,5 +1,7 @@
 package me.playernguyen.opteco.listener;
 
+import me.playernguyen.opteco.event.OptEcoPointChangedEvent;
+import me.playernguyen.opteco.schedule.PointChangedPerformance;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerJoinEvent;
@@ -31,6 +33,13 @@ public class OptEcoPlayerListener extends OptEcoListener {
         // Remove account from manager
         this.getAccountManager().remove(player.getUniqueId());
         getDebugger().warn("Remove the player data into manager...");
+    }
+
+
+    @EventHandler
+    public void onChange(OptEcoPointChangedEvent e) {
+        // Call new async
+        this.getScheduleManager().callAsyncTimer(new PointChangedPerformance(e), 0, 0);
     }
 
 }

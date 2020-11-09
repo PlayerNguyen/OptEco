@@ -5,6 +5,7 @@ import me.playernguyen.opteco.OptEcoConfiguration;
 import me.playernguyen.opteco.account.SQLAccountDatabase;
 import me.playernguyen.opteco.sql.MySQLEstablish;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 

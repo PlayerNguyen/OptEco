@@ -22,7 +22,8 @@ public class CloseConnectionRunnable extends OptEcoRunnable {
     public void run() {
         try {
             if (getConnection() != null && !getConnection().isClosed()) {
-                getInstance().getDebugger().info(String.format("Closing connection with task #%s...", getTaskId()));
+                this.getInstance().getDebugger().notice(String.format("Closing connection with task #%s...",
+                        getTaskId()));
                 getConnection().close();
             }
         } catch (SQLException e) {

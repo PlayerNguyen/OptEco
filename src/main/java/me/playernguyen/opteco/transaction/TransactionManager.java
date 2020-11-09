@@ -5,6 +5,7 @@ import me.playernguyen.opteco.schedule.TransactionCountRunnable;
 import me.playernguyen.opteco.transaction.mysql.TransactionMySQLStorage;
 import me.playernguyen.opteco.transaction.sqlite.TransactionSQLiteStorage;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.UUID;
 

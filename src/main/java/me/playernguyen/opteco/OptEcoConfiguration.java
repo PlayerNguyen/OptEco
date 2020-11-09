@@ -12,6 +12,8 @@ public enum OptEcoConfiguration {
     MINIMUM_TRANSACT_VALUE("Settings.Preferences.MinimumCanTransact", 0.1),
     STORAGE_TYPE("Settings.Storage.Type", StorageType.SQLITE.toString().toLowerCase()),
 
+    USE_DOUBLE("Settings.Preferences.UseDouble", false),
+
     MYSQL_HOST("Settings.SQL.MySQL.Host", "localhost"),
     MYSQL_DATABASE("Settings.SQL.MySQL.Database", "dbname"),
     MYSQL_PORT("Settings.SQL.MySQL.Port", "3306"),
@@ -31,7 +33,11 @@ public enum OptEcoConfiguration {
     REFRESH_TIME("Settings.Preferences.Cache.RefreshTime", 5),
 
     DEBUG("Settings.Debug", false),
-    LANGUAGE_FILE("Settings.Preferences.Language", "language.yml");
+    LANGUAGE_FILE("Settings.Preferences.Language", "language.yml"),
+
+    TITLE_STAY("Settings.Title.Stay", 20),
+    TITLE_FADE_OUT("Settings.Title.FadeOut", 100),
+    ;
 
     private final String path;
     private final Object wh;
