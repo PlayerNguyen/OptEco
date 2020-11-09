@@ -12,7 +12,7 @@ plugins {
 def devBuild = false
 
 group = 'com.playernguyen'
-version = ('2.0.4b') + ((devBuild) ? "-devbuild": "")
+version = ('2.1b') + ((devBuild) ? "-devbuild": "")
 
 sourceCompatibility = '1.8'
 
@@ -41,9 +41,11 @@ dependencies {
     implementation 'org.jetbrains:annotations:19.0.0'
     compileOnly 'me.clip:placeholderapi:2.10.4'
     compileOnly 'com.destroystokyo.paper:paper-api:1.15.2-R0.1-SNAPSHOT'
-    compile 'com.zaxxer:HikariCP:3.4.5'
-
     compileOnly files('lib/BossShopPro.jar')
+
+    // Compile and put to jar
+    compile 'com.zaxxer:HikariCP:3.4.5'
+    compile 'org.slf4j:slf4j-site:2.0.0-alpha1'
 }
 
 publishing {

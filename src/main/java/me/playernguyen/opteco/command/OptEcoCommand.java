@@ -1,5 +1,6 @@
 package me.playernguyen.opteco.command;
 
+import me.playernguyen.opteco.OptEcoConfiguration;
 import me.playernguyen.opteco.OptEcoLanguage;
 import me.playernguyen.opteco.permission.OptEcoPermission;
 import org.bukkit.ChatColor;
@@ -8,6 +9,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.command.RemoteConsoleCommandSender;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -78,7 +80,15 @@ public class OptEcoCommand extends OptEcoAbstractCommand {
     }
 
     @Override
-    public List<String> onTabComplete(CommandSender commandSender, Command command, String s, String[] strings) {
+    public List<String> onTabComplete(@NotNull CommandSender commandSender,
+                                      @NotNull Command command,
+                                      @NotNull String s,
+                                      String[] strings) {
+        // Whether the tab executor disabled
+        if (!getConfigurationLoader().getBool(OptEcoConfiguration.TAB_EXECUTOR)) {
+            return null;
+        }
+        // Whether enabled
         if (strings.length < 2) {
             ArrayList<String> allowCommand = new ArrayList<>();
             for (SubCommand subCommand : getSubCommands()) {
@@ -86,7 +96,6 @@ public class OptEcoCommand extends OptEcoAbstractCommand {
             }
             return allowCommand;
         } else {
-
             SubCommand subCommand = getSubCommand(strings[0]);
             if (subCommand == null) return null;
             else return subCommand.onTabComplete(commandSender, separator(strings, 1));

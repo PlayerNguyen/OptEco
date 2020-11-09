@@ -25,18 +25,24 @@ public enum OptEcoConfiguration {
     SQL_ACCOUNT_TABLE_NAME("Settings.SQL.Table.Accounts", "opteco"),
     SQL_TRANSACT_TABLE_NAME("Settings.SQL.Table.Transactions", "opteco_transaction"),
 
-    SQL_CLOSE_CONNECT_TIMEOUT("Settings.SQL.ConnectionPool.Timeout", 60),
     COMMAND_LIMIT_TOP("Settings.Preferences.LimitTopCommand", 5),
     COUNTDOWN_ENABLE("Settings.Payment.Pending.Countdown.Enable", true),
     COUNTDOWN_TYPE("Settings.Payment.Pending.Countdown.Type", "message"),
 
     REFRESH_TIME("Settings.Preferences.Cache.RefreshTime", 5),
 
-    DEBUG("Settings.Debug", false),
+    DEBUG("Debug", false),
     LANGUAGE_FILE("Settings.Preferences.Language", "language.yml"),
 
-    TITLE_STAY("Settings.Title.Stay", 20),
-    TITLE_FADE_OUT("Settings.Title.FadeOut", 100),
+    TITLE_ENABLE("Settings.Effect.TittleCounter.Enable", true),
+    TITLE_STAY("Settings.Effect.TittleCounter.Stay", 20),
+    TITLE_FADE_OUT("Settings.Effect.TittleCounter.FadeOut", 100),
+    TITLE_SPEED("Settings.Effect.TittleCounter.Speed", 5),
+
+    TITLE_LIMIT_VALUE("Settings.Effect.TitleCounter.Limit", 10000),
+
+    TAB_EXECUTOR("Settings.Preferences.TabExecutor", true)
+
     ;
 
     private final String path;

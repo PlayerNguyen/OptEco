@@ -13,6 +13,7 @@ import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class SubCommandSet extends SubCommand {
     SubCommandSet(String command, OptEco plugin) {
@@ -78,7 +79,7 @@ public class SubCommandSet extends SubCommand {
                     getMessageFormat()
                             .format(getPlugin().getLanguageLoader().getLanguage(OptEcoLanguage.SET_SUCCESS))
                             .replace("%value%", Double.toString(value))
-                            .replace("%who%", target.getName())
+                            .replace("%who%", Objects.requireNonNull(target.getName()))
                             .replace("%currency%", getPlugin().getConfigurationLoader().getString(OptEcoConfiguration.CURRENCY_SYMBOL))
             );
             // Refresh the cache account
@@ -88,7 +89,7 @@ public class SubCommandSet extends SubCommand {
                     getMessageFormat()
                             .format(getPlugin().getLanguageLoader().getLanguage(OptEcoLanguage.SET_FAIL))
                             .replace("%value%", _value)
-                            .replace("%who%", target.getName())
+                            .replace("%who%", Objects.requireNonNull(target.getName()))
                             .replace("%currency%", getPlugin().getConfigurationLoader().getString(OptEcoConfiguration.CURRENCY_SYMBOL))
             );
         }

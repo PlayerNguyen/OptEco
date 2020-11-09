@@ -10,7 +10,7 @@ import java.util.ArrayList;
 public class MySQLEstablish extends SQLEstablish {
 
     // Connection pool system
-    private HikariDataSource dataSource;
+    private final HikariDataSource dataSource;
 
     private final String username;
     private final String password;
@@ -31,6 +31,12 @@ public class MySQLEstablish extends SQLEstablish {
         // Create dataSource and add the data
         this.dataSource = new HikariDataSource();
         dataSource.setDataSourceClassName("com.mysql.jdbc.jdbc2.optional.MysqlDataSource");
+//        dataSource.setJdbcUrl(String.format("jdbc:mysql://%s:%s/%s?%s",
+//                this.address,
+//                this.port,
+//                this.database,
+//                this.parameters
+//                ));
         dataSource.addDataSourceProperty("serverName", address);
         dataSource.addDataSourceProperty("port", port);
         dataSource.addDataSourceProperty("databaseName", database);
@@ -66,13 +72,6 @@ public class MySQLEstablish extends SQLEstablish {
         return dataSource.getConnection();
     }
 
-    private String getUsername() {
-        return username;
-    }
-
-    private String getPassword() {
-        return password;
-    }
 
     /**
      * Linear adding tables of SQL
@@ -84,7 +83,7 @@ public class MySQLEstablish extends SQLEstablish {
         ArrayList<String> table = new ArrayList<>();
         try (Connection connection = this.openConnect()) {
             Statement statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery("show tables");
+            ResultSet resultSet = statement.executeQuery("SHOW TABLES");
 
             while (resultSet.next()) {
                 table.add(resultSet.getString(1));

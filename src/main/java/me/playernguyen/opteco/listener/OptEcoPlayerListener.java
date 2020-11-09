@@ -1,5 +1,6 @@
 package me.playernguyen.opteco.listener;
 
+import me.playernguyen.opteco.OptEcoConfiguration;
 import me.playernguyen.opteco.event.OptEcoPointChangedEvent;
 import me.playernguyen.opteco.schedule.PointChangedPerformance;
 import org.bukkit.entity.Player;
@@ -38,6 +39,8 @@ public class OptEcoPlayerListener extends OptEcoListener {
 
     @EventHandler
     public void onChange(OptEcoPointChangedEvent e) {
+        // Whether enable the title counter
+        if (getConfigurationLoader().getBool(OptEcoConfiguration.TITLE_ENABLE))
         // Call new async
         this.getScheduleManager().callAsyncTimer(new PointChangedPerformance(e), 0, 0);
     }

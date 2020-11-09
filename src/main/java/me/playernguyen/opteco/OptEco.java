@@ -29,7 +29,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.sql.SQLException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.logging.Logger;
 
@@ -59,6 +59,8 @@ public class OptEco extends JavaPlugin {
     private TransactionManager transactionManager;
     private Metrics metrics;
     private ScheduleManager scheduleManager;
+
+    private boolean canLoad = true;
 
     @Override
     public void onEnable() {
@@ -107,9 +109,11 @@ public class OptEco extends JavaPlugin {
     @Override
     public void onDisable() {
         // Unregister listen
-        listenerManager.unregisterAll();
+        if (listenerManager != null)
+            listenerManager.unregisterAll();
         // Command manager
-        commandManager.getContainer().clear();
+        if (commandManager != null)
+            commandManager.getContainer().clear();
     }
 
     private void setupMetric() {
@@ -122,7 +126,9 @@ public class OptEco extends JavaPlugin {
     }
 
     private void setupInstance() {
-        instance = this;
+        if (instance == null) {
+            instance = this;
+        }
     }
 
     private void setupManager() {
@@ -133,12 +139,19 @@ public class OptEco extends JavaPlugin {
     }
 
     private void setupLoader() {
-        // Configuration Loader
-        this.optEcoConfigurationLoader = new OptEcoConfigurationLoader();
-        // Language Loader
-        this.optEcoLanguageLoader = new OptEcoLanguageLoader(
-                getConfigurationLoader().getString(OptEcoConfiguration.LANGUAGE_FILE)
-        );
+        try {
+            if (canLoad) {
+                // Configuration Loader
+                this.optEcoConfigurationLoader = new OptEcoConfigurationLoader();
+                // Language Loader
+                this.optEcoLanguageLoader = new OptEcoLanguageLoader(
+                        getConfigurationLoader().getString(OptEcoConfiguration.LANGUAGE_FILE)
+                );
+            }
+        } catch (IOException e) {
+            this.canLoad = false;
+            e.printStackTrace();
+        }
     }
 
     private void setupAccount() {

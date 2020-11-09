@@ -61,6 +61,11 @@ public enum OptEcoLanguage {
     UNACCEPTED_VALUE_PAYMENT("COMMAND.UNACCEPTED_VALUE", "&cThis value is unaccepted in transaction"),
     MUST_BE_INTEGER("MUST_BE_INTEGER", "&cThe value must be an integer!"),
 
+    FORMAT_INCREASE_TITLE("EFFECT.TITLE.INCREASE.TITLE", "&a+ &8%current% &a+"),
+    FORMAT_INCREASE_SUB_TITLE("EFFECT.TITLE.INCREASE.SUBTITLE", "&c^ &6%remain% &c^ "),
+
+    FORMAT_DECREASE_TITLE("EFFECT.TITLE.DECREASE.TITLE", "&c- &8%current% &c-"),
+    FORMAT_DECREASE_SUB_TITLE("EFFECT.TITLE.DECREASE.SUBTITLE", "&c^ &6%remain% &c^"),
 
     ;
 

@@ -8,7 +8,7 @@ import org.bukkit.command.CommandSender;
 
 public class OptEcoDebugger extends OptEcoImplementation implements Debugger {
 
-    private CommandSender sender;
+    private final CommandSender sender;
 
     private final String prefix;
 

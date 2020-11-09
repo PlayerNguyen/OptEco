@@ -138,6 +138,18 @@ public abstract class SQLAccountDatabase extends OptEcoImplementation
 
     @Override
     public boolean setBalance(UUID uuid, double newBalance) {
+        double oldBalance = this.getBalance(uuid);
+        OptEcoPointChangedEvent.ModifyType type = (oldBalance > newBalance)
+                ? OptEcoPointChangedEvent.ModifyType.DECREASE
+                : OptEcoPointChangedEvent.ModifyType.INCREASE;
+        // Call event
+        Bukkit.getPluginManager().callEvent(new OptEcoPointChangedEvent(
+                uuid,
+                oldBalance,
+                newBalance,
+                type
+        ));
+
         return this.save(new Account(uuid, newBalance));
     }
 
@@ -149,26 +161,12 @@ public abstract class SQLAccountDatabase extends OptEcoImplementation
     @Override
     public boolean takeBalance(UUID uuid, double amount) {
         // Take balance
-        // Call event
-        Bukkit.getPluginManager().callEvent(new OptEcoPointChangedEvent(
-                uuid,
-                this.getBalance(uuid),
-                this.getBalance(uuid) - amount,
-                OptEcoPointChangedEvent.ModifyType.DECREASE
-        ));
         return this.setBalance(uuid, this.getBalance(uuid) - amount);
     }
 
     @Override
     public boolean addBalance(UUID uuid, double amount) {
         // Add new balance
-        // Call event
-        Bukkit.getPluginManager().callEvent(new OptEcoPointChangedEvent(
-                uuid,
-                this.getBalance(uuid),
-                this.getBalance(uuid) + amount,
-                OptEcoPointChangedEvent.ModifyType.INCREASE
-        ));
         return this.setBalance(uuid, this.getBalance(uuid) + amount);
     }
 

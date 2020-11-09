@@ -57,7 +57,7 @@ public abstract class OptEcoLoaderAbstract extends OptEcoImplementation {
         this.header = header;
     }
 
-    public abstract void saveDefault();
+    public abstract void saveDefault() throws IOException;
 
     public File getFile() {
         return file;

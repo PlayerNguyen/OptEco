@@ -1,6 +1,7 @@
 package me.playernguyen.opteco.schedule;
 
 import me.playernguyen.opteco.OptEcoConfiguration;
+import me.playernguyen.opteco.OptEcoLanguage;
 import me.playernguyen.opteco.event.OptEcoPointChangedEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -32,7 +33,13 @@ public class PointChangedPerformance extends OptEcoRunnable {
         }
         // Decrease case
         if (event.getType() == OptEcoPointChangedEvent.ModifyType.DECREASE) {
-            double changeValue = Math.sqrt((pointCounter - event.getNewPoint()));
+            // Point counter limit
+            if (pointCounter - event.getNewPoint()
+                    > getInstance().getConfigurationLoader().getInt(OptEcoConfiguration.TITLE_LIMIT_VALUE)) {
+                pointCounter = event.getNewPoint();
+            }
+            double changeValue = Math.sqrt((pointCounter - event.getNewPoint()) *
+                    getInstance().getConfigurationLoader().getInt(OptEcoConfiguration.TITLE_SPEED));
             pointCounter -= changeValue;
             // Send title
             String formattedPoint = new DecimalFormat("#0.00")
@@ -40,8 +47,12 @@ public class PointChangedPerformance extends OptEcoRunnable {
             String formattedMinusPoint = new DecimalFormat("#0.00")
                     .format(Math.max((pointCounter - (event.getNewPoint())), 0));
             player.sendTitle(
-                    ChatColor.translateAlternateColorCodes('&', String.format("&a- &8%s &a-", formattedPoint)),
-                    ChatColor.translateAlternateColorCodes('&', String.format("&c^ &6%s &c^", formattedMinusPoint)),
+                    ChatColor.translateAlternateColorCodes('&',
+                            getInstance().getLanguageLoader().getLanguage(OptEcoLanguage.FORMAT_DECREASE_TITLE)
+                                .replace("%current%", formattedPoint).replace("%remain%", formattedMinusPoint)
+                    ),
+                    getInstance().getLanguageLoader().getLanguage(OptEcoLanguage.FORMAT_DECREASE_SUB_TITLE)
+                            .replace("%current%", formattedPoint).replace("%remain%", formattedMinusPoint),
                     0,
                     getInstance().getConfigurationLoader().getInt(OptEcoConfiguration.TITLE_STAY),
                     getInstance().getConfigurationLoader().getInt(OptEcoConfiguration.TITLE_FADE_OUT)
@@ -54,8 +65,14 @@ public class PointChangedPerformance extends OptEcoRunnable {
         }
         // Increase case
         if (event.getType() == OptEcoPointChangedEvent.ModifyType.INCREASE) {
+            // If out of limit, just display one time
+            if (event.getNewPoint() - pointCounter
+                    > getInstance().getConfigurationLoader().getInt(OptEcoConfiguration.TITLE_LIMIT_VALUE)) {
+                this.pointCounter = event.getNewPoint();
+            }
             // Count up and push to the counter
-            double changeValue = Math.sqrt((event.getNewPoint() - pointCounter));
+            double changeValue = Math.sqrt((event.getNewPoint() - pointCounter) *
+                    getInstance().getConfigurationLoader().getInt(OptEcoConfiguration.TITLE_SPEED));
             pointCounter += changeValue;
             // Send title
             String formattedPoint = new DecimalFormat("#0.00")
@@ -63,8 +80,11 @@ public class PointChangedPerformance extends OptEcoRunnable {
             String formattedMinusPoint = new DecimalFormat("#0.00")
                     .format(Math.max((event.getNewPoint() - (pointCounter)), 0));
 
-            player.sendTitle(ChatColor.translateAlternateColorCodes('&', String.format("&a+ &8%s &a+", formattedPoint)),
-                    ChatColor.translateAlternateColorCodes('&', String.format("&c^ &6%s &c^", formattedMinusPoint)),
+            player.sendTitle(
+                    getInstance().getLanguageLoader().getLanguage(OptEcoLanguage.FORMAT_INCREASE_TITLE)
+                            .replace("%current%", formattedPoint).replace("%remain%", formattedMinusPoint),
+                    getInstance().getLanguageLoader().getLanguage(OptEcoLanguage.FORMAT_INCREASE_SUB_TITLE)
+                            .replace("%current%", formattedPoint).replace("%remain%", formattedMinusPoint),
                     0,
                     getInstance().getConfigurationLoader().getInt(OptEcoConfiguration.TITLE_STAY),
                     getInstance().getConfigurationLoader().getInt(OptEcoConfiguration.TITLE_FADE_OUT)
