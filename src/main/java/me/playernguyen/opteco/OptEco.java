@@ -73,9 +73,19 @@ public class OptEco extends JavaPlugin {
         this.setupAccount();
         this.hookPlaceHolderAPI();
         this.hookBossShopPro();
+        this.hookShopGuiPro();
         this.announcePlayerPoints();
         this.setupMetric();
         this.waterMarkPrint();
+    }
+
+    private void hookShopGuiPro() {
+        // Find ShopGuiPlus
+        Plugin plugin = Bukkit.getPluginManager().getPlugin("ShopGuiPlus");
+        // Whether found ShopGuiPlus
+        if (plugin != null) {
+
+        }
     }
 
     private void setupSchedule() {
@@ -83,7 +93,7 @@ public class OptEco extends JavaPlugin {
     }
 
     private void announcePlayerPoints() {
-        // Find BossShopPro
+        // Find PlayerPoints
         Plugin plugin = Bukkit.getPluginManager().getPlugin("PlayerPoints");
         // Whether found PlayerPoints
         if (plugin != null) {

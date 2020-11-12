@@ -14,7 +14,10 @@ def devBuild = false
 group = 'com.playernguyen'
 version = ('2.1b') + ((devBuild) ? "-devbuild": "")
 
-sourceCompatibility = '1.8'
+compileJava {
+    sourceCompatibility = '1.8'
+    targetCompatibility = '1.8'
+}
 
 repositories {
     mavenLocal()
@@ -33,12 +36,18 @@ repositories {
     maven {
         url = uri('http://repo.maven.apache.org/maven2')
     }
+
+    maven {
+        url = uri('https://jitpack.io')
+    }
 }
 
 dependencies {
     implementation 'com.google.code.gson:gson:2.8.6'
     implementation 'com.comphenix.protocol:ProtocolLib-API:4.4.0'
     implementation 'org.jetbrains:annotations:19.0.0'
+//    implementation 'com.github.brcdev-minecraft:shopgui-api:2.1.1'
+
     compileOnly 'me.clip:placeholderapi:2.10.4'
     compileOnly 'com.destroystokyo.paper:paper-api:1.15.2-R0.1-SNAPSHOT'
     compileOnly files('lib/BossShopPro.jar')
