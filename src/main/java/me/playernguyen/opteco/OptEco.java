@@ -75,7 +75,7 @@ public class OptEco extends JavaPlugin {
             this.setupAccount();
             this.hookPlaceHolderAPI();
             this.hookBossShopPro();
-            this.hookShopGuiPro();
+            this.hookShopGuiPlus();
             this.hookMVdWPlaceholderAPI();
             this.announcePlayerPoints();
             this.setupMetric();
@@ -95,7 +95,7 @@ public class OptEco extends JavaPlugin {
         }
     }
 
-    private void hookShopGuiPro() {
+    private void hookShopGuiPlus() {
         // Find ShopGuiPlus
         Plugin plugin = Bukkit.getPluginManager().getPlugin("ShopGuiPlus");
         // Whether found ShopGuiPlus

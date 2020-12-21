@@ -12,7 +12,7 @@ plugins {
 def devBuild = false
 
 group = 'com.playernguyen'
-version = ('2.1.1b') + ((devBuild) ? "-devbuild": "")
+version = ('2.1.1b') + ((devBuild) ? "-devbuild" : "")
 
 compileJava {
     sourceCompatibility = '1.8'
@@ -41,21 +41,23 @@ repositories {
     maven {
         url = uri('http://repo.mvdw-software.be/content/groups/public/')
     }
+
+    maven { url = 'https://oss.sonatype.org/content/repositories/snapshots' }
+    maven { url = 'https://hub.spigotmc.org/nexus/content/repositories/snapshots/' }
 }
 
 dependencies {
     implementation 'com.google.code.gson:gson:2.8.6'
     implementation 'com.comphenix.protocol:ProtocolLib-API:4.4.0'
     implementation 'org.jetbrains:annotations:19.0.0'
-    compileOnly 'me.clip:placeholderapi:2.10.4'
-    compileOnly 'com.destroystokyo.paper:paper-api:1.15.2-R0.1-SNAPSHOT'
-    compileOnly files('lib/BossShopPro.jar')
-
-    // Compile and put to jar
+    implementation 'me.clip:placeholderapi:2.10.4'
+    implementation 'com.destroystokyo.paper:paper-api:1.15.2-R0.1-SNAPSHOT'
+    compile 'com.github.brcdev-minecraft:shopgui-api:2.1.1'
+    implementation files('lib/BossShopPro.jar')
+    implementation files('lib/MVdWPlaceholderAPI.jar')
     compile 'com.zaxxer:HikariCP:3.4.5'
     compile 'org.slf4j:slf4j-site:2.0.0-alpha1'
-    implementation 'com.github.brcdev-minecraft:shopgui-api:2.1.1'
-    implementation 'be.maximvdw:MVdWPlaceholderAPI:2.1.1-SNAPSHOT'
+
 }
 
 publishing {
