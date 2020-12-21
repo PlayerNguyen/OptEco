@@ -1,4 +1,4 @@
-package me.playernguyen.opteco.bossshoppro;
+package me.playernguyen.opteco.api.bossshoppro;
 
 import me.playernguyen.opteco.OptEco;
 import me.playernguyen.opteco.account.OptEcoCacheAccount;

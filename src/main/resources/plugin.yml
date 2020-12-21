@@ -5,7 +5,7 @@ description: "The powerful points system plugin of Minecraft Server"
 main: me.playernguyen.opteco.OptEco
 author: Player_Nguyen
 loadbefore: [ BossShopPro ]
-softdepend: [ PlaceholderAPI, BossShopPro ]
+softdepend: [ PlaceholderAPI, BossShopPro, MVdWPlaceholderAPI, ShopGUIPlus ]
 commands:
   opteco:
     usage: /opteco help
@@ -39,11 +39,6 @@ permissions:
       opteco.confirm: true
       opteco.cancel: true
       opteco.pay: true
-      opteco.take: false
-      opteco.add: false
-      opteco.check: false
-      opteco.reload: false
-      opteco.set: false
   opteco.take:
     description: Grant access to use /points take
     default: op

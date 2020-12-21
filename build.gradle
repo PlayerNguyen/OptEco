@@ -12,7 +12,7 @@ plugins {
 def devBuild = false
 
 group = 'com.playernguyen'
-version = ('2.1b') + ((devBuild) ? "-devbuild": "")
+version = ('2.1.1b') + ((devBuild) ? "-devbuild": "")
 
 compileJava {
     sourceCompatibility = '1.8'
@@ -21,6 +21,7 @@ compileJava {
 
 repositories {
     mavenLocal()
+
     maven {
         url = uri('https://papermc.io/repo/repository/maven-public/')
     }
@@ -34,11 +35,11 @@ repositories {
     }
 
     maven {
-        url = uri('http://repo.maven.apache.org/maven2')
+        url = uri('https://jitpack.io')
     }
 
     maven {
-        url = uri('https://jitpack.io')
+        url = uri('http://repo.mvdw-software.be/content/groups/public/')
     }
 }
 
@@ -46,8 +47,6 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.8.6'
     implementation 'com.comphenix.protocol:ProtocolLib-API:4.4.0'
     implementation 'org.jetbrains:annotations:19.0.0'
-//    implementation 'com.github.brcdev-minecraft:shopgui-api:2.1.1'
-
     compileOnly 'me.clip:placeholderapi:2.10.4'
     compileOnly 'com.destroystokyo.paper:paper-api:1.15.2-R0.1-SNAPSHOT'
     compileOnly files('lib/BossShopPro.jar')
@@ -55,6 +54,8 @@ dependencies {
     // Compile and put to jar
     compile 'com.zaxxer:HikariCP:3.4.5'
     compile 'org.slf4j:slf4j-site:2.0.0-alpha1'
+    implementation 'com.github.brcdev-minecraft:shopgui-api:2.1.1'
+    implementation 'be.maximvdw:MVdWPlaceholderAPI:2.1.1-SNAPSHOT'
 }
 
 publishing {

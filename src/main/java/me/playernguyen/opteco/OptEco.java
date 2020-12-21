@@ -4,8 +4,9 @@ import me.playernguyen.opteco.account.IAccountDatabase;
 import me.playernguyen.opteco.account.OptEcoCacheAccountManager;
 import me.playernguyen.opteco.account.mysql.MySQLAccountDatabase;
 import me.playernguyen.opteco.account.sqlite.SQLiteAccountDatabase;
+import me.playernguyen.opteco.api.mvdwplaceholder.OptEcoMVdWPlaceholderAPI;
 import me.playernguyen.opteco.bStats.Metrics;
-import me.playernguyen.opteco.bossshoppro.OptEcoBossShopPro;
+import me.playernguyen.opteco.api.bossshoppro.OptEcoBossShopPro;
 import me.playernguyen.opteco.command.CommandManager;
 import me.playernguyen.opteco.command.OptEcoCommand;
 import me.playernguyen.opteco.command.PlayerPointToOptEcoCommand;
@@ -18,11 +19,13 @@ import me.playernguyen.opteco.listener.OptEcoPlayerListener;
 import me.playernguyen.opteco.logger.Debugger;
 import me.playernguyen.opteco.logger.OptEcoDebugger;
 import me.playernguyen.opteco.manager.ManagerSet;
-import me.playernguyen.opteco.placeholderapi.OptEcoExpansion;
+import me.playernguyen.opteco.api.placeholderapi.OptEcoExpansion;
 import me.playernguyen.opteco.schedule.ScheduleManager;
+import me.playernguyen.opteco.api.shopguiplus.OptEcoShopGuiPlusEconomyProvider;
 import me.playernguyen.opteco.transaction.TransactionManager;
 import me.playernguyen.opteco.updater.OptEcoUpdater;
 import me.playernguyen.opteco.utils.MessageFormat;
+import net.brcdev.shopgui.ShopGuiPlusApi;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -60,23 +63,36 @@ public class OptEco extends JavaPlugin {
     private Metrics metrics;
     private ScheduleManager scheduleManager;
 
-    private boolean canLoad = true;
-
     @Override
     public void onEnable() {
-        this.setupInstance();
-        this.setupLoader();
-        this.setupManager();
-        this.setupUpdater();
-        this.setupSchedule();
-        this.setupStorage();
-        this.setupAccount();
-        this.hookPlaceHolderAPI();
-        this.hookBossShopPro();
-        this.hookShopGuiPro();
-        this.announcePlayerPoints();
-        this.setupMetric();
-        this.waterMarkPrint();
+        try {
+            this.setupInstance();
+            this.setupLoader();
+            this.setupManager();
+            this.setupUpdater();
+            this.setupSchedule();
+            this.setupStorage();
+            this.setupAccount();
+            this.hookPlaceHolderAPI();
+            this.hookBossShopPro();
+            this.hookShopGuiPro();
+            this.hookMVdWPlaceholderAPI();
+            this.announcePlayerPoints();
+            this.setupMetric();
+            this.waterMarkPrint();
+        } catch (Exception e) {
+            this.logger.severe("Having a critical problem when loading plugin :( <~> ):");
+            e.printStackTrace();
+            this.logger.info("Disabling OptEco because of error");
+        }
+    }
+
+    private void hookMVdWPlaceholderAPI() {
+        if (Bukkit.getPluginManager().isPluginEnabled("MVdWPlaceholderAPI")) {
+            this.getLogger().info("Found MVdWPlaceholderAPI. Registering provider...");
+            // Register function
+            new OptEcoMVdWPlaceholderAPI(this).register();
+        }
     }
 
     private void hookShopGuiPro() {
@@ -84,7 +100,9 @@ public class OptEco extends JavaPlugin {
         Plugin plugin = Bukkit.getPluginManager().getPlugin("ShopGuiPlus");
         // Whether found ShopGuiPlus
         if (plugin != null) {
-
+            this.getLogger().info("Found ShopGuiPlus. Registering provider...");
+            // Register the provider
+            ShopGuiPlusApi.registerEconomyProvider(new OptEcoShopGuiPlusEconomyProvider(this));
         }
     }
 
@@ -148,20 +166,13 @@ public class OptEco extends JavaPlugin {
         this.messageFormat = new MessageFormat();
     }
 
-    private void setupLoader() {
-        try {
-            if (canLoad) {
-                // Configuration Loader
-                this.optEcoConfigurationLoader = new OptEcoConfigurationLoader();
-                // Language Loader
-                this.optEcoLanguageLoader = new OptEcoLanguageLoader(
-                        getConfigurationLoader().getString(OptEcoConfiguration.LANGUAGE_FILE)
-                );
-            }
-        } catch (IOException e) {
-            this.canLoad = false;
-            e.printStackTrace();
-        }
+    private void setupLoader() throws IOException {
+        // Configuration Loader
+        this.optEcoConfigurationLoader = new OptEcoConfigurationLoader();
+        // Language Loader
+        this.optEcoLanguageLoader = new OptEcoLanguageLoader(
+                getConfigurationLoader().getString(OptEcoConfiguration.LANGUAGE_FILE)
+        );
     }
 
     private void setupAccount() {
@@ -291,12 +302,13 @@ public class OptEco extends JavaPlugin {
 
     private void setupStorage() {
         logger.info("Loading storage type.");
-        String var0 = this.getConfigurationLoader().getString(OptEcoConfiguration.STORAGE_TYPE);
-        this.storageType = StorageType.fromString(var0);
+        String rawStorageType = this.getConfigurationLoader().getString(OptEcoConfiguration.STORAGE_TYPE);
+        this.storageType = StorageType.fromString(rawStorageType);
         if (this.storageType == null) {
             Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "*****************************************");
             Bukkit.getConsoleSender().sendMessage(
-                    ChatColor.RED + "[!] " + String.format("Storage type not found %s. Using SQLite instead!", var0)
+                    ChatColor.RED + "[!] " + String.format("Storage type not found %s. Using SQLite instead!",
+                            rawStorageType)
             );
             Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "*****************************************");
             this.storageType = StorageType.SQLITE;

@@ -27,7 +27,6 @@ public class SubCommandPay extends SubCommand {
         addPermissions(OptEcoPermission.ADMIN);
         addPermissions(OptEcoPermission.PAY);
         addPermissions(OptEcoPermission.USER);
-
     }
 
     @Override

@@ -1,4 +1,4 @@
-package me.playernguyen.opteco.placeholderapi;
+package me.playernguyen.opteco.api.placeholderapi;
 
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import me.playernguyen.opteco.OptEco;
