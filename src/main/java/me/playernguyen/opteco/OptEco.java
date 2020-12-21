@@ -4,9 +4,11 @@ import me.playernguyen.opteco.account.IAccountDatabase;
 import me.playernguyen.opteco.account.OptEcoCacheAccountManager;
 import me.playernguyen.opteco.account.mysql.MySQLAccountDatabase;
 import me.playernguyen.opteco.account.sqlite.SQLiteAccountDatabase;
-import me.playernguyen.opteco.api.mvdwplaceholder.OptEcoMVdWPlaceholderAPI;
-import me.playernguyen.opteco.bStats.Metrics;
 import me.playernguyen.opteco.api.bossshoppro.OptEcoBossShopPro;
+import me.playernguyen.opteco.api.mvdwplaceholder.OptEcoMVdWPlaceholderAPI;
+import me.playernguyen.opteco.api.placeholderapi.OptEcoExpansion;
+import me.playernguyen.opteco.api.shopguiplus.OptEcoShopGuiPlusEconomyProvider;
+import me.playernguyen.opteco.bStats.Metrics;
 import me.playernguyen.opteco.command.CommandManager;
 import me.playernguyen.opteco.command.OptEcoCommand;
 import me.playernguyen.opteco.command.PlayerPointToOptEcoCommand;
@@ -19,13 +21,10 @@ import me.playernguyen.opteco.listener.OptEcoPlayerListener;
 import me.playernguyen.opteco.logger.Debugger;
 import me.playernguyen.opteco.logger.OptEcoDebugger;
 import me.playernguyen.opteco.manager.ManagerSet;
-import me.playernguyen.opteco.api.placeholderapi.OptEcoExpansion;
 import me.playernguyen.opteco.schedule.ScheduleManager;
-import me.playernguyen.opteco.api.shopguiplus.OptEcoShopGuiPlusEconomyProvider;
 import me.playernguyen.opteco.transaction.TransactionManager;
 import me.playernguyen.opteco.updater.OptEcoUpdater;
 import me.playernguyen.opteco.utils.MessageFormat;
-import net.brcdev.shopgui.ShopGuiPlusApi;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -102,7 +101,7 @@ public class OptEco extends JavaPlugin {
         if (plugin != null) {
             this.getLogger().info("Found ShopGuiPlus. Registering provider...");
             // Register the provider
-            ShopGuiPlusApi.registerEconomyProvider(new OptEcoShopGuiPlusEconomyProvider(this));
+            new OptEcoShopGuiPlusEconomyProvider(this).register();
         }
     }
 

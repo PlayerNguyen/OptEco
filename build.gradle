@@ -52,7 +52,7 @@ dependencies {
     implementation 'org.jetbrains:annotations:19.0.0'
     implementation 'me.clip:placeholderapi:2.10.4'
     implementation 'com.destroystokyo.paper:paper-api:1.15.2-R0.1-SNAPSHOT'
-    compile 'com.github.brcdev-minecraft:shopgui-api:2.1.1'
+    implementation 'com.github.brcdev-minecraft:shopgui-api:2.1.1'
     implementation files('lib/BossShopPro.jar')
     implementation files('lib/MVdWPlaceholderAPI.jar')
     compile 'com.zaxxer:HikariCP:3.4.5'
