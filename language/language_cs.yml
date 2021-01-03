@@ -51,7 +51,7 @@ COMMAND:
   CONFIRM:
     DESCRIPTION: potvrdit transakci
   CANCEL:
-    DESCRIPTION: prerusit transakci
+    DESCRIPTION: zrusit transakci
   UNACCEPTED_VALUE: '&cTato hodnota neni akceptovatelna pri transakci'
 COUNTDOWN_FORMAT: '&8%second%...'
 RED_BAR: '&7---------------------------'
