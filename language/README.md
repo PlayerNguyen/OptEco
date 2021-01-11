@@ -2,6 +2,7 @@
 * [English](lang.yml)
 * [Vietnamese](lang_vi.yml)
 * [Chinese](lang_cn.yml)
+* [Czech](language_cs.yml)
 
 Just copy and paste into `lang.yml` file. It'll work fine!
 # Language example

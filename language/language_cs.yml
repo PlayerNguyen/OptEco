@@ -1,0 +1,66 @@
+PREFIX: '&e[OptEco]'
+NO_PERMISSIONS: '&cNemas dostatek opravneni pro tuto akci.'
+COMMAND_NOT_FOUND: '&cPrikaz nenalezen.'
+FOR_PLAYER: '&cTento prikaz je pouze pro hrace, konzole je nemuze pouzivat.'
+COMMAND:
+  VAR_AMOUNT: <amount>
+  VAR_NOT_A_NUMBER: '&cHodnota %value% neni ciselna.'
+  VAR_PLAYER: <player>
+  VAR_VALUE_CANNOT_BE_NEGATIVE: '&cHodnota nesmi byt negativni.'
+  PLAYER_NOT_FOUND: '&cHrac %who% nebyl nalezen.'
+  ADD:
+    DESCRIPTION: pridat hraci penize
+    SUCCEEDED: '&aUspesne jsi pridal &d%value% %currency% &ahraci &d%who% na ucet.'
+    FAILED: '&cPridani &d%value% %currency% &cna tento ucet &d%who% selhalo.'
+  CHECK:
+    DESCRIPTION: zkontrolovat zustatek hrace
+    SELF: '&aStav tveho uctu je &d%value% %currency%'
+    ANOTHER: '&aHrac %who% a jeho zustatek &d%value% %currency%'
+  ME:
+    DESCRIPTION: zkontrolovat muj zustatek
+  TOP:
+    DESCRIPTION: zobrazit nejbohatsi hrace
+    FORMAT: '&7%id%. &6%name%  ~  &c%balance%'
+  PAY:
+    DESCRIPTION: prevod penez na ucet
+    PAY_ON_TRANSACTION: '&cPrave provadis transakci s jinym hracem, prosim napis
+      &d/points [confirm/cancel] &cpro potvrzeni transakce.'
+    CONFIRM_DISPLAY: '&aMas &d%value% sekund &ana potvrzeni, prosim napis &d/points
+      [confirm/cancel] &apro potvrzeni transakce.'
+    OUT_OF_TIME_CONFIRM: '&cCas pro transakci vyprsel.'
+    NOT_ENOUGH: '&cNedostatek penez.'
+    PAY_CANNOT_SELF_TRANSFER: '&cNemuzes prevadet penize sam sobe.'
+    PAY_TRANSACTION_NOT_EXIST: '&cNeprovadel jsi zadnou transakci proti ji nemuzes
+      zrusit.'
+    ACCEPTED: '&aPrevod &d%value% %currency% &ana &d%who%.'
+    ACCEPTED_TARGET: '&aObdrzel jsi &d%value% %currency% &aod &d%who%'
+    FAILED: '&cChyba behem cekani na prevod.'
+    DENY: '&cPrerusil jsi transakci.'
+  RELOAD:
+    DESCRIPTION: znovu nacteni konfigurace
+    DONE: '&aKonfigurace znovu nactena.'
+  TAKE:
+    DESCRIPTION: vzit hraci penize
+    SUCCESS: '&aOdebiral jsi &d%value% %currency% &ahraci &d%who%'
+    FAIL: '&cNemuzes odebrat &d%value% %currency% &chraci &d%who% &ckvuli chybe!'
+    NOT_ENOUGH: '&cYou cannot take out of limitation.'
+  SET:
+    DESCRIPTION: nastavit hraci penize
+    SUCCESS: '&aNastavil jsi &d%value% %currency% &ahraci &d%who%'
+    FAIL: '&aNemuzes nastavit &d%value% %currency% &ahraci &d%who% &akvuli chybe!'
+  CONFIRM:
+    DESCRIPTION: potvrdit transakci
+  CANCEL:
+    DESCRIPTION: zrusit transakci
+  UNACCEPTED_VALUE: '&cTato hodnota neni akceptovatelna pri transakci'
+COUNTDOWN_FORMAT: '&8%second%...'
+RED_BAR: '&7---------------------------'
+MUST_BE_INTEGER: '&cHodnota musi byt ciselna!'
+EFFECT:
+  TITLE:
+    INCREASE:
+      TITLE: '&a+ &8%current% &a+'
+      SUBTITLE: '&c^ &6%remain% &c^ '
+    DECREASE:
+      TITLE: '&c- &8%current% &c-'
+      SUBTITLE: '&c^ &6%remain% &c^'

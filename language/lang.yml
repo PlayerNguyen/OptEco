@@ -1,5 +1,5 @@
 PREFIX: '&e[OptEco]'
-NO_PERMISSIONS: '&cYou have no permission to require this action.'
+NO_PERMISSIONS: '&cYou dont have required permission for this action.'
 COMMAND_NOT_FOUND: '&cCommand not found.'
 FOR_PLAYER: '&cThis command just for player, console cannot use this.'
 COMMAND:
@@ -7,7 +7,7 @@ COMMAND:
   VAR_NOT_A_NUMBER: '&cValue %value% is not a number.'
   VAR_PLAYER: <player>
   VAR_VALUE_CANNOT_BE_NEGATIVE: '&cThe amount cannot be negative.'
-  PLAYER_NOT_FOUND: '&cCannot found player %who% in server.'
+  PLAYER_NOT_FOUND: '&cPlayer %who% not found in server or database.'
   ADD:
     DESCRIPTION: add balance to player
     SUCCEEDED: '&aSucceeded add &d%value% %currency% &ainto &d%who% &aaccount.'
@@ -18,6 +18,9 @@ COMMAND:
     ANOTHER: '&aPlayer %who% balance now is &d%value% %currency%'
   ME:
     DESCRIPTION: check my balance
+  TOP:
+    DESCRIPTION: view top points
+    FORMAT: '&7%id%. &6%name%  ~  &c%balance%'
   PAY:
     DESCRIPTION: transfer points to player
     PAY_ON_TRANSACTION: '&cYou are on transaction with another player, please using
@@ -26,7 +29,7 @@ COMMAND:
       [confirm/cancel] &ato confirm your transaction.'
     OUT_OF_TIME_CONFIRM: '&cYou are out of time to confirm your transaction.'
     NOT_ENOUGH: '&cNot enough to pay.'
-    PAY_CANNOT_SELF_TRANSFER: '&cYou cannot transfer to yourself.'
+    PAY_CANNOT_SELF_TRANSFER: '&cYou cannot transfer money to yourself.'
     PAY_TRANSACTION_NOT_EXIST: '&cYou have not paid for everybody.'
     ACCEPTED: '&aTransfer &d%value% %currency% &ato &d%who%.'
     ACCEPTED_TARGET: '&aYou has been received &d%value% %currency% &aby &d%who%'
@@ -38,12 +41,25 @@ COMMAND:
   TAKE:
     DESCRIPTION: take player points
     SUCCESS: '&aTaking &d%value% %currency% &afrom &d%who%'
-    FAIL: '&aCannot take &d%value% %currency% &afrom &d%who% &abecause of the error!'
+    FAIL: '&cCannot take &d%value% %currency% &afrom &d%who% &cbecause of the error!'
+    NOT_ENOUGH: '&cYou cannot take out of limitation.'
   SET:
     DESCRIPTION: set player points
     SUCCESS: '&aSetting &d%value% %currency% &ato &d%who%'
-    FAIL: '&aCannot set &d%value% %currency% &ato &d%who% &abecause of the error!'
+    FAIL: '&cCannot set &d%value% %currency% &ato &d%who% &cbecause of the error!'
   CONFIRM:
     DESCRIPTION: confirm transaction
   CANCEL:
     DESCRIPTION: cancel transaction
+  UNACCEPTED_VALUE: '&cThis value is unaccepted in transaction'
+COUNTDOWN_FORMAT: '&8%second%...'
+RED_BAR: '&7---------------------------'
+MUST_BE_INTEGER: '&cThe value must be an integer!'
+EFFECT:
+  TITLE:
+    INCREASE:
+      TITLE: '&a+ &8%current% &a+'
+      SUBTITLE: '&c^ &6%remain% &c^ '
+    DECREASE:
+      TITLE: '&c- &8%current% &c-'
+      SUBTITLE: '&c^ &6%remain% &c^'
