@@ -6,6 +6,7 @@ import me.playernguyen.opteco.OptEcoLanguage;
 import me.playernguyen.opteco.account.OptEcoCacheAccount;
 import me.playernguyen.opteco.permission.OptEcoPermission;
 import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.RemoteConsoleCommandSender;
 import org.bukkit.entity.Player;
@@ -59,19 +60,29 @@ public class SubCommandCheck extends SubCommand {
             return true;
         }
         String _target = args.get(0);
-        Player target = Bukkit.getServer().getPlayerExact(_target);
-        // Player are not online
-        if (target == null) {
+        OfflinePlayer target = Bukkit.getOfflinePlayer(_target);
+        // If this offline player has never played before
+        if (!target.hasPlayedBefore()) {
             sender.sendMessage(
-                    getMessageFormat().format(getPlugin().getLanguageLoader().getLanguage(OptEcoLanguage.VAR_PLAYER_NOT_FOUND)
-                            .replace("%who%", _target))
+                    getMessageFormat()
+                            .format(getPlugin().getLanguageLoader().getLanguage(OptEcoLanguage.VAR_PLAYER_NOT_FOUND))
+                            .replace("%who%", _target)
             );
             return true;
         }
-        OptEcoCacheAccount optEcoCacheAccount = getPlugin().getAccountManager().get(target.getUniqueId());
-        if (optEcoCacheAccount == null)
-            throw new NullPointerException("Cache player not found: " + target.getUniqueId());
-        double val = optEcoCacheAccount.getBalance();
+
+        double val;
+        // Player is online
+        if (target.isOnline()) {
+            OptEcoCacheAccount optEcoCacheAccount = getPlugin().getAccountManager().get(target.getUniqueId());
+            if (optEcoCacheAccount == null)
+                throw new NullPointerException("Cache player not found: " + target.getUniqueId());
+            val = optEcoCacheAccount.getBalance();
+        }
+        //Player is not online
+        else {
+            val = getPlugin().getAccountDatabase().getBalance(target.getUniqueId());
+        }
         // Send the message to check
         sender.sendMessage(
                 getMessageFormat().format(

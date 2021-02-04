@@ -49,11 +49,11 @@ public class SubCommandTake extends SubCommand {
             sender.sendMessage(getMessageFormat().format(getHelp()));
             return true;
         }
-
         String _target = args.get(0);
         OfflinePlayer target = Bukkit.getOfflinePlayer(_target);
         String _value = args.get(1);
-        if (target == null) {
+        // If this offline player has never played before
+        if (!target.hasPlayedBefore()) {
             sender.sendMessage(
                     getMessageFormat()
                             .format(getPlugin().getLanguageLoader().getLanguage(OptEcoLanguage.VAR_PLAYER_NOT_FOUND))
@@ -100,7 +100,8 @@ public class SubCommandTake extends SubCommand {
                             .replace("%currency%", getPlugin().getConfigurationLoader().getString(OptEcoConfiguration.CURRENCY_SYMBOL))
             );
             // Refresh the cache account
-            this.getAccountManager().refresh(target.getUniqueId());
+            if (target.isOnline())
+                this.getAccountManager().refresh(target.getUniqueId());
         } else {
             sender.sendMessage(
                     getMessageFormat()

@@ -49,8 +49,18 @@ public class SubCommandAdd extends SubCommand {
             sender.sendMessage(getMessageFormat().format(getHelp()));
             return true;
         }
-        OfflinePlayer target = Bukkit.getServer().getOfflinePlayer(args.get(0));
+        String _target = args.get(0);
+        OfflinePlayer target = Bukkit.getOfflinePlayer(_target);
         String _value = args.get(1);
+        // If this offline player has never played before
+        if (!target.hasPlayedBefore()) {
+            sender.sendMessage(
+                    getMessageFormat()
+                            .format(getPlugin().getLanguageLoader().getLanguage(OptEcoLanguage.VAR_PLAYER_NOT_FOUND))
+                            .replace("%who%", _target)
+            );
+            return true;
+        }
         if (MathUtils.isNotNumber(_value)) {
             sender.sendMessage(getMessageFormat().format(
                     getPlugin().getLanguageLoader().getLanguage(OptEcoLanguage.VAR_NOT_A_NUMBER)
