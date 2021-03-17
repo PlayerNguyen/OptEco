@@ -61,8 +61,8 @@ public class SubCommandCheck extends SubCommand {
         }
         String _target = args.get(0);
         OfflinePlayer target = Bukkit.getOfflinePlayer(_target);
-        // If this offline player has never played before
-        if (!target.hasPlayedBefore()) {
+        // If this offline player has never played before and is not online
+        if (!target.hasPlayedBefore() && !target.isOnline()) {
             sender.sendMessage(
                     getMessageFormat()
                             .format(getPlugin().getLanguageLoader().getLanguage(OptEcoLanguage.VAR_PLAYER_NOT_FOUND))
