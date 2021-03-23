@@ -9,10 +9,10 @@ plugins {
     id 'java-library'
 }
 
-def devBuild = false
+def devBuild = true
 
 group = 'com.playernguyen'
-version = ('2.1.1b') + ((devBuild) ? "-devbuild" : "")
+version = ('2.1.2b') + ((devBuild) ? "-devbuild" : "")
 
 compileJava {
     sourceCompatibility = '1.8'
