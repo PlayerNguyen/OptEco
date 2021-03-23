@@ -1,5 +1,17 @@
 package me.playernguyen.opteco;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.logging.Logger;
+
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.entity.Player;
+import org.bukkit.plugin.Plugin;
+import org.bukkit.plugin.PluginManager;
+import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scheduler.BukkitScheduler;
+
 import me.playernguyen.opteco.account.IAccountDatabase;
 import me.playernguyen.opteco.account.OptEcoCacheAccountManager;
 import me.playernguyen.opteco.account.mysql.MySQLAccountDatabase;
@@ -25,15 +37,6 @@ import me.playernguyen.opteco.schedule.ScheduleManager;
 import me.playernguyen.opteco.transaction.TransactionManager;
 import me.playernguyen.opteco.updater.OptEcoUpdater;
 import me.playernguyen.opteco.utils.MessageFormat;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.entity.Player;
-import org.bukkit.plugin.Plugin;
-import org.bukkit.plugin.java.JavaPlugin;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.logging.Logger;
 
 /**
  * Main class of OptEco plugin
@@ -95,14 +98,17 @@ public class OptEco extends JavaPlugin {
     }
 
     private void hookShopGuiPlus() {
-        // Find ShopGuiPlus
-        Plugin plugin = Bukkit.getPluginManager().getPlugin("ShopGuiPlus");
-        // Whether found ShopGuiPlus
-        if (plugin != null) {
-            this.getLogger().info("Found ShopGuiPlus. Registering provider...");
-            // Register the provider
+        PluginManager pluginManager = Bukkit.getPluginManager();
+        Plugin pluginSGP = pluginManager.getPlugin("ShopGUIPlus");
+        if(pluginSGP == null) return;
+
+        Runnable task = () -> {
+            Logger logger = getLogger();
+            logger.info("Found ShopGUIPlus, registering provider...");
             new OptEcoShopGuiPlusEconomyProvider(this).register();
-        }
+        };
+        BukkitScheduler scheduler = Bukkit.getScheduler();
+        scheduler.runTaskLater(this, task, 1L);
     }
 
     private void setupSchedule() {

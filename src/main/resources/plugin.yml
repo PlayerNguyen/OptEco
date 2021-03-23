@@ -4,7 +4,7 @@ api-version: 1.13
 description: "The powerful points system plugin of Minecraft Server"
 main: me.playernguyen.opteco.OptEco
 author: Player_Nguyen
-loadbefore: [ BossShopPro, ShopGUIPlus ]
+loadbefore: [ BossShopPro ]
 softdepend: [ PlaceholderAPI, BossShopPro, MVdWPlaceholderAPI, ShopGUIPlus ]
 commands:
   opteco:
