@@ -1,7 +1,7 @@
 package me.playernguyen.opteco.account;
 
 import me.playernguyen.opteco.OptEco;
-import me.playernguyen.opteco.OptEcoConfiguration;
+import me.playernguyen.opteco.configuration.OptEcoConfiguration;
 
 import java.util.HashMap;
 import java.util.Map;

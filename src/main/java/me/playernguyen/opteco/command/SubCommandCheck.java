@@ -1,8 +1,8 @@
 package me.playernguyen.opteco.command;
 
 import me.playernguyen.opteco.OptEco;
-import me.playernguyen.opteco.OptEcoConfiguration;
-import me.playernguyen.opteco.OptEcoLanguage;
+import me.playernguyen.opteco.configuration.OptEcoConfiguration;
+import me.playernguyen.opteco.language.OptEcoLanguage;
 import me.playernguyen.opteco.account.OptEcoCacheAccount;
 import me.playernguyen.opteco.permission.OptEcoPermission;
 import org.bukkit.Bukkit;

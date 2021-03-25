@@ -1,114 +1,65 @@
 package me.playernguyen.opteco.api;
 
-import me.playernguyen.opteco.OptEco;
-import me.playernguyen.opteco.OptEcoConfiguration;
-import me.playernguyen.opteco.account.OptEcoCacheAccount;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
 
-public class OptEcoAPI implements IOptEcoAPI {
-
-    private final UUID player;
-    private final OptEco plugin;
+public interface OptEcoAPI {
 
     /**
-     * Get the OptEco API
+     * Check whether the account that exist or not.
      *
-     * @param uuid who you want to get?
-     */
-    public OptEcoAPI(UUID uuid) {
-        this.player = uuid;
-        this.plugin = OptEco.getPlugin();
-    }
-
-    /**
-     * Check whether the account that exist or not
-     *
+     * @param uuid a uuid to check
      * @return boolean has this account on database or not
      */
-    @Override
-    public boolean hasAccount() {
-        return this.plugin
-                .getAccountDatabase().hasAccount(player);
-    }
+    boolean hasAccount(@NotNull UUID uuid);
 
     /**
-     * Set the balance of player
+     * Set points to player uuid.
      *
+     * @param uuid   a player that will set
      * @param amount amount you want to set
      * @return boolean is set or not
      */
-    @Override
-    public boolean setPoints(double amount) {
-        if (amount <= 0) throw new IllegalArgumentException("amount must greater than 0");
-        return this.plugin
-                .getAccountDatabase().setBalance(player, amount);
-    }
+    boolean setPoints(@NotNull UUID uuid, double amount);
 
     /**
-     * Get balance/points of player
+     * Get points of player
      *
      * @return double balance of that player
      */
-    @Override
-    public double getPoints() {
-        OptEcoCacheAccount optEcoCacheAccount = this.plugin
-                .getAccountManager().get(player);
-        return (optEcoCacheAccount != null) ? optEcoCacheAccount.getBalance() : 0.0d;
-    }
+    double getPoints(@NotNull UUID player);
 
     /**
-     * Check whether player is on pending transaction or not
+     * Check status that whether individual is on pending transaction or not.
      *
+     * @param uuid a player to check pending status
      * @return boolean is pending or not
      */
-    @Override
-    public boolean isPending() {
-        return this.plugin
-                .getTransactionManager().hasTransaction(player);
-    }
+    boolean isPending(@NotNull UUID uuid);
 
     /**
-     * API Player interactive
+     * Credit an amount of point into player account.
      *
-     * @return Player
+     * @param amount an amount to credit
+     * @return true whether credited or false otherwise
      */
-    @Override
-    public UUID getPlayer() {
-        return this.player;
-    }
+    boolean addPoints(@NotNull UUID player, double amount);
 
     /**
-     * Add points into player's account
+     * Withdraw points out of player's account
      *
-     * @param amount how much
-     * @return is added or not
+     *
+     * @param amount an amount to withdraw
+     * @return true whether withdrawn or false otherwise
      */
-    @Override
-    public boolean addPoints(double amount) {
-        if (amount <= 0) throw new IllegalArgumentException("amount must greater than 0");
-        return this.plugin.getAccountDatabase().addBalance(getPlayer(), amount);
-    }
+    boolean takePoints(@NotNull UUID player, double amount);
 
     /**
-     * Take points out of player's account
+     * A currently symbol which was configured by user.
      *
-     * @param amount how much
-     * @return is taken or not
+     * @return currency symbol
      */
-    @Override
-    public boolean takePoints(double amount) {
-        if (amount <= 0) throw new IllegalArgumentException("amount must greater than 0");
-        return this.plugin.getAccountDatabase().takeBalance(getPlayer(), amount);
-    }
+    String getCurrencySymbol();
 
-    /**
-     * Get the currency symbol
-     *
-     * @return String currency symbol
-     */
-    @Override
-    public String getCurrencySymbol() {
-        return this.plugin.getConfigurationLoader().getString(OptEcoConfiguration.CURRENCY_SYMBOL);
-    }
 }

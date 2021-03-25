@@ -1,6 +1,5 @@
 package me.playernguyen.opteco.configuration;
 
-import me.playernguyen.opteco.OptEcoConfiguration;
 import me.playernguyen.opteco.OptEcoImplementation;
 import org.bukkit.configuration.file.YamlConfiguration;
 

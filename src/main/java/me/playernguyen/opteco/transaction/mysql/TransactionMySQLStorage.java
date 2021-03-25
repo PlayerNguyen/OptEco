@@ -1,11 +1,10 @@
 package me.playernguyen.opteco.transaction.mysql;
 
 import me.playernguyen.opteco.OptEco;
-import me.playernguyen.opteco.OptEcoConfiguration;
+import me.playernguyen.opteco.configuration.OptEcoConfiguration;
 import me.playernguyen.opteco.sql.MySQLEstablish;
 import me.playernguyen.opteco.transaction.TransactionSQL;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 

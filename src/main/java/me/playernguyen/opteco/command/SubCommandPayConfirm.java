@@ -1,12 +1,10 @@
 package me.playernguyen.opteco.command;
 
 import me.playernguyen.opteco.OptEco;
-import me.playernguyen.opteco.OptEcoConfiguration;
-import me.playernguyen.opteco.OptEcoLanguage;
+import me.playernguyen.opteco.configuration.OptEcoConfiguration;
+import me.playernguyen.opteco.language.OptEcoLanguage;
 import me.playernguyen.opteco.permission.OptEcoPermission;
 import me.playernguyen.opteco.transaction.Transaction;
-import net.md_5.bungee.api.ChatMessageType;
-import net.md_5.bungee.api.chat.ComponentBuilder;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.RemoteConsoleCommandSender;

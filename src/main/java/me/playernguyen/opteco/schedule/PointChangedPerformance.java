@@ -1,7 +1,7 @@
 package me.playernguyen.opteco.schedule;
 
-import me.playernguyen.opteco.OptEcoConfiguration;
-import me.playernguyen.opteco.OptEcoLanguage;
+import me.playernguyen.opteco.configuration.OptEcoConfiguration;
+import me.playernguyen.opteco.language.OptEcoLanguage;
 import me.playernguyen.opteco.event.OptEcoPointChangedEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;

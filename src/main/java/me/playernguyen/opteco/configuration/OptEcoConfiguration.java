@@ -1,6 +1,4 @@
-package me.playernguyen.opteco;
-
-import me.playernguyen.opteco.configuration.StorageType;
+package me.playernguyen.opteco.configuration;
 
 public enum OptEcoConfiguration {
 

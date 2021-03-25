@@ -1,7 +1,5 @@
 package me.playernguyen.opteco.configuration;
 
-import me.playernguyen.opteco.OptEcoConfiguration;
-
 public class OptEcoConfigurationLoader extends OptEcoLoaderAbstract {
 
     private static final String CONFIG_FILE = "config.yml";

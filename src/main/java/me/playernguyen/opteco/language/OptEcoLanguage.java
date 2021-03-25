@@ -1,4 +1,4 @@
-package me.playernguyen.opteco;
+package me.playernguyen.opteco.language;
 
 public enum OptEcoLanguage {
 
@@ -14,18 +14,18 @@ public enum OptEcoLanguage {
     VALUE_CANNOT_BE_NEGATIVE("COMMAND.VAR_VALUE_CANNOT_BE_NEGATIVE", "&cThe amount cannot be negative."),
     VAR_PLAYER_NOT_FOUND("COMMAND.PLAYER_NOT_FOUND", "&cCannot found player %who% in server or database."),
 
-    COMMAND_DESCRIBE_ADD("COMMAND.ADD.DESCRIPTION", "add balance to player"),
+    COMMAND_DESCRIBE_ADD("COMMAND.ADD.DESCRIPTION", "credit point to player"),
     COMMAND_SUCCEEDED_ADD("COMMAND.ADD.SUCCEEDED", "&aSucceeded add &d%value% %currency% &ainto &d%who% &aaccount."),
     COMMAND_FAILED_ADD("COMMAND.ADD.FAILED", "&cFailed to add &d%value% %currency% &ainto &d%who% &aaccount."),
 
-    COMMAND_DESCRIBE_CHECK("COMMAND.CHECK.DESCRIPTION", "check player balance"),
-    COMMAND_DESCRIBE_SELFCHECK("COMMAND.ME.DESCRIPTION", "check my balance"),
+    COMMAND_DESCRIBE_CHECK("COMMAND.CHECK.DESCRIPTION", "reveal a current point of player"),
+    COMMAND_DESCRIBE_SELFCHECK("COMMAND.ME.DESCRIPTION", "reveal your current point"),
     CHECK_SELF("COMMAND.CHECK.SELF", "&aYour balance now is &d%value% %currency%"),
     CHECK_ANOTHER("COMMAND.CHECK.ANOTHER", "&aPlayer %who% balance now is &d%value% %currency%"),
 
-    COMMAND_DESCRIBE_TOP("COMMAND.TOP.DESCRIPTION", "view top points"),
+    COMMAND_DESCRIBE_TOP("COMMAND.TOP.DESCRIPTION", "reveal a leaderboard of server"),
 
-    COMMAND_DESCRIBE_PAY("COMMAND.PAY.DESCRIPTION", "transfer points to player"),
+    COMMAND_DESCRIBE_PAY("COMMAND.PAY.DESCRIPTION", "transfer point to another player"),
     PAY_ON_TRANSACTION("COMMAND.PAY.PAY_ON_TRANSACTION", "&cYou are on transaction with another player, please using &d/points [confirm/cancel] &cto confirm your before transaction."),
     PAY_CONFIRM_DISPLAY("COMMAND.PAY.CONFIRM_DISPLAY", "&aYou have &d%value% seconds &ato confirm, please using &d/points [confirm/cancel] &ato confirm your transaction."),
     PAY_OUT_OF_TIME_CONFIRM("COMMAND.PAY.OUT_OF_TIME_CONFIRM", "&cYou are out of time to confirm your transaction."),
@@ -37,15 +37,15 @@ public enum OptEcoLanguage {
     PAY_FAILED("COMMAND.PAY.FAILED", "&cHaving an error while pending transferred."),
     PAY_DENY("COMMAND.PAY.DENY", "&cYou are denied the transaction."),
 
-    COMMAND_DESCRIBE_RELOAD("COMMAND.RELOAD.DESCRIPTION", "reload plugin"),
+    COMMAND_DESCRIBE_RELOAD("COMMAND.RELOAD.DESCRIPTION", "reload OptEco plugin"),
     RELOAD_DONE("COMMAND.RELOAD.DONE", "&aReloaded all config."),
 
-    COMMAND_DESCRIBE_TAKE("COMMAND.TAKE.DESCRIPTION", "take player points"),
+    COMMAND_DESCRIBE_TAKE("COMMAND.TAKE.DESCRIPTION", "withdraw player currency"),
     TAKE_SUCCESS("COMMAND.TAKE.SUCCESS", "&aTaking &d%value% %currency% &afrom &d%who%"),
     TAKE_FAIL("COMMAND.TAKE.FAIL", "&cCannot take &d%value% %currency% &afrom &d%who% &cbecause of the error!"),
-    TAKE_NOT_ENOUGH("COMMAND.TAKE.NOT_ENOUGH", "&cYou cannot take out of limitation."),
+    TAKE_NOT_ENOUGH("COMMAND.TAKE.NOT_ENOUGH", "&cYou cannot take more than a limit amount."),
 
-    COMMAND_DESCRIBE_SET("COMMAND.SET.DESCRIPTION", "set player points"),
+    COMMAND_DESCRIBE_SET("COMMAND.SET.DESCRIPTION", "set player point to a specific amount"),
     SET_SUCCESS("COMMAND.SET.SUCCESS", "&aSetting &d%value% %currency% &ato &d%who%"),
     SET_FAIL("COMMAND.SET.FAIL", "&cCannot set &d%value% %currency% &ato &d%who% &cbecause of the error!"),
 

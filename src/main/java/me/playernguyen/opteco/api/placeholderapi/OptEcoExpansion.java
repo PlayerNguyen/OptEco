@@ -2,7 +2,7 @@ package me.playernguyen.opteco.api.placeholderapi;
 
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import me.playernguyen.opteco.OptEco;
-import me.playernguyen.opteco.OptEcoConfiguration;
+import me.playernguyen.opteco.configuration.OptEcoConfiguration;
 import me.playernguyen.opteco.account.OptEcoCacheAccount;
 import org.bukkit.entity.Player;
 

@@ -3,7 +3,7 @@ package me.playernguyen.opteco.api.mvdwplaceholder;
 import be.maximvdw.placeholderapi.PlaceholderAPI;
 import be.maximvdw.placeholderapi.PlaceholderReplacer;
 import me.playernguyen.opteco.OptEco;
-import me.playernguyen.opteco.OptEcoConfiguration;
+import me.playernguyen.opteco.configuration.OptEcoConfiguration;
 import me.playernguyen.opteco.account.OptEcoCacheAccount;
 
 import java.util.Map;

@@ -4,6 +4,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.logging.Logger;
 
+import me.playernguyen.opteco.api.OptEcoAPI;
+import me.playernguyen.opteco.api.OptEcoAPIAbstract;
+import me.playernguyen.opteco.configuration.OptEcoConfiguration;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -25,7 +28,7 @@ import me.playernguyen.opteco.command.CommandManager;
 import me.playernguyen.opteco.command.OptEcoCommand;
 import me.playernguyen.opteco.command.PlayerPointToOptEcoCommand;
 import me.playernguyen.opteco.configuration.OptEcoConfigurationLoader;
-import me.playernguyen.opteco.configuration.OptEcoLanguageLoader;
+import me.playernguyen.opteco.language.OptEcoLanguageLoader;
 import me.playernguyen.opteco.configuration.StorageType;
 import me.playernguyen.opteco.listener.ListenerManager;
 import me.playernguyen.opteco.listener.OptEcoListener;
@@ -50,7 +53,6 @@ public class OptEco extends JavaPlugin {
     private static final int METRICS_ID = 6793;
 
     private final Logger logger = this.getLogger();
-
     private ListenerManager listenerManager;
     private CommandManager commandManager;
     private boolean isHookPlaceholder;
@@ -64,6 +66,7 @@ public class OptEco extends JavaPlugin {
     private TransactionManager transactionManager;
     private Metrics metrics;
     private ScheduleManager scheduleManager;
+    private OptEcoAPI api = new OptEcoAPIAbstract(this);
 
     @Override
     public void onEnable() {
@@ -79,6 +82,7 @@ public class OptEco extends JavaPlugin {
             this.hookBossShopPro();
             this.hookShopGuiPlus();
             this.hookMVdWPlaceholderAPI();
+            this.hookWithVault();
             this.announcePlayerPoints();
             this.setupMetric();
             this.waterMarkPrint();
@@ -87,6 +91,10 @@ public class OptEco extends JavaPlugin {
             e.printStackTrace();
             this.logger.info("Disabling OptEco because of error");
         }
+    }
+
+    private void hookWithVault() {
+
     }
 
     private void hookMVdWPlaceholderAPI() {
@@ -384,4 +392,7 @@ public class OptEco extends JavaPlugin {
         return scheduleManager;
     }
 
+    public OptEcoAPI getApplicationInterface() {
+        return api;
+    }
 }

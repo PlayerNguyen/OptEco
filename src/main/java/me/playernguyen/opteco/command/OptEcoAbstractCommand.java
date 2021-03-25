@@ -1,6 +1,6 @@
 package me.playernguyen.opteco.command;
 
-import me.playernguyen.opteco.OptEcoLanguage;
+import me.playernguyen.opteco.language.OptEcoLanguage;
 import me.playernguyen.opteco.utils.MessageFormat;
 import org.bukkit.command.*;
 import org.bukkit.entity.Player;

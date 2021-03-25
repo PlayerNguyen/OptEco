@@ -1,7 +1,7 @@
 package me.playernguyen.opteco.utils;
 
 import me.playernguyen.opteco.OptEcoImplementation;
-import me.playernguyen.opteco.OptEcoLanguage;
+import me.playernguyen.opteco.language.OptEcoLanguage;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 

@@ -1,7 +1,7 @@
 package me.playernguyen.opteco.logger;
 
 import me.playernguyen.opteco.OptEco;
-import me.playernguyen.opteco.OptEcoConfiguration;
+import me.playernguyen.opteco.configuration.OptEcoConfiguration;
 import me.playernguyen.opteco.OptEcoImplementation;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;

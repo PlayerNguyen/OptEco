@@ -1,6 +1,6 @@
 package me.playernguyen.opteco.sql;
 
-import me.playernguyen.opteco.OptEcoConfiguration;
+import me.playernguyen.opteco.configuration.OptEcoConfiguration;
 
 import java.io.File;
 import java.sql.*;

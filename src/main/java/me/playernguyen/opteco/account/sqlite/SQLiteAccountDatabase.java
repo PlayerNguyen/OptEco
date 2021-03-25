@@ -1,7 +1,7 @@
 package me.playernguyen.opteco.account.sqlite;
 
 import me.playernguyen.opteco.OptEco;
-import me.playernguyen.opteco.OptEcoConfiguration;
+import me.playernguyen.opteco.configuration.OptEcoConfiguration;
 import me.playernguyen.opteco.account.SQLAccountDatabase;
 import me.playernguyen.opteco.sql.SQLiteEstablish;
 

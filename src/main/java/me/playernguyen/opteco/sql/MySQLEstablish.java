@@ -1,8 +1,7 @@
 package me.playernguyen.opteco.sql;
 
 import com.zaxxer.hikari.HikariDataSource;
-import me.playernguyen.opteco.OptEcoConfiguration;
-import me.playernguyen.opteco.schedule.CloseConnectionRunnable;
+import me.playernguyen.opteco.configuration.OptEcoConfiguration;
 
 import java.sql.*;
 import java.util.ArrayList;
