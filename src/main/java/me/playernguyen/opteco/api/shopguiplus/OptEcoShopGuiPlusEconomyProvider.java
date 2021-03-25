@@ -1,17 +1,15 @@
 package me.playernguyen.opteco.api.shopguiplus;
 
+import org.bukkit.entity.Player;
+
 import me.playernguyen.opteco.OptEco;
 import net.brcdev.shopgui.ShopGuiPlusApi;
 import net.brcdev.shopgui.provider.economy.EconomyProvider;
-import org.bukkit.entity.Player;
 
 public class OptEcoShopGuiPlusEconomyProvider extends EconomyProvider {
-
     private final OptEco optEco;
-
     public OptEcoShopGuiPlusEconomyProvider(OptEco optEco) {
         this.optEco = optEco;
-
     }
 
     public void register() {
