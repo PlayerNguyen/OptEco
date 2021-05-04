@@ -17,6 +17,7 @@ public enum OptEcoConfiguration {
     MYSQL_PORT("Settings.SQL.MySQL.Port", "3306"),
     MYSQL_USERNAME("Settings.SQL.MySQL.Username", "root"),
     MYSQL_PASSWORD("Settings.SQL.MySQL.Password", ""),
+    MYSQL_PARAMETER("Settings.SQL.MySQL.Parameter", "useSSL=false"),
 
     SQLITE_FILE("Settings.SQL.SQLite.File", "account.sqlite"),
 
@@ -39,8 +40,7 @@ public enum OptEcoConfiguration {
 
     TITLE_LIMIT_VALUE("Settings.Effect.TitleCounter.Limit", 10000),
 
-    TAB_EXECUTOR("Settings.Preferences.TabExecutor", true)
-
+    TAB_EXECUTOR("Settings.Preferences.TabExecutor", true),
     ;
 
     private final String path;

@@ -9,10 +9,10 @@ plugins {
     id 'java-library'
 }
 
-def devBuild = true
+def devBuild = false
 
 group = 'com.playernguyen'
-version = ('2.1.2b') + ((devBuild) ? "-devbuild" : "")
+version = ('2.1.3b') + ((devBuild) ? "-devbuild" : "")
 
 compileJava {
     sourceCompatibility = '1.8'
@@ -76,8 +76,8 @@ processResources {
     }
 }
 
-task fatJar(type: Jar) {
-    baseName = project.name
-    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
-    with jar
+jar {
+    from {
+        configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
+    }
 }
