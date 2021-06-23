@@ -56,7 +56,7 @@ public class SubCommandPayConfirm extends SubCommand {
             }
             if (tranReceiver != null) {
                 String senderName = "";
-                if (tranSender != null) senderName = tranReceiver.getName();
+                if (tranSender != null) senderName = tranSender.getName();
                 tranReceiver.sendMessage(
                         getMessageFormat().format(getPlugin().getLanguageLoader().getLanguage(OptEcoLanguage.PAY_SUCCESS_TARGET))
                                 .replace("%who%", senderName)
