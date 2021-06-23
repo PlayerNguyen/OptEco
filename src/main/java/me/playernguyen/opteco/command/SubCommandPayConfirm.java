@@ -41,9 +41,11 @@ public class SubCommandPayConfirm extends SubCommand {
             Player tranSender = Bukkit.getPlayer(transaction.getPlayer());
             Player tranReceiver = Bukkit.getPlayer(transaction.getTarget());
             if (tranSender != null) {
+                String receiverName = "";
+                if (tranReceiver != null) receiverName = tranReceiver.getName();
                 tranSender.sendMessage(
                         getMessageFormat().format(getPlugin().getLanguageLoader().getLanguage(OptEcoLanguage.PAY_SUCCESS))
-                                .replace("%who%", tranSender.getName())
+                                .replace("%who%", receiverName)
                                 .replace("%value%", getMessageFormat().numberFormat(transaction.getAmount()))
                                 .replace("%currency%", getPlugin().getConfigurationLoader()
                                         .getString(OptEcoConfiguration.CURRENCY_SYMBOL)
@@ -53,9 +55,11 @@ public class SubCommandPayConfirm extends SubCommand {
                 this.getAccountManager().refresh(tranSender.getUniqueId());
             }
             if (tranReceiver != null) {
+                String senderName = "";
+                if (tranSender != null) senderName = tranReceiver.getName();
                 tranReceiver.sendMessage(
                         getMessageFormat().format(getPlugin().getLanguageLoader().getLanguage(OptEcoLanguage.PAY_SUCCESS_TARGET))
-                                .replace("%who%", tranReceiver.getName())
+                                .replace("%who%", senderName)
                                 .replace("%value%", getMessageFormat().numberFormat(transaction.getAmount()))
                                 .replace("%currency%", getPlugin().getConfigurationLoader()
                                         .getString(OptEcoConfiguration.CURRENCY_SYMBOL)
