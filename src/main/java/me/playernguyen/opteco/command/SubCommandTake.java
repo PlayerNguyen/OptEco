@@ -77,11 +77,21 @@ public class SubCommandTake extends SubCommand {
             );
             return true;
         }
-        // If sender don't have enough points
-//        if ((getPlugin().getAccountDatabase().getBalance(target.getUniqueId()) - Double.parseDouble(_value)) <
-        OptEcoCacheAccount optEcoCacheAccount = getAccountManager().get(target.getUniqueId());
-        double balance = optEcoCacheAccount.getBalance();
 
+        double balance;
+        // Player is online
+        if (target.isOnline()) {
+            OptEcoCacheAccount optEcoCacheAccount = getAccountManager().get(target.getUniqueId());
+            if (optEcoCacheAccount == null)
+                throw new NullPointerException("Cache player not found: " + target.getUniqueId());
+            balance = optEcoCacheAccount.getBalance();
+        }
+        //Player is not online
+        else {
+            balance = getPlugin().getAccountDatabase().getBalance(target.getUniqueId());
+        }
+
+        // If player doesn't have enough points
         if ((balance - Double.parseDouble(_value)) <
                 getPlugin().getConfigurationLoader().getDouble(OptEcoConfiguration.MIN_BALANCE)) {
             sender.sendMessage(
