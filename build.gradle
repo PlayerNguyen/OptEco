@@ -62,13 +62,16 @@ dependencies {
 
 }
 
-//publishing {
-//    publications {
-//        maven(MavenPublication) {
-//            from(components.java)
-//        }
-//    }
-//}
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            from components.java
+        }
+    }
+    repositories {
+        mavenLocal()
+    }
+}
 
 processResources {
     from(sourceSets.main.resources.srcDirs) {

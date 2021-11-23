@@ -52,8 +52,8 @@ public class SubCommandTake extends SubCommand {
         String _target = args.get(0);
         OfflinePlayer target = Bukkit.getOfflinePlayer(_target);
         String _value = args.get(1);
-        // If this offline player has never played before and is not online
-        if (!target.hasPlayedBefore() && !target.isOnline()) {
+        // If this offline player is not online and does not have an account
+        if (!target.isOnline() && !getPlugin().getAccountDatabase().hasAccount(target.getUniqueId())) {
             sender.sendMessage(
                     getMessageFormat()
                             .format(getPlugin().getLanguageLoader().getLanguage(OptEcoLanguage.VAR_PLAYER_NOT_FOUND))
@@ -77,11 +77,21 @@ public class SubCommandTake extends SubCommand {
             );
             return true;
         }
-        // If sender don't have enough points
-//        if ((getPlugin().getAccountDatabase().getBalance(target.getUniqueId()) - Double.parseDouble(_value)) <
-        OptEcoCacheAccount optEcoCacheAccount = getAccountManager().get(target.getUniqueId());
-        double balance = optEcoCacheAccount.getBalance();
 
+        double balance;
+        // Player is online
+        if (target.isOnline()) {
+            OptEcoCacheAccount optEcoCacheAccount = getAccountManager().get(target.getUniqueId());
+            if (optEcoCacheAccount == null)
+                throw new NullPointerException("Cache player not found: " + target.getUniqueId());
+            balance = optEcoCacheAccount.getBalance();
+        }
+        //Player is not online
+        else {
+            balance = getPlugin().getAccountDatabase().getBalance(target.getUniqueId());
+        }
+
+        // If player doesn't have enough points
         if ((balance - Double.parseDouble(_value)) <
                 getPlugin().getConfigurationLoader().getDouble(OptEcoConfiguration.MIN_BALANCE)) {
             sender.sendMessage(

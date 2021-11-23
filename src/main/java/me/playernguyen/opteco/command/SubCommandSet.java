@@ -50,8 +50,8 @@ public class SubCommandSet extends SubCommand {
         String _target = args.get(0);
         OfflinePlayer target = Bukkit.getOfflinePlayer(_target);
         String _value = args.get(1);
-        // If this offline player has never played before and is not online
-        if (!target.hasPlayedBefore() && !target.isOnline()) {
+        // If this offline player is not online and does not have an account
+        if (!target.isOnline() && !getPlugin().getAccountDatabase().hasAccount(target.getUniqueId())) {
             sender.sendMessage(
                     getMessageFormat()
                             .format(getPlugin().getLanguageLoader().getLanguage(OptEcoLanguage.VAR_PLAYER_NOT_FOUND))
