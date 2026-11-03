@@ -162,8 +162,9 @@ public final class EconomyService {
             throw new IllegalStateException("Transfer did not return an outcome");
         }
         if (!outcome.isSuccess()) {
-            if (outcome.status() == TransferStatus.INSUFFICIENT_FUNDS && outcome.oldSenderBalance() != null) {
-                return TransferResult.insufficientFunds(outcome.oldSenderBalance());
+            BigDecimal oldSenderBalance = outcome.oldSenderBalance();
+            if (outcome.status() == TransferStatus.INSUFFICIENT_FUNDS && oldSenderBalance != null) {
+                return TransferResult.insufficientFunds(oldSenderBalance);
             }
             return TransferResult.failure(outcome.status());
         }
