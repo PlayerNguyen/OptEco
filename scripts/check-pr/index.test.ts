@@ -30,7 +30,7 @@ Closes #42
 ## Checklist
 
 - [x] Commit messages follow the commit convention in \`AGENTS.md\`
-- [x] Build passes, or the change does not affect Java code
+- [x] Production code compiles, or the change is tests/docs/config only
 - [x] Config/language/permissions/docs updated where applicable
 - [x] Public API compatibility considered
 - [x] No secrets, credentials, or server-specific data are committed
