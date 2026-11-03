@@ -9,21 +9,33 @@ plugins {
     id 'java-library'
 }
 
-def devBuild = false
-
 group = 'com.playernguyen'
-version = ('2.1.3b') + ((devBuild) ? "-devbuild" : "")
 
-compileJava {
-    sourceCompatibility = '1.8'
-    targetCompatibility = '1.8'
+def projectVersion = providers.gradleProperty('version')
+        .orElse(providers.environmentVariable('VERSION'))
+        .map { it.trim() }
+        .filter { it && it != 'unspecified' }
+        .getOrElse('0.0.0-dev')
+version = projectVersion
+
+tasks.withType(JavaCompile).configureEach {
+    options.compilerArgs.add('-Xlint:-options')
+}
+
+tasks.named('compileJava', JavaCompile) {
+    options.release = 8
+}
+
+tasks.named('compileTestJava', JavaCompile) {
+    options.release = 17
 }
 
 repositories {
+    mavenCentral()
     mavenLocal()
 
     maven {
-        url = uri('https://papermc.io/repo/repository/maven-public/')
+        url = uri('https://repo.papermc.io/repository/maven-public/')
     }
 
     maven {
@@ -31,15 +43,11 @@ repositories {
     }
 
     maven {
-        url = uri('http://repo.dmulloy2.net/nexus/repository/public/')
-    }
-
-    maven {
         url = uri('https://jitpack.io')
     }
 
     maven {
-        url = uri('http://repo.mvdw-software.be/content/groups/public/')
+        url = uri('https://nexus.funkemunky.cc/content/repositories/releases/')
     }
 
     maven { url = 'https://oss.sonatype.org/content/repositories/snapshots' }
@@ -47,19 +55,28 @@ repositories {
 }
 
 dependencies {
-    implementation 'com.google.code.gson:gson:2.8.6'
-    implementation 'com.comphenix.protocol:ProtocolLib-API:4.4.0'
-    implementation 'org.jetbrains:annotations:19.0.0'
-    implementation 'me.clip:placeholderapi:2.10.4'
-    implementation 'com.destroystokyo.paper:paper-api:1.15.2-R0.1-SNAPSHOT'
-    implementation 'com.github.brcdev-minecraft:shopgui-api:2.1.1'
-    implementation files('lib/BossShopPro.jar')
-    implementation files('lib/MVdWPlaceholderAPI.jar')
+    compileOnly 'com.google.code.gson:gson:2.8.6'
+    compileOnly 'org.jetbrains:annotations:19.0.0'
+    compileOnly 'me.clip:placeholderapi:2.11.6'
+    compileOnly 'com.destroystokyo.paper:paper-api:1.15.2-R0.1-SNAPSHOT'
+    compileOnly 'com.github.brcdev-minecraft:shopgui-api:2.4.0'
+    compileOnly('com.promcteam:bossshoppro:2.1.0-R2') {
+        transitive = false
+    }
+    compileOnly 'be.maximvdw:MVdWPlaceholderAPI:2.5.1'
+    compileOnly 'com.github.MilkBowl:VaultAPI:1.7'
 
-    compileOnly "com.github.MilkBowl:VaultAPI:1.7"
-    compile 'com.zaxxer:HikariCP:3.4.5'
-    compile 'org.slf4j:slf4j-site:2.0.0-alpha1'
+    implementation 'com.zaxxer:HikariCP:3.4.5'
 
+    testImplementation 'org.junit.jupiter:junit-jupiter:6.1.3'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher:6.1.3'
+}
+
+test {
+    useJUnitPlatform()
+    testLogging {
+        events 'passed', 'skipped', 'failed'
+    }
 }
 
 publishing {
@@ -73,14 +90,19 @@ publishing {
     }
 }
 
+def versionTokens = ['VERSION': project.version]
+
 processResources {
-    from(sourceSets.main.resources.srcDirs) {
-        filter(ReplaceTokens, tokens: ['VERSION': project.version])
+    inputs.property('version', project.version)
+
+    filesMatching('plugin.yml') {
+        filter(ReplaceTokens, tokens: versionTokens)
     }
 }
 
 jar {
     from {
-        configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
+        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
     }
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 }

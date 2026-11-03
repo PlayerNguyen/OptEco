@@ -17,13 +17,22 @@ changes over large rewrites.
 - Canonical build: `./gradlew clean build`
 - Quick compile: `./gradlew compileJava`
 - Output JAR: `build/libs/`
-- The Gradle wrapper is Gradle 6.7 and the project targets **Java 8**.
+- The Gradle wrapper is Gradle 8.14.6 and runs on JDK 21. Source and test
+  compilation target Java 8 via `options.release = 8`.
+- `gradle/wrapper/gradle-wrapper.jar` is tracked intentionally; keep the
+  `.gitignore` exception so `./gradlew` works in a fresh clone.
+- The JAR bundles HikariCP; plugin and server APIs are `compileOnly`.
 - `pom.xml` is a stale legacy file. Use Gradle; do not trust its version or
   dependency list.
-- The plugin version lives in `build.gradle` and is injected into
-  `src/main/resources/plugin.yml` through `ReplaceTokens`. Do not hardcode it.
-- There is currently no automated test suite. Verify changes by compiling and,
-  for behavior changes, manually testing on a supported Paper/Spigot server
+- The plugin version is injected into `src/main/resources/plugin.yml` through
+  `ReplaceTokens`. Set it with `-Pversion=X.Y.Z` or `VERSION`; local builds
+  default to `0.0.0-dev`.
+- Releases are built by `.github/workflows/release.yml` from `vX.Y.Z` tags.
+- Java tests use JUnit 6 under `src/test/java`. Run `./gradlew test` (or
+  `./gradlew clean build`, which runs tests as part of `build`).
+- CI runs `./gradlew clean build` on JDK 21 in
+  `.github/workflows/java-tests.yml`.
+- For behavior changes, also manually test on a supported Paper/Spigot server
   (SQLite storage is the easiest setup).
 
 ## Repository tooling
@@ -79,6 +88,10 @@ changes over large rewrites.
   new blocking work to the server thread where possible.
 - Match the surrounding style: 4-space indentation, descriptive names, and small
   classes in the existing package structure.
+- Add JUnit 6 tests under `src/test/java` for pure logic. Name tests
+  `should<DoSomething>When<Criteria>` and split bodies into `// Arrange`,
+  `// Act`, and `// Assert` blocks. Keep unit tests independent of a running
+  Bukkit server.
 
 ## Commit convention
 
@@ -207,10 +220,15 @@ This reverts commit 1234abcd.
   integrations must stay optional and null-safe.
 - The PHP web integration writes directly to the MySQL table and duplicates the
   plugin's schema assumptions. Update both sides when the schema changes.
+- Plugin APIs (Paper, PlaceholderAPI, ShopGUI, Vault, BossShopPro, MVdW) are
+  `compileOnly`. Only HikariCP is bundled into the JAR. Do not move server or
+  plugin APIs to `implementation`; that would shade them into the plugin.
+- BossShopPro and MVdWPlaceholderAPI are resolved from online Maven
+  repositories. Do not reintroduce `lib/*.jar`; keep build inputs reproducible.
 
 ## Change checklist
 
-1. `./gradlew clean build` succeeds.
+1. `./gradlew clean build` succeeds (this includes the JUnit `test` task).
 2. New config keys have sensible defaults and appear in generated `config.yml`.
 3. New messages exist in every shipped language file when reasonable.
 4. New permissions are declared in `plugin.yml`.
@@ -223,6 +241,8 @@ This reverts commit 1234abcd.
 
 - Default branch: `master`.
 - Repository: `PlayerNguyen/OptEco` on GitHub.
+- To release, push a `vX.Y.Z` tag. The release workflow builds with
+  `-Pversion=X.Y.Z` and creates a GitHub release with the JAR attached.
 - Follow the [commit convention](#commit-convention) for all commit messages.
 - Fill in `.github/pull_request_template.md` when opening a pull request.
 - Update `README.MD`, `CONFIGURATION.md`, or `API.MD` when behavior or public

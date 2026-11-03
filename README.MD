@@ -46,6 +46,9 @@ and migration guidance.
 - Follow the [commit convention](AGENTS.md#commit-convention) in AGENTS.md for commit messages.
 - Use the [pull request template](.github/pull_request_template.md) when opening a PR.
 - Read [AGENTS.md](AGENTS.md) for the architecture and development workflow.
+- Build with `./gradlew clean build` (Gradle 8.14.6 + JDK 21; targets Java 8).
+- Run Java tests with `./gradlew test`; run PR tooling checks with `bun test`.
+- Create a release by pushing a `vX.Y.Z` tag; CI builds and publishes the JAR.
 - CI validates the PR title, template, and commit subjects with Bun ([`scripts/check-pr`](scripts/check-pr/README.md)).
 
 # License & Contribution 
