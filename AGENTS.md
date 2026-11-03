@@ -104,7 +104,7 @@ changes over large rewrites.
 
 - Default branch: `master`.
 - Repository: `PlayerNguyen/OptEco` on GitHub.
-- Keep commits focused and use clear messages (for example
-  `fix: refresh cache after offline take`).
+- Follow `COMMIT_CONVENTION.md` for all commit messages.
+- Fill in `.github/pull_request_template.md` when opening a pull request.
 - Update `README.MD`, `CONFIGURATION.md`, or `API.MD` when behavior or public
   API changes.
