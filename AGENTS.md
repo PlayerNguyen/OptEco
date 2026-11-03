@@ -33,6 +33,8 @@ changes over large rewrites.
 - `bun test` runs the PR validator tests in `scripts/check-pr/index.test.ts`.
 - `bun run check:pr` validates the current PR title, body, and commit subjects.
   CI runs both commands in `.github/workflows/pr-check.yml`.
+- See `scripts/check-pr/README.md` for the validator architecture and flow
+  diagram.
 - Pull requests must use `.github/pull_request_template.md`. Add the
   `skip-pr-check` label only for bot PRs or exceptional cases.
 
