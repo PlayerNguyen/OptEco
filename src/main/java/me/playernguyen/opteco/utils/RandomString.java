@@ -13,5 +13,4 @@ public class RandomString {
         }
         return builder.toString();
     }
-
 }

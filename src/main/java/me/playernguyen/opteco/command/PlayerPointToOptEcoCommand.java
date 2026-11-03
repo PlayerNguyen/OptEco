@@ -1,6 +1,6 @@
 package me.playernguyen.opteco.command;
 
-import me.playernguyen.opteco.OptEco;
+import java.util.List;
 import me.playernguyen.opteco.permission.OptEcoPermission;
 import me.playernguyen.opteco.playerpoints.PlayerPointsAdapter;
 import org.bukkit.ChatColor;
@@ -12,9 +12,7 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.List;
-
-public class PlayerPointToOptEcoCommand extends OptEcoAbstractCommand{
+public class PlayerPointToOptEcoCommand extends OptEcoAbstractCommand {
 
     public PlayerPointToOptEcoCommand() {
         super("playerpointtoopteco");
@@ -76,14 +74,15 @@ public class PlayerPointToOptEcoCommand extends OptEcoAbstractCommand{
             sender.sendMessage(ChatColor.GRAY + " (Nothing changes because the storage is empty)");
         }
         sender.sendMessage(ChatColor.GREEN + "Done!");
-        sender.sendMessage(ChatColor.GOLD + "Now you can remove the PlayerPoints plugin, reload and use " +
-                "OptEco instead. Good luck!");
+        sender.sendMessage(ChatColor.GOLD + "Now you can remove the PlayerPoints plugin, reload and use "
+                + "OptEco instead. Good luck!");
 
         return true;
     }
 
     @Override
-    public @Nullable List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String alias, @NotNull String[] args) {
+    public @Nullable List<String> onTabComplete(
+            @NotNull CommandSender sender, @NotNull Command command, @NotNull String alias, @NotNull String[] args) {
         return null;
     }
 }

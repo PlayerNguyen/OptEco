@@ -12,7 +12,6 @@ public class OptEcoPlayerRequestTransactionEvent extends PlayerEvent {
         super(who);
     }
 
-
     public static HandlerList getHandlerList() {
         return handlerList;
     }

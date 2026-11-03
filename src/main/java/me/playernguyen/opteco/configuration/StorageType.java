@@ -1,7 +1,6 @@
 package me.playernguyen.opteco.configuration;
 
 public enum StorageType {
-
     MYSQL("mysql"),
     SQLITE("sqlite");
 
@@ -24,5 +23,4 @@ public enum StorageType {
         }
         return null;
     }
-
 }

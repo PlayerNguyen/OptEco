@@ -1,16 +1,13 @@
 package me.playernguyen.opteco.sql;
 
-import me.playernguyen.opteco.OptEcoImplementation;
-
-import javax.annotation.Nullable;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import me.playernguyen.opteco.OptEcoImplementation;
 
-public abstract class SQLEstablish
-        extends OptEcoImplementation implements OptEcoEstablish {
+public abstract class SQLEstablish extends OptEcoImplementation implements OptEcoEstablish {
 
     private String url;
     private final String tableName;
@@ -22,8 +19,6 @@ public abstract class SQLEstablish
         this.init = initialDataList;
         // If the table is empty
         if (tableName.equals("")) throw new NullPointerException("Table name cannot be null");
-
-
     }
 
     public String getURL() {
@@ -63,11 +58,10 @@ public abstract class SQLEstablish
             if (init.indexOf(e) < (init.size() - 1)) builder.append(", ");
         }
         try (Connection connection = this.openConnect()) {
-            PreparedStatement preparedStatement = connection
-                    .prepareStatement(String.format("CREATE TABLE IF NOT EXISTS %s (%s);", getTableName(), builder));
+            PreparedStatement preparedStatement = connection.prepareStatement(
+                    String.format("CREATE TABLE IF NOT EXISTS %s (%s);", getTableName(), builder));
             // Return true
-            if (preparedStatement.executeUpdate() == 0)
-                return CreateTableState.SUCCEED;
+            if (preparedStatement.executeUpdate() == 0) return CreateTableState.SUCCEED;
         } catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();
         }
@@ -87,12 +81,21 @@ public abstract class SQLEstablish
         CreateTableState tableState = this.createTableIfNotExist();
         switch (tableState) {
             case FAILED:
-                getPlugin().getLogger().severe(String.format("[Table] Cannot create the table %s...", this.getTableName()));
-                getPlugin().getLogger().severe(String.format("[Table] Disabling %s...", this.getPlugin().getDescription().getName()));
+                getPlugin()
+                        .getLogger()
+                        .severe(String.format("[Table] Cannot create the table %s...", this.getTableName()));
+                getPlugin()
+                        .getLogger()
+                        .severe(String.format(
+                                "[Table] Disabling %s...",
+                                this.getPlugin().getDescription().getName()));
                 getPlugin().getPluginLoader().disablePlugin(getPlugin());
                 break;
             case EXISTED:
-                getPlugin().getLogger().info(String.format("[Table] The table %s has existed, skipping create...", this.getTableName()));
+                getPlugin()
+                        .getLogger()
+                        .info(String.format(
+                                "[Table] The table %s has existed, skipping create...", this.getTableName()));
 
                 break;
             case SUCCEED:
@@ -100,7 +103,6 @@ public abstract class SQLEstablish
                 break;
         }
     }
-
 
     /**
      * Get size of table (rows)
@@ -119,5 +121,4 @@ public abstract class SQLEstablish
         }
         return -1;
     }
-
 }

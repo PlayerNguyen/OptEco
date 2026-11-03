@@ -1,8 +1,7 @@
 package me.playernguyen.opteco.api;
 
-import org.jetbrains.annotations.NotNull;
-
 import java.util.UUID;
+import org.jetbrains.annotations.NotNull;
 
 public interface OptEcoAPI {
 
@@ -61,5 +60,4 @@ public interface OptEcoAPI {
      * @return currency symbol
      */
     String getCurrencySymbol();
-
 }

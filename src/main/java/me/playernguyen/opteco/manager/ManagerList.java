@@ -11,7 +11,6 @@ public class ManagerList<T> implements Manager<T> {
 
     private final ArrayList<T> container;
 
-
     public ManagerList() {
         this.container = new ArrayList<>();
     }

@@ -1,10 +1,9 @@
 package me.playernguyen.opteco.event;
 
+import java.util.UUID;
 import me.playernguyen.opteco.transaction.Transaction;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
-
-import java.util.UUID;
 
 public class OptEcoPlayerPendingEvent extends Event {
 
@@ -25,7 +24,6 @@ public class OptEcoPlayerPendingEvent extends Event {
     public Transaction getTransaction() {
         return transaction;
     }
-
 
     @Override
     public HandlerList getHandlers() {

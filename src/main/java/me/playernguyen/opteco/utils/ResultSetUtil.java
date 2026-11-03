@@ -21,5 +21,4 @@ public class ResultSetUtil {
         // Return the position of last row
         return set.getRow();
     }
-
 }

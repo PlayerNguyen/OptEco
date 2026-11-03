@@ -1,13 +1,11 @@
 package me.playernguyen.opteco.sql;
 
-import me.playernguyen.opteco.configuration.OptEcoConfiguration;
-
 import java.io.File;
 import java.sql.*;
 import java.util.ArrayList;
+import me.playernguyen.opteco.configuration.OptEcoConfiguration;
 
 public class SQLiteEstablish extends SQLEstablish {
-
 
     public SQLiteEstablish(String tableName, ArrayList<String> init) {
         super(tableName, init);
@@ -36,8 +34,8 @@ public class SQLiteEstablish extends SQLEstablish {
     public ArrayList<String> getTables() {
         ArrayList<String> temp = new ArrayList<>();
         try (Connection connection = this.openConnect()) {
-            PreparedStatement preparedStatement = connection
-                    .prepareStatement("SELECT * FROM sqlite_master WHERE type='table' AND name not like 'sqlite_%'");
+            PreparedStatement preparedStatement = connection.prepareStatement(
+                    "SELECT * FROM sqlite_master WHERE type='table' AND name not like 'sqlite_%'");
             ResultSet resultSet = preparedStatement.executeQuery();
 
             while (resultSet.next()) {
@@ -61,5 +59,4 @@ public class SQLiteEstablish extends SQLEstablish {
                 + File.separator
                 + getConfigurationLoader().getString(OptEcoConfiguration.SQLITE_FILE);
     }
-
 }

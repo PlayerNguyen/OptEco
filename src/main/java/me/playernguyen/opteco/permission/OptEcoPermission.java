@@ -1,7 +1,6 @@
 package me.playernguyen.opteco.permission;
 
 public enum OptEcoPermission {
-
     ADMIN("opteco.admin"),
     EVERYTHING("opteco.*"),
     USER("opteco.user"),
@@ -17,9 +16,7 @@ public enum OptEcoPermission {
     CANCEL("opteco.cancel"),
     TOP("opteco.top"),
 
-    PPTO("opteco.ppto")
-
-    ;
+    PPTO("opteco.ppto");
 
     private final String permission;
 
@@ -30,5 +27,4 @@ public enum OptEcoPermission {
     public String getPermission() {
         return permission;
     }
-
 }

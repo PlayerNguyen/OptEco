@@ -1,11 +1,10 @@
 package me.playernguyen.opteco.transaction.yaml;
 
+import java.util.ArrayList;
 import me.playernguyen.opteco.configuration.OptEcoTransactionLoader;
 import me.playernguyen.opteco.transaction.Transaction;
 import me.playernguyen.opteco.transaction.TransactionResult;
 import me.playernguyen.opteco.transaction.TransactionStorage;
-
-import java.util.ArrayList;
 
 public class TransactionStorageYaml implements TransactionStorage {
 
@@ -64,8 +63,7 @@ public class TransactionStorageYaml implements TransactionStorage {
      */
     @Override
     public boolean updateTransaction(Transaction transaction) {
-        if (getTransaction(transaction.getId()) == null)
-            throw new NullPointerException("cannot found transaction");
+        if (getTransaction(transaction.getId()) == null) throw new NullPointerException("cannot found transaction");
         return getTransactionLoader().saveTransaction(transaction);
     }
 

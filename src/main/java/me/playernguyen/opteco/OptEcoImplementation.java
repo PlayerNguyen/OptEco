@@ -1,15 +1,14 @@
 package me.playernguyen.opteco;
 
+import java.util.logging.Logger;
 import me.playernguyen.opteco.account.IAccountDatabase;
 import me.playernguyen.opteco.account.OptEcoCacheAccountManager;
 import me.playernguyen.opteco.configuration.OptEcoConfigurationLoader;
-import me.playernguyen.opteco.language.OptEcoLanguageLoader;
 import me.playernguyen.opteco.configuration.StorageType;
+import me.playernguyen.opteco.language.OptEcoLanguageLoader;
 import me.playernguyen.opteco.logger.Debugger;
 import me.playernguyen.opteco.schedule.ScheduleManager;
 import me.playernguyen.opteco.transaction.TransactionManager;
-
-import java.util.logging.Logger;
 
 /**
  * The implementation class to implement from {@link OptEco} class instance
@@ -100,6 +99,4 @@ public abstract class OptEcoImplementation {
     protected ScheduleManager getScheduleManager() {
         return this.getPlugin().getScheduleManager();
     }
-
-
 }

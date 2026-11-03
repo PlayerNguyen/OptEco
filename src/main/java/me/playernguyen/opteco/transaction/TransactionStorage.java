@@ -49,5 +49,4 @@ public interface TransactionStorage {
      * @return return state transaction
      */
     boolean createStorageTransaction(Transaction transaction);
-
 }

@@ -1,5 +1,7 @@
 package me.playernguyen.opteco.command;
 
+import java.util.ArrayList;
+import java.util.List;
 import me.playernguyen.opteco.OptEco;
 import me.playernguyen.opteco.language.OptEcoLanguage;
 import me.playernguyen.opteco.permission.OptEcoPermission;
@@ -9,9 +11,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.RemoteConsoleCommandSender;
 import org.bukkit.entity.Player;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class SubCommandReload extends SubCommand {
 
     SubCommandReload(String command, OptEco plugin) {
@@ -20,7 +19,6 @@ public class SubCommandReload extends SubCommand {
         addPermissions(OptEcoPermission.ADMIN);
         addPermissions(OptEcoPermission.EVERYTHING);
         addPermissions(OptEcoPermission.RELOAD);
-
     }
 
     @Override
@@ -50,12 +48,10 @@ public class SubCommandReload extends SubCommand {
         Bukkit.getServer().getPluginManager().disablePlugin(getPlugin());
         Bukkit.getServer().getPluginManager().enablePlugin(getPlugin());
         sender.sendMessage(getPlugin().getLanguageLoader().getLanguage(OptEcoLanguage.GRAY_BAR));
+        sender.sendMessage(ChatColor.GRAY + " - OptEco by Player_Nguyen version "
+                + getPlugin().getDescription().getVersion());
         sender.sendMessage(
-                ChatColor.GRAY + " - OptEco by Player_Nguyen version " + getPlugin().getDescription().getVersion()
-        );
-        sender.sendMessage(
-                getMessageFormat().format(getPlugin().getLanguageLoader().getLanguage(OptEcoLanguage.RELOAD_DONE))
-        );
+                getMessageFormat().format(getPlugin().getLanguageLoader().getLanguage(OptEcoLanguage.RELOAD_DONE)));
 
         return true;
     }

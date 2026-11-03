@@ -1,10 +1,9 @@
 package me.playernguyen.opteco.manager;
 
-import org.jetbrains.annotations.NotNull;
-
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.stream.Stream;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * The represent class to contain items.
@@ -34,9 +33,7 @@ public interface Manager<T> extends Iterable<T> {
      *
      * @param item item to pull out
      */
-    default void remove(T item) {
-
-    }
+    default void remove(T item) {}
 
     /**
      * Stream the collection

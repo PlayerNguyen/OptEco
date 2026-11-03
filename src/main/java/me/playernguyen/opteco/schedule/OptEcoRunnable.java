@@ -8,5 +8,4 @@ public abstract class OptEcoRunnable extends BukkitRunnable {
     public OptEco getInstance() {
         return OptEco.getInstance();
     }
-
 }

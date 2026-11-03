@@ -1,20 +1,18 @@
 package me.playernguyen.opteco.account;
 
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.UUID;
+import javax.annotation.Nullable;
 import me.playernguyen.opteco.OptEcoImplementation;
 import me.playernguyen.opteco.event.OptEcoPointChangedEvent;
 import me.playernguyen.opteco.sql.SQLEstablish;
 import org.bukkit.Bukkit;
 import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.Nullable;
-import java.sql.*;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.UUID;
-
-public abstract class SQLAccountDatabase extends OptEcoImplementation
-        implements IOptEcoAccountDatabase {
+public abstract class SQLAccountDatabase extends OptEcoImplementation implements IOptEcoAccountDatabase {
 
     private final SQLEstablish establish;
 
@@ -39,8 +37,7 @@ public abstract class SQLAccountDatabase extends OptEcoImplementation
     }
 
     public Account requestAccountInformation(UUID who) {
-        if (who == null)
-            throw new NullPointerException("UUID mustn't be null");
+        if (who == null) throw new NullPointerException("UUID mustn't be null");
         getDebugger().info("Get account within UUID -> " + who.toString());
 
         SQLResultAccount resultAccount = requestAccount(who);
@@ -80,14 +77,11 @@ public abstract class SQLAccountDatabase extends OptEcoImplementation
             // If no, create
             try (Connection connection = getEstablish().openConnect()) {
 
-                String query =
-                        String.format("INSERT INTO %s (player, balance, uuid) VALUES (?, ?, ?) ",
-                                getEstablish().getTableName());
+                String query = String.format(
+                        "INSERT INTO %s (player, balance, uuid) VALUES (?, ?, ?) ",
+                        getEstablish().getTableName());
                 getDebugger().info("Call " + query);
-                PreparedStatement preparedStatement
-                        = connection.prepareStatement(
-                        query
-                );
+                PreparedStatement preparedStatement = connection.prepareStatement(query);
 
                 preparedStatement.setObject(1, player);
                 preparedStatement.setObject(2, balance);
@@ -110,11 +104,9 @@ public abstract class SQLAccountDatabase extends OptEcoImplementation
 
         try (Connection connection = getEstablish().openConnect()) {
 
-            String query =
-                    String.format("UPDATE %s SET player=?, balance=?, uuid=? WHERE uuid='%s'",
-                            getEstablish().getTableName(),
-                            uuid
-                    );
+            String query = String.format(
+                    "UPDATE %s SET player=?, balance=?, uuid=? WHERE uuid='%s'",
+                    getEstablish().getTableName(), uuid);
             getDebugger().info("Call " + query);
             PreparedStatement preparedStatement = connection.prepareStatement(query);
 
@@ -143,12 +135,7 @@ public abstract class SQLAccountDatabase extends OptEcoImplementation
                 ? OptEcoPointChangedEvent.ModifyType.DECREASE
                 : OptEcoPointChangedEvent.ModifyType.INCREASE;
         // Call event
-        Bukkit.getPluginManager().callEvent(new OptEcoPointChangedEvent(
-                uuid,
-                oldBalance,
-                newBalance,
-                type
-        ));
+        Bukkit.getPluginManager().callEvent(new OptEcoPointChangedEvent(uuid, oldBalance, newBalance, type));
 
         return this.save(new Account(uuid, newBalance));
     }
@@ -175,9 +162,7 @@ public abstract class SQLAccountDatabase extends OptEcoImplementation
         try (Connection connection = establish.openConnect()) {
             PreparedStatement preparedStatement = connection.prepareStatement(String.format(
                     "SELECT * FROM %s ORDER BY balance DESC LIMIT %d",
-                    getEstablish().getTableName(),
-                    limit
-            ));
+                    getEstablish().getTableName(), limit));
 
             List<Account> accounts = new LinkedList<>();
             ResultSet resultSet = preparedStatement.executeQuery();
@@ -203,9 +188,8 @@ public abstract class SQLAccountDatabase extends OptEcoImplementation
         // create connection
         try (Connection connection = getEstablish().openConnect()) {
             // prepare to launch
-            PreparedStatement statement = connection.prepareStatement(
-                    String.format("SELECT * FROM %s WHERE uuid=?", getEstablish().getTableName())
-            );
+            PreparedStatement statement = connection.prepareStatement(String.format(
+                    "SELECT * FROM %s WHERE uuid=?", getEstablish().getTableName()));
             // settings
             statement.setString(1, who.toString());
             // launch and get response information
@@ -214,12 +198,7 @@ public abstract class SQLAccountDatabase extends OptEcoImplementation
             ArrayList<String> result = parseResult(resultSet);
             if (result == null || result.size() == 0) return null;
             // fetch data
-            return new SQLResultAccount(
-                    result.get(0),
-                    result.get(1),
-                    result.get(2),
-                    result.get(3)
-            );
+            return new SQLResultAccount(result.get(0), result.get(1), result.get(2), result.get(3));
         } catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();
         }

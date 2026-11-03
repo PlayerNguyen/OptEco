@@ -36,13 +36,11 @@ public class OptEcoPlayerListener extends OptEcoListener {
         getDebugger().warn("Remove the player data into manager...");
     }
 
-
     @EventHandler
     public void onChange(OptEcoPointChangedEvent e) {
         // Whether enable the title counter
         if (getConfigurationLoader().getBool(OptEcoConfiguration.TITLE_ENABLE))
-        // Call new async
-        this.getScheduleManager().callAsyncTimer(new PointChangedPerformance(e), 0, 0);
+            // Call new async
+            this.getScheduleManager().callAsyncTimer(new PointChangedPerformance(e), 0, 0);
     }
-
 }

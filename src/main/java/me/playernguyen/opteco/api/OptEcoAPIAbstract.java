@@ -1,11 +1,10 @@
 package me.playernguyen.opteco.api;
 
-import me.playernguyen.opteco.OptEco;
-import me.playernguyen.opteco.configuration.OptEcoConfiguration;
-import me.playernguyen.opteco.account.OptEcoCacheAccount;
-import org.jetbrains.annotations.NotNull;
-
 import java.util.UUID;
+import me.playernguyen.opteco.OptEco;
+import me.playernguyen.opteco.account.OptEcoCacheAccount;
+import me.playernguyen.opteco.configuration.OptEcoConfiguration;
+import org.jetbrains.annotations.NotNull;
 
 public class OptEcoAPIAbstract implements OptEcoAPI {
 
@@ -20,28 +19,24 @@ public class OptEcoAPIAbstract implements OptEcoAPI {
 
     @Override
     public boolean hasAccount(@NotNull UUID uuid) {
-        return this.plugin
-                .getAccountDatabase().hasAccount(uuid);
+        return this.plugin.getAccountDatabase().hasAccount(uuid);
     }
 
     @Override
     public boolean setPoints(@NotNull UUID player, double amount) {
         if (amount <= 0) throw new IllegalArgumentException("amount must greater than 0");
-        return this.plugin
-                .getAccountDatabase().setBalance(player, amount);
+        return this.plugin.getAccountDatabase().setBalance(player, amount);
     }
 
     @Override
     public double getPoints(@NotNull UUID player) {
-        OptEcoCacheAccount optEcoCacheAccount = this.plugin
-                .getAccountManager().get(player);
+        OptEcoCacheAccount optEcoCacheAccount = this.plugin.getAccountManager().get(player);
         return (optEcoCacheAccount != null) ? optEcoCacheAccount.getBalance() : 0.0d;
     }
 
     @Override
     public boolean isPending(@NotNull UUID player) {
-        return this.plugin
-                .getTransactionManager().hasTransaction(player);
+        return this.plugin.getTransactionManager().hasTransaction(player);
     }
 
     @Override

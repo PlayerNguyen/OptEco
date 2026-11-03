@@ -2,8 +2,8 @@ package me.playernguyen.opteco.api.placeholderapi;
 
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import me.playernguyen.opteco.OptEco;
-import me.playernguyen.opteco.configuration.OptEcoConfiguration;
 import me.playernguyen.opteco.account.OptEcoCacheAccount;
+import me.playernguyen.opteco.configuration.OptEcoConfiguration;
 import org.bukkit.entity.Player;
 
 public class OptEcoExpansion extends PlaceholderExpansion {
@@ -36,7 +36,8 @@ public class OptEcoExpansion extends PlaceholderExpansion {
         }
         // %opteco_points%
         if (params.equalsIgnoreCase("points")) {
-            OptEcoCacheAccount optEcoCacheAccount = OptEco.getInstance().getAccountManager().get(p.getUniqueId());
+            OptEcoCacheAccount optEcoCacheAccount =
+                    OptEco.getInstance().getAccountManager().get(p.getUniqueId());
             if (optEcoCacheAccount == null) {
                 return "";
             }
@@ -45,7 +46,8 @@ public class OptEcoExpansion extends PlaceholderExpansion {
         }
         // %opteco_points_rounded
         if (params.equalsIgnoreCase("points_rounded")) {
-            OptEcoCacheAccount optEcoCacheAccount = OptEco.getInstance().getAccountManager().get(p.getUniqueId());
+            OptEcoCacheAccount optEcoCacheAccount =
+                    OptEco.getInstance().getAccountManager().get(p.getUniqueId());
             if (optEcoCacheAccount == null) {
                 return null;
             }

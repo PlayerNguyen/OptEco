@@ -1,5 +1,7 @@
 package me.playernguyen.opteco.command;
 
+import java.util.ArrayList;
+import java.util.List;
 import me.playernguyen.opteco.configuration.OptEcoConfiguration;
 import me.playernguyen.opteco.language.OptEcoLanguage;
 import me.playernguyen.opteco.permission.OptEcoPermission;
@@ -11,15 +13,11 @@ import org.bukkit.command.RemoteConsoleCommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class OptEcoCommand extends OptEcoAbstractCommand {
 
     public OptEcoCommand() {
         super("opteco");
-        for (OptEcoPermission perm :
-                OptEcoPermission.values()) {
+        for (OptEcoPermission perm : OptEcoPermission.values()) {
             addPermissions(perm);
         }
         // Append new command
@@ -64,13 +62,8 @@ public class OptEcoCommand extends OptEcoAbstractCommand {
 
         String sub = args[0];
         if (!getSubAsString().contains(sub)) {
-            sender.sendMessage(
-                    getMessageFormat().format(getPlugin()
-                            .getLanguageLoader()
-                            .getLanguage(OptEcoLanguage.COMMAND_NOT_FOUND
-                            )
-                    )
-            );
+            sender.sendMessage(getMessageFormat()
+                    .format(getPlugin().getLanguageLoader().getLanguage(OptEcoLanguage.COMMAND_NOT_FOUND)));
             getMessageFormat().sendCuteList(sender, getSubAsHelp(sender), ChatColor.GRAY);
             return true;
         }
@@ -80,10 +73,8 @@ public class OptEcoCommand extends OptEcoAbstractCommand {
     }
 
     @Override
-    public List<String> onTabComplete(@NotNull CommandSender commandSender,
-                                      @NotNull Command command,
-                                      @NotNull String s,
-                                      String[] strings) {
+    public List<String> onTabComplete(
+            @NotNull CommandSender commandSender, @NotNull Command command, @NotNull String s, String[] strings) {
         // Whether the tab executor disabled
         if (!getConfigurationLoader().getBool(OptEcoConfiguration.TAB_EXECUTOR)) {
             return null;
@@ -101,6 +92,4 @@ public class OptEcoCommand extends OptEcoAbstractCommand {
             else return subCommand.onTabComplete(commandSender, separator(strings, 1));
         }
     }
-
-
 }

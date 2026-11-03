@@ -1,17 +1,15 @@
 package me.playernguyen.opteco.command;
 
+import java.util.ArrayList;
 import me.playernguyen.opteco.OptEcoImplementation;
 import me.playernguyen.opteco.permission.OptEcoPermission;
 import org.bukkit.command.CommandSender;
-
-import java.util.ArrayList;
 
 public class AbstractPermission extends OptEcoImplementation {
 
     private final ArrayList<OptEcoPermission> permissions = new ArrayList<>();
 
-    public AbstractPermission() {
-    }
+    public AbstractPermission() {}
 
     public ArrayList<OptEcoPermission> getPermissions() {
         return permissions;
@@ -32,5 +30,4 @@ public class AbstractPermission extends OptEcoImplementation {
         }
         return false;
     }
-
 }

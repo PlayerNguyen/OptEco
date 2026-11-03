@@ -26,5 +26,4 @@ public class ScheduleManager extends ManagerList<BukkitRunnable> {
     public void callAsyncLater(BukkitRunnable runnable, long delay) {
         runnable.runTaskLaterAsynchronously(plugin, delay);
     }
-
 }

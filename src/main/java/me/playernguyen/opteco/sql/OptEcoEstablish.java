@@ -16,6 +16,4 @@ public interface OptEcoEstablish {
     String getTableName();
 
     ArrayList<String> getTables();
-
-
 }

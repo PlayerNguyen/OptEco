@@ -1,18 +1,17 @@
 package me.playernguyen.opteco.playerpoints;
 
 import com.google.common.base.Preconditions;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+import java.util.UUID;
 import me.playernguyen.opteco.OptEco;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.Plugin;
-
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-import java.util.UUID;
 
 public class PlayerPointsAdapter {
 
@@ -27,7 +26,7 @@ public class PlayerPointsAdapter {
         this.playerPointsPlugin = Bukkit.getPluginManager().getPlugin("PlayerPoints");
         this.hasPlugin = playerPointsPlugin != null;
         // If found, doing the process
-        this.dataFolder = (playerPointsPlugin != null) ? playerPointsPlugin.getDataFolder(): null;
+        this.dataFolder = (playerPointsPlugin != null) ? playerPointsPlugin.getDataFolder() : null;
         this.storageFile = new File(getDataFolder(), PLAYER_POINTS_STORAGE_FILE_NAME);
     }
 
@@ -60,8 +59,7 @@ public class PlayerPointsAdapter {
             Set<String> uuids = points.getKeys(false);
             // Put set
             for (String uuid : uuids) {
-                playerPointsObjects.add(new PlayerPointsObject(UUID.fromString(uuid),
-                        points.getInt(uuid)));
+                playerPointsObjects.add(new PlayerPointsObject(UUID.fromString(uuid), points.getInt(uuid)));
             }
         }
 
@@ -90,7 +88,4 @@ public class PlayerPointsAdapter {
             return uuid;
         }
     }
-
-
-
 }

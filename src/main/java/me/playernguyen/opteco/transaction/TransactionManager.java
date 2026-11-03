@@ -1,13 +1,11 @@
 package me.playernguyen.opteco.transaction;
 
+import java.util.ArrayList;
+import java.util.UUID;
 import me.playernguyen.opteco.OptEcoImplementation;
 import me.playernguyen.opteco.schedule.TransactionCountRunnable;
 import me.playernguyen.opteco.transaction.mysql.TransactionMySQLStorage;
 import me.playernguyen.opteco.transaction.sqlite.TransactionSQLiteStorage;
-
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.UUID;
 
 public class TransactionManager extends OptEcoImplementation {
 
@@ -37,8 +35,7 @@ public class TransactionManager extends OptEcoImplementation {
     }
 
     public void addTransaction(UUID player, UUID target, Double amount) {
-        Transaction transaction =
-                new Transaction(player, target, amount, new TransactionCountRunnable(player, target));
+        Transaction transaction = new Transaction(player, target, amount, new TransactionCountRunnable(player, target));
         this.getTransactions().add(transaction);
         // Store the transaction's information
         this.transactionStorage.push(transaction);

@@ -1,7 +1,6 @@
 package me.playernguyen.opteco.language;
 
 public enum OptEcoLanguage {
-
     PREFIX("PREFIX", "&e[OptEco]"),
 
     NO_PERMISSION("NO_PERMISSIONS", "&cYou have no permission to require this action."),
@@ -26,8 +25,12 @@ public enum OptEcoLanguage {
     COMMAND_DESCRIBE_TOP("COMMAND.TOP.DESCRIPTION", "reveal a leaderboard of server"),
 
     COMMAND_DESCRIBE_PAY("COMMAND.PAY.DESCRIPTION", "transfer point to another player"),
-    PAY_ON_TRANSACTION("COMMAND.PAY.PAY_ON_TRANSACTION", "&cYou are on transaction with another player, please using &d/points [confirm/cancel] &cto confirm your before transaction."),
-    PAY_CONFIRM_DISPLAY("COMMAND.PAY.CONFIRM_DISPLAY", "&aYou have &d%value% seconds &ato confirm, please using &d/points [confirm/cancel] &ato confirm your transaction."),
+    PAY_ON_TRANSACTION(
+            "COMMAND.PAY.PAY_ON_TRANSACTION",
+            "&cYou are on transaction with another player, please using &d/points [confirm/cancel] &cto confirm your before transaction."),
+    PAY_CONFIRM_DISPLAY(
+            "COMMAND.PAY.CONFIRM_DISPLAY",
+            "&aYou have &d%value% seconds &ato confirm, please using &d/points [confirm/cancel] &ato confirm your transaction."),
     PAY_OUT_OF_TIME_CONFIRM("COMMAND.PAY.OUT_OF_TIME_CONFIRM", "&cYou are out of time to confirm your transaction."),
     PAY_NOT_ENOUGH("COMMAND.PAY.NOT_ENOUGH", "&cNot enough to pay."),
     PAY_CANNOT_SELF_TRANSFER("COMMAND.PAY.PAY_CANNOT_SELF_TRANSFER", "&cYou cannot transfer to yourself."),
@@ -66,7 +69,6 @@ public enum OptEcoLanguage {
 
     FORMAT_DECREASE_TITLE("EFFECT.TITLE.DECREASE.TITLE", "&c- &8%current% &c-"),
     FORMAT_DECREASE_SUB_TITLE("EFFECT.TITLE.DECREASE.SUBTITLE", "&c^ &6%remain% &c^"),
-
     ;
 
     private final String path;
@@ -84,5 +86,4 @@ public enum OptEcoLanguage {
     public Object getDefaultSetting() {
         return wh;
     }
-
 }

@@ -22,5 +22,4 @@ public class OptEcoTransactionChangeStateEvent extends TransactionEvent {
     public TransactionState getState() {
         return getTransaction().getState();
     }
-
 }

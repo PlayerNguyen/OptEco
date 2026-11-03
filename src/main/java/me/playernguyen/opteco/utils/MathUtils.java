@@ -1,6 +1,5 @@
 package me.playernguyen.opteco.utils;
 
-
 import java.util.regex.Pattern;
 
 public class MathUtils {
@@ -20,6 +19,4 @@ public class MathUtils {
             return false;
         }
     }
-
-
 }

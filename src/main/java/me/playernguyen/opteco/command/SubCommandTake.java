@@ -1,9 +1,11 @@
 package me.playernguyen.opteco.command;
 
+import java.util.ArrayList;
+import java.util.List;
 import me.playernguyen.opteco.OptEco;
+import me.playernguyen.opteco.account.OptEcoCacheAccount;
 import me.playernguyen.opteco.configuration.OptEcoConfiguration;
 import me.playernguyen.opteco.language.OptEcoLanguage;
-import me.playernguyen.opteco.account.OptEcoCacheAccount;
 import me.playernguyen.opteco.permission.OptEcoPermission;
 import me.playernguyen.opteco.utils.MathUtils;
 import org.bukkit.Bukkit;
@@ -11,9 +13,6 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.RemoteConsoleCommandSender;
 import org.bukkit.entity.Player;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class SubCommandTake extends SubCommand {
 
@@ -54,27 +53,21 @@ public class SubCommandTake extends SubCommand {
         String _value = args.get(1);
         // If this offline player is not online and does not have an account
         if (!target.isOnline() && !getPlugin().getAccountDatabase().hasAccount(target.getUniqueId())) {
-            sender.sendMessage(
-                    getMessageFormat()
-                            .format(getPlugin().getLanguageLoader().getLanguage(OptEcoLanguage.VAR_PLAYER_NOT_FOUND))
-                            .replace("%who%", _target)
-            );
+            sender.sendMessage(getMessageFormat()
+                    .format(getPlugin().getLanguageLoader().getLanguage(OptEcoLanguage.VAR_PLAYER_NOT_FOUND))
+                    .replace("%who%", _target));
             return true;
         }
         if (MathUtils.isNotNumber(_value)) {
-            sender.sendMessage(
-                    getMessageFormat()
-                            .format(getPlugin().getLanguageLoader().getLanguage(OptEcoLanguage.VAR_NOT_A_NUMBER))
-                            .replace("%value%", _value)
-            );
+            sender.sendMessage(getMessageFormat()
+                    .format(getPlugin().getLanguageLoader().getLanguage(OptEcoLanguage.VAR_NOT_A_NUMBER))
+                    .replace("%value%", _value));
             return true;
         }
         double value = Double.parseDouble(_value);
         if (value < 0) {
-            sender.sendMessage(
-                    getMessageFormat()
-                            .format(getPlugin().getLanguageLoader().getLanguage(OptEcoLanguage.VALUE_CANNOT_BE_NEGATIVE))
-            );
+            sender.sendMessage(getMessageFormat()
+                    .format(getPlugin().getLanguageLoader().getLanguage(OptEcoLanguage.VALUE_CANNOT_BE_NEGATIVE)));
             return true;
         }
 
@@ -86,40 +79,37 @@ public class SubCommandTake extends SubCommand {
                 throw new NullPointerException("Cache player not found: " + target.getUniqueId());
             balance = optEcoCacheAccount.getBalance();
         }
-        //Player is not online
+        // Player is not online
         else {
             balance = getPlugin().getAccountDatabase().getBalance(target.getUniqueId());
         }
 
         // If player doesn't have enough points
-        if ((balance - Double.parseDouble(_value)) <
-                getPlugin().getConfigurationLoader().getDouble(OptEcoConfiguration.MIN_BALANCE)) {
-            sender.sendMessage(
-                    getMessageFormat()
-                            .format(getPlugin().getLanguageLoader().getLanguage(OptEcoLanguage.TAKE_NOT_ENOUGH))
-                            .replace("%value%", _value)
-            );
+        if ((balance - Double.parseDouble(_value))
+                < getPlugin().getConfigurationLoader().getDouble(OptEcoConfiguration.MIN_BALANCE)) {
+            sender.sendMessage(getMessageFormat()
+                    .format(getPlugin().getLanguageLoader().getLanguage(OptEcoLanguage.TAKE_NOT_ENOUGH))
+                    .replace("%value%", _value));
             return true;
         }
         if (getPlugin().getAccountDatabase().takeBalance(target.getUniqueId(), value)) {
-            sender.sendMessage(
-                    getMessageFormat()
-                            .format(getPlugin().getLanguageLoader().getLanguage(OptEcoLanguage.TAKE_SUCCESS))
-                            .replace("%value%", _value)
-                            .replace("%who%", target.getName())
-                            .replace("%currency%", getPlugin().getConfigurationLoader().getString(OptEcoConfiguration.CURRENCY_SYMBOL))
-            );
+            sender.sendMessage(getMessageFormat()
+                    .format(getPlugin().getLanguageLoader().getLanguage(OptEcoLanguage.TAKE_SUCCESS))
+                    .replace("%value%", _value)
+                    .replace("%who%", target.getName())
+                    .replace(
+                            "%currency%",
+                            getPlugin().getConfigurationLoader().getString(OptEcoConfiguration.CURRENCY_SYMBOL)));
             // Refresh the cache account
-            if (target.isOnline())
-                this.getAccountManager().refresh(target.getUniqueId());
+            if (target.isOnline()) this.getAccountManager().refresh(target.getUniqueId());
         } else {
-            sender.sendMessage(
-                    getMessageFormat()
-                            .format(getPlugin().getLanguageLoader().getLanguage(OptEcoLanguage.TAKE_FAIL))
-                            .replace("%value%", _value)
-                            .replace("%who%", target.getName())
-                            .replace("%currency%", getPlugin().getConfigurationLoader().getString(OptEcoConfiguration.CURRENCY_SYMBOL))
-            );
+            sender.sendMessage(getMessageFormat()
+                    .format(getPlugin().getLanguageLoader().getLanguage(OptEcoLanguage.TAKE_FAIL))
+                    .replace("%value%", _value)
+                    .replace("%who%", target.getName())
+                    .replace(
+                            "%currency%",
+                            getPlugin().getConfigurationLoader().getString(OptEcoConfiguration.CURRENCY_SYMBOL)));
         }
 
         return true;

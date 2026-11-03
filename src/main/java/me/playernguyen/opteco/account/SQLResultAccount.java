@@ -35,5 +35,4 @@ public class SQLResultAccount {
     public Account toAccount() {
         return new Account(UUID.fromString(uuid), Double.parseDouble(balance));
     }
-
 }

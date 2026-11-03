@@ -13,5 +13,4 @@ public interface Debugger {
     void notice(String var1);
 
     void printException(Exception exception);
-
 }

@@ -46,13 +46,12 @@ public class TransactionResult {
 
     @Override
     public String toString() {
-        return "TransactionResult{" +
-                "id='" + id + '\'' +
-                ", sender=" + sender +
-                ", receiver=" + receiver +
-                ", amount=" + amount +
-                ", state=" + state +
-                ", time=" + time +
-                '}';
+        return "TransactionResult{" + "id='"
+                + id + '\'' + ", sender="
+                + sender + ", receiver="
+                + receiver + ", amount="
+                + amount + ", state="
+                + state + ", time="
+                + time + '}';
     }
 }

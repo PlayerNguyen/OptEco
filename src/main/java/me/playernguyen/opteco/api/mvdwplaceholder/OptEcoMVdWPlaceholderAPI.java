@@ -2,12 +2,11 @@ package me.playernguyen.opteco.api.mvdwplaceholder;
 
 import be.maximvdw.placeholderapi.PlaceholderAPI;
 import be.maximvdw.placeholderapi.PlaceholderReplacer;
-import me.playernguyen.opteco.OptEco;
-import me.playernguyen.opteco.configuration.OptEcoConfiguration;
-import me.playernguyen.opteco.account.OptEcoCacheAccount;
-
 import java.util.Map;
 import java.util.TreeMap;
+import me.playernguyen.opteco.OptEco;
+import me.playernguyen.opteco.account.OptEcoCacheAccount;
+import me.playernguyen.opteco.configuration.OptEcoConfiguration;
 
 public class OptEcoMVdWPlaceholderAPI {
 
@@ -24,7 +23,8 @@ public class OptEcoMVdWPlaceholderAPI {
         Map<String, PlaceholderReplacer> replacerMap = new TreeMap<>();
         replacerMap.put("opteco_points", (event) -> {
             // Get account
-            OptEcoCacheAccount account = plugin.getAccountManager().get(event.getPlayer().getUniqueId());
+            OptEcoCacheAccount account =
+                    plugin.getAccountManager().get(event.getPlayer().getUniqueId());
             // Whether null, return NaN
             if (account == null) {
                 return "NaN";
@@ -35,7 +35,8 @@ public class OptEcoMVdWPlaceholderAPI {
         // {opteco_points_rounded}
         replacerMap.put("opteco_points_rounded", (event) -> {
             // Get account
-            OptEcoCacheAccount account = plugin.getAccountManager().get(event.getPlayer().getUniqueId());
+            OptEcoCacheAccount account =
+                    plugin.getAccountManager().get(event.getPlayer().getUniqueId());
             // Whether null, return NaN
             if (account == null) {
                 return "NaN";
@@ -60,5 +61,4 @@ public class OptEcoMVdWPlaceholderAPI {
             PlaceholderAPI.registerPlaceholder(plugin, name, replacer);
         });
     }
-
 }

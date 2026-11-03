@@ -1,24 +1,23 @@
 package me.playernguyen.opteco.utils;
 
+import java.util.ArrayList;
 import me.playernguyen.opteco.OptEcoImplementation;
 import me.playernguyen.opteco.language.OptEcoLanguage;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
-
-import java.util.ArrayList;
 
 public class MessageFormat extends OptEcoImplementation {
 
     private final char SPACE_CHARACTER = ' ';
     private final char START_LIST_CHARACTER = '>';
 
-    public MessageFormat() {
-    }
+    public MessageFormat() {}
 
     public String format(String string) {
         return getPlugin().getLanguageLoader().getLanguage(OptEcoLanguage.PREFIX)
                 + SPACE_CHARACTER
-                + ChatColor.RESET + string;
+                + ChatColor.RESET
+                + string;
     }
 
     public void sendCuteList(CommandSender commandSender, ArrayList<String> strings, ChatColor color, char startChar) {
@@ -41,5 +40,4 @@ public class MessageFormat extends OptEcoImplementation {
         }
         return String.format("%.2f", d);
     }
-
 }

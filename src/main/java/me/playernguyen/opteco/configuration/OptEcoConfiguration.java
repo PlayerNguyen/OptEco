@@ -1,7 +1,6 @@
 package me.playernguyen.opteco.configuration;
 
 public enum OptEcoConfiguration {
-
     CHECK_FOR_UPDATE("Update.CheckForUpdate", true),
     START_BALANCE("Settings.Preferences.BeginPoint", 0.0),
     MIN_BALANCE("Settings.Preferences.MinimumReachPoint", -15.0),

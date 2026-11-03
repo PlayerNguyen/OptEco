@@ -1,5 +1,8 @@
 package me.playernguyen.opteco.command;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 import me.playernguyen.opteco.OptEco;
 import me.playernguyen.opteco.configuration.OptEcoConfiguration;
 import me.playernguyen.opteco.language.OptEcoLanguage;
@@ -10,10 +13,6 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.RemoteConsoleCommandSender;
 import org.bukkit.entity.Player;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
 
 public class SubCommandSet extends SubCommand {
     SubCommandSet(String command, OptEco plugin) {
@@ -52,48 +51,41 @@ public class SubCommandSet extends SubCommand {
         String _value = args.get(1);
         // If this offline player is not online and does not have an account
         if (!target.isOnline() && !getPlugin().getAccountDatabase().hasAccount(target.getUniqueId())) {
-            sender.sendMessage(
-                    getMessageFormat()
-                            .format(getPlugin().getLanguageLoader().getLanguage(OptEcoLanguage.VAR_PLAYER_NOT_FOUND))
-                            .replace("%who%", _target)
-            );
+            sender.sendMessage(getMessageFormat()
+                    .format(getPlugin().getLanguageLoader().getLanguage(OptEcoLanguage.VAR_PLAYER_NOT_FOUND))
+                    .replace("%who%", _target));
             return true;
         }
         if (MathUtils.isNotNumber(_value)) {
-            sender.sendMessage(
-                    getMessageFormat()
-                            .format(getPlugin().getLanguageLoader().getLanguage(OptEcoLanguage.VAR_NOT_A_NUMBER))
-                            .replace("%value%", _value)
-            );
+            sender.sendMessage(getMessageFormat()
+                    .format(getPlugin().getLanguageLoader().getLanguage(OptEcoLanguage.VAR_NOT_A_NUMBER))
+                    .replace("%value%", _value));
             return true;
         }
         double value = Double.parseDouble(_value);
         if (value < 0) {
-            sender.sendMessage(
-                    getMessageFormat()
-                            .format(getPlugin().getLanguageLoader().getLanguage(OptEcoLanguage.VALUE_CANNOT_BE_NEGATIVE))
-            );
+            sender.sendMessage(getMessageFormat()
+                    .format(getPlugin().getLanguageLoader().getLanguage(OptEcoLanguage.VALUE_CANNOT_BE_NEGATIVE)));
             return true;
         }
         if (getPlugin().getAccountDatabase().setBalance(target.getUniqueId(), value)) {
-            sender.sendMessage(
-                    getMessageFormat()
-                            .format(getPlugin().getLanguageLoader().getLanguage(OptEcoLanguage.SET_SUCCESS))
-                            .replace("%value%", Double.toString(value))
-                            .replace("%who%", Objects.requireNonNull(target.getName()))
-                            .replace("%currency%", getPlugin().getConfigurationLoader().getString(OptEcoConfiguration.CURRENCY_SYMBOL))
-            );
+            sender.sendMessage(getMessageFormat()
+                    .format(getPlugin().getLanguageLoader().getLanguage(OptEcoLanguage.SET_SUCCESS))
+                    .replace("%value%", Double.toString(value))
+                    .replace("%who%", Objects.requireNonNull(target.getName()))
+                    .replace(
+                            "%currency%",
+                            getPlugin().getConfigurationLoader().getString(OptEcoConfiguration.CURRENCY_SYMBOL)));
             // Refresh the cache account
-            if (target.isOnline())
-                this.getAccountManager().refresh(target.getUniqueId());
+            if (target.isOnline()) this.getAccountManager().refresh(target.getUniqueId());
         } else {
-            sender.sendMessage(
-                    getMessageFormat()
-                            .format(getPlugin().getLanguageLoader().getLanguage(OptEcoLanguage.SET_FAIL))
-                            .replace("%value%", _value)
-                            .replace("%who%", Objects.requireNonNull(target.getName()))
-                            .replace("%currency%", getPlugin().getConfigurationLoader().getString(OptEcoConfiguration.CURRENCY_SYMBOL))
-            );
+            sender.sendMessage(getMessageFormat()
+                    .format(getPlugin().getLanguageLoader().getLanguage(OptEcoLanguage.SET_FAIL))
+                    .replace("%value%", _value)
+                    .replace("%who%", Objects.requireNonNull(target.getName()))
+                    .replace(
+                            "%currency%",
+                            getPlugin().getConfigurationLoader().getString(OptEcoConfiguration.CURRENCY_SYMBOL)));
         }
         return true;
     }

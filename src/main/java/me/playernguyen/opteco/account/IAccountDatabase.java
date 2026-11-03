@@ -1,11 +1,10 @@
 package me.playernguyen.opteco.account;
 
-import org.bukkit.OfflinePlayer;
-import org.bukkit.entity.Player;
-
-import javax.annotation.Nullable;
 import java.util.List;
 import java.util.UUID;
+import javax.annotation.Nullable;
+import org.bukkit.OfflinePlayer;
+import org.bukkit.entity.Player;
 
 public interface IAccountDatabase {
 

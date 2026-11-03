@@ -1,11 +1,10 @@
 package me.playernguyen.opteco.account;
 
-import me.playernguyen.opteco.OptEco;
-import me.playernguyen.opteco.configuration.OptEcoConfiguration;
-
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+import me.playernguyen.opteco.OptEco;
+import me.playernguyen.opteco.configuration.OptEcoConfiguration;
 
 public class OptEcoCacheAccountManager {
 
@@ -28,11 +27,11 @@ public class OptEcoCacheAccountManager {
     public boolean outdated(UUID uuid) {
         // Check notnull
         OptEcoCacheAccount cacheAccount = getMap().get(uuid);
-        if (cacheAccount == null)
-            throw new NullPointerException("UUID not found: " + uuid);
+        if (cacheAccount == null) throw new NullPointerException("UUID not found: " + uuid);
         // Return the system times - stored time >= refresh time
-        OptEco.getInstance().getDebugger().info("Out-date session: " + uuid + " with last update at " +
-                cacheAccount.getLastUpdate());
+        OptEco.getInstance()
+                .getDebugger()
+                .info("Out-date session: " + uuid + " with last update at " + cacheAccount.getLastUpdate());
         return (System.currentTimeMillis() - cacheAccount.getLastUpdate())
                 >= optEco.getConfigurationLoader().getInt(OptEcoConfiguration.REFRESH_TIME) * 1000;
     }
@@ -51,11 +50,9 @@ public class OptEcoCacheAccountManager {
     public OptEcoCacheAccount get(UUID uuid) {
         // Get the cache from map, whether null throw exception
         OptEcoCacheAccount cacheAccount = getMap().get(uuid);
-        if (cacheAccount == null)
-            throw new NullPointerException("Map not contains uuid" + uuid.toString());
+        if (cacheAccount == null) throw new NullPointerException("Map not contains uuid" + uuid.toString());
         // Is outdated, refresh then reload
-        if (outdated(uuid))
-            refresh(uuid);
+        if (outdated(uuid)) refresh(uuid);
         return cacheAccount;
     }
 
@@ -77,8 +74,8 @@ public class OptEcoCacheAccountManager {
         if (this.getOptEco().getAccountDatabase().hasAccount(uuid)) {
             account = this.getOptEco().getAccountDatabase().requestAccountInformation(uuid);
         } else if (this.getOptEco().getConfigurationLoader().getDouble(OptEcoConfiguration.START_BALANCE) != 0) {
-            account = new Account(uuid, getOptEco().getConfigurationLoader().getDouble(OptEcoConfiguration
-                    .START_BALANCE));
+            account = new Account(
+                    uuid, getOptEco().getConfigurationLoader().getDouble(OptEcoConfiguration.START_BALANCE));
         }
 
         // Then return account
@@ -87,8 +84,7 @@ public class OptEcoCacheAccountManager {
 
     public void pushNewOne(UUID uuid, double balance) {
         // Push new account with balance value
-        Account account =
-                new Account(uuid, balance);
+        Account account = new Account(uuid, balance);
 
         // Save account
         this.getOptEco().getDebugger().info("Saving " + uuid + " with balance " + balance + ".");
@@ -103,5 +99,4 @@ public class OptEcoCacheAccountManager {
         // otherwise, remove them out
         this.map.remove(uuid);
     }
-
 }

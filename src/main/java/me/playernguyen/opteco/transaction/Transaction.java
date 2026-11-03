@@ -1,5 +1,6 @@
 package me.playernguyen.opteco.transaction;
 
+import java.util.UUID;
 import me.playernguyen.opteco.OptEcoImplementation;
 import me.playernguyen.opteco.event.OptEcoPlayerPendingEvent;
 import me.playernguyen.opteco.event.OptEcoPlayerReceivedEvent;
@@ -7,8 +8,6 @@ import me.playernguyen.opteco.event.OptEcoTransactionChangeStateEvent;
 import me.playernguyen.opteco.utils.RandomString;
 import org.bukkit.Bukkit;
 import org.bukkit.scheduler.BukkitRunnable;
-
-import java.util.UUID;
 
 public class Transaction extends OptEcoImplementation {
 
@@ -80,8 +79,8 @@ public class Transaction extends OptEcoImplementation {
         Bukkit.getScheduler().runTaskAsynchronously(getPlugin(), () -> {
             this.state = state;
             // Call the event without async error
-            Bukkit.getScheduler().runTask(getPlugin(),
-                    () -> Bukkit.getPluginManager().callEvent(new OptEcoTransactionChangeStateEvent(this)));
+            Bukkit.getScheduler().runTask(getPlugin(), () -> Bukkit.getPluginManager()
+                    .callEvent(new OptEcoTransactionChangeStateEvent(this)));
         });
     }
 
@@ -98,7 +97,9 @@ public class Transaction extends OptEcoImplementation {
             }
             // Call received listener
             OptEcoPlayerReceivedEvent event = new OptEcoPlayerReceivedEvent(this);
-            Bukkit.getScheduler().runTask(getPlugin(), () -> Bukkit.getServer().getPluginManager().callEvent(event));
+            Bukkit.getScheduler().runTask(getPlugin(), () -> Bukkit.getServer()
+                    .getPluginManager()
+                    .callEvent(event));
             // Change state
             this.setState(TransactionState.CONFIRMED);
             // Update the information into database

@@ -4,8 +4,8 @@ import me.playernguyen.opteco.OptEco;
 import me.playernguyen.opteco.language.OptEcoLanguage;
 
 public enum CommandArguments {
-
-    AMOUNT, PLAYER;
+    AMOUNT,
+    PLAYER;
 
     public String asString(OptEco plugin) {
         switch (this) {
@@ -17,5 +17,4 @@ public enum CommandArguments {
                 return "";
         }
     }
-
 }

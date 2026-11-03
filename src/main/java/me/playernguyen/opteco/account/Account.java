@@ -1,10 +1,9 @@
 package me.playernguyen.opteco.account;
 
+import java.util.UUID;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
-
-import java.util.UUID;
 
 public class Account {
 
@@ -18,7 +17,6 @@ public class Account {
     public Account(Player player) {
         this(player.getUniqueId(), 0d);
     }
-
 
     public Account(OfflinePlayer player, double d) {
         this(player.getUniqueId(), d);
@@ -55,9 +53,6 @@ public class Account {
 
     @Override
     public String toString() {
-        return "Account{" +
-                "player=" + player +
-                ", balance=" + balance +
-                '}';
+        return "Account{" + "player=" + player + ", balance=" + balance + '}';
     }
 }

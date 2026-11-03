@@ -1,12 +1,11 @@
 package me.playernguyen.opteco.configuration;
 
-import me.playernguyen.opteco.OptEcoImplementation;
-import org.bukkit.configuration.file.YamlConfiguration;
-
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import me.playernguyen.opteco.OptEcoImplementation;
+import org.bukkit.configuration.file.YamlConfiguration;
 
 public abstract class OptEcoLoaderAbstract extends OptEcoImplementation {
 
@@ -33,9 +32,9 @@ public abstract class OptEcoLoaderAbstract extends OptEcoImplementation {
             throw new NullPointerException("Resource not found: " + name);
         }
         this.file = new File(parentFolder, name);
-        this.configuration = (fromResource) ?
-                YamlConfiguration.loadConfiguration(new InputStreamReader(stream)) :
-                YamlConfiguration.loadConfiguration(file);
+        this.configuration = (fromResource)
+                ? YamlConfiguration.loadConfiguration(new InputStreamReader(stream))
+                : YamlConfiguration.loadConfiguration(file);
         this.header = header;
         save();
     }
@@ -103,5 +102,4 @@ public abstract class OptEcoLoaderAbstract extends OptEcoImplementation {
     public long getLong(OptEcoConfiguration configuration) {
         return getConfiguration().getLong(configuration.getPath());
     }
-
 }

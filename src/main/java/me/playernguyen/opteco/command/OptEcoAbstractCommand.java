@@ -1,16 +1,14 @@
 package me.playernguyen.opteco.command;
 
+import java.util.ArrayList;
+import java.util.stream.Collectors;
 import me.playernguyen.opteco.language.OptEcoLanguage;
 import me.playernguyen.opteco.utils.MessageFormat;
 import org.bukkit.command.*;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.stream.Collectors;
-
-public abstract class OptEcoAbstractCommand extends AbstractPermission
-        implements TabCompleter, CommandExecutor {
+public abstract class OptEcoAbstractCommand extends AbstractPermission implements TabCompleter, CommandExecutor {
 
     private final String command;
     private final MessageFormat messageFormat;
@@ -45,9 +43,7 @@ public abstract class OptEcoAbstractCommand extends AbstractPermission
     }
 
     public ArrayList<String> getSubAsString() {
-        return subCommands.stream().map(
-                SubCommand::getCommand).collect(Collectors.toCollection(ArrayList::new)
-        );
+        return subCommands.stream().map(SubCommand::getCommand).collect(Collectors.toCollection(ArrayList::new));
     }
 
     public ArrayList<String> getSubAsHelp(CommandSender sender) {
@@ -70,11 +66,11 @@ public abstract class OptEcoAbstractCommand extends AbstractPermission
         return _args;
     }
 
-    public boolean onCommand(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String s, String[] strings) {
+    public boolean onCommand(
+            @NotNull CommandSender commandSender, @NotNull Command command, @NotNull String s, String[] strings) {
         if (!checkPermission(commandSender)) {
-            commandSender.sendMessage(
-                    getMessageFormat().format(getPlugin().getLanguageLoader().getLanguage(OptEcoLanguage.NO_PERMISSION))
-            );
+            commandSender.sendMessage(getMessageFormat()
+                    .format(getPlugin().getLanguageLoader().getLanguage(OptEcoLanguage.NO_PERMISSION)));
             return true;
         }
         if (commandSender instanceof Player) {
@@ -87,12 +83,12 @@ public abstract class OptEcoAbstractCommand extends AbstractPermission
         return onAny(commandSender, command, s, strings);
     }
 
-
     public abstract boolean onPlayerCommand(Player player, Command command, String s, String[] args);
 
     public abstract boolean onConsoleCommand(ConsoleCommandSender sender, Command command, String s, String[] args);
 
-    public abstract boolean onRemoteConsole(RemoteConsoleCommandSender sender, Command command, String s, String[] args);
+    public abstract boolean onRemoteConsole(
+            RemoteConsoleCommandSender sender, Command command, String s, String[] args);
 
     public abstract boolean onAny(CommandSender sender, Command command, String s, String[] args);
 }

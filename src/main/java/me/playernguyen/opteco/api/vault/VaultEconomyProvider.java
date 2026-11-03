@@ -1,16 +1,13 @@
 package me.playernguyen.opteco.api.vault;
 
+import java.util.List;
 import me.playernguyen.opteco.OptEco;
 import net.milkbowl.vault.economy.AbstractEconomy;
 import net.milkbowl.vault.economy.EconomyResponse;
 
-import java.util.List;
-
 public class VaultEconomyProvider extends AbstractEconomy {
 
-    public VaultEconomyProvider(OptEco optEco) {
-
-    }
+    public VaultEconomyProvider(OptEco optEco) {}
 
     @Override
     public boolean isEnabled() {

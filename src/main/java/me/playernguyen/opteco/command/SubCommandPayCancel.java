@@ -1,14 +1,13 @@
 package me.playernguyen.opteco.command;
 
+import java.util.ArrayList;
+import java.util.List;
 import me.playernguyen.opteco.OptEco;
 import me.playernguyen.opteco.language.OptEcoLanguage;
 import me.playernguyen.opteco.permission.OptEcoPermission;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.RemoteConsoleCommandSender;
 import org.bukkit.entity.Player;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class SubCommandPayCancel extends SubCommand {
     SubCommandPayCancel(String command, OptEco plugin) {
@@ -24,21 +23,20 @@ public class SubCommandPayCancel extends SubCommand {
     @Override
     public boolean onPlayerCommand(Player player, ArrayList<String> args) {
         if (!getPlugin().getTransactionManager().hasTransaction(player.getUniqueId())) {
-            player.sendMessage(
-                    getMessageFormat()
-                            .format(getPlugin().getLanguageLoader().getLanguage(OptEcoLanguage.PAY_TRANSACTION_NOT_EXIST))
-            );
+            player.sendMessage(getMessageFormat()
+                    .format(getPlugin().getLanguageLoader().getLanguage(OptEcoLanguage.PAY_TRANSACTION_NOT_EXIST)));
             return true;
         }
 
-        if (getPlugin().getTransactionManager().getTransaction(player.getUniqueId()).cancel()) {
+        if (getPlugin()
+                .getTransactionManager()
+                .getTransaction(player.getUniqueId())
+                .cancel()) {
             player.sendMessage(
-                    getMessageFormat().format(getPlugin().getLanguageLoader().getLanguage(OptEcoLanguage.PAY_DENY))
-            );
+                    getMessageFormat().format(getPlugin().getLanguageLoader().getLanguage(OptEcoLanguage.PAY_DENY)));
         } else {
             player.sendMessage(
-                    getMessageFormat().format(getPlugin().getLanguageLoader().getLanguage(OptEcoLanguage.PAY_FAILED))
-            );
+                    getMessageFormat().format(getPlugin().getLanguageLoader().getLanguage(OptEcoLanguage.PAY_FAILED)));
         }
         return true;
     }
@@ -50,9 +48,8 @@ public class SubCommandPayCancel extends SubCommand {
 
     @Override
     public boolean onRemoteConsoleCommand(RemoteConsoleCommandSender sender, ArrayList<String> args) {
-        sender.sendMessage(
-                getMessageFormat().format(getPlugin().getLanguageLoader().getLanguage(OptEcoLanguage.FOR_PLAYER_COMMAND))
-        );
+        sender.sendMessage(getMessageFormat()
+                .format(getPlugin().getLanguageLoader().getLanguage(OptEcoLanguage.FOR_PLAYER_COMMAND)));
         return true;
     }
 

@@ -1,5 +1,7 @@
 package me.playernguyen.opteco.command;
 
+import java.util.ArrayList;
+import java.util.List;
 import me.playernguyen.opteco.OptEco;
 import me.playernguyen.opteco.language.OptEcoLanguage;
 import me.playernguyen.opteco.utils.MessageFormat;
@@ -9,18 +11,16 @@ import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.command.RemoteConsoleCommandSender;
 import org.bukkit.entity.Player;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public abstract class SubCommand extends AbstractPermission {
 
     private String command;
     private String description;
+
     @Deprecated
     private String args;
+
     private MessageFormat messageFormat;
     private ArrayList<CommandArguments> arguments = new ArrayList<>();
-
 
     @Deprecated
     SubCommand(String command, String description, String args, OptEco plugin) {
@@ -54,7 +54,8 @@ public abstract class SubCommand extends AbstractPermission {
     }
 
     public String getHelp() {
-        return ChatColor.GOLD + this.command + " " + ChatColor.GRAY + this.argumentsAsString() + ChatColor.GOLD + ": " + ChatColor.GREEN + this.description;
+        return ChatColor.GOLD + this.command + " " + ChatColor.GRAY + this.argumentsAsString() + ChatColor.GOLD + ": "
+                + ChatColor.GREEN + this.description;
     }
 
     public ArrayList<CommandArguments> getArguments() {
@@ -67,8 +68,7 @@ public abstract class SubCommand extends AbstractPermission {
 
     public String argumentsAsString() {
         StringBuilder _builder = new StringBuilder();
-        for (CommandArguments args :
-                getArguments()) {
+        for (CommandArguments args : getArguments()) {
             _builder.append(args.asString(getPlugin()));
             if (!args.equals(getArguments().get(getArguments().size() - 1))) _builder.append(" ");
         }
@@ -76,21 +76,19 @@ public abstract class SubCommand extends AbstractPermission {
     }
 
     public boolean onCommand(CommandSender commandSender, ArrayList<String> args) {
-        this.getPlugin().getDebugger().info("Sender " + commandSender.getName() + " execute sub-command " + this.getCommand());
+        this.getPlugin()
+                .getDebugger()
+                .info("Sender " + commandSender.getName() + " execute sub-command " + this.getCommand());
         if (!checkPermission(commandSender)) {
-            commandSender.sendMessage(
-                    getMessageFormat()
-                            .format(getPlugin().getLanguageLoader().getLanguage(OptEcoLanguage.NO_PERMISSION))
-            );
+            commandSender.sendMessage(getMessageFormat()
+                    .format(getPlugin().getLanguageLoader().getLanguage(OptEcoLanguage.NO_PERMISSION)));
             return true;
         }
         // With player execute
-        if (commandSender instanceof Player)
-            return onPlayerCommand((Player) commandSender, args);
-            // With console execute
-        else if (commandSender instanceof ConsoleCommandSender)
-            return onConsoleCommand(commandSender, args);
-            // With remote console
+        if (commandSender instanceof Player) return onPlayerCommand((Player) commandSender, args);
+        // With console execute
+        else if (commandSender instanceof ConsoleCommandSender) return onConsoleCommand(commandSender, args);
+        // With remote console
         else if (commandSender instanceof RemoteConsoleCommandSender)
             return onRemoteConsoleCommand((RemoteConsoleCommandSender) commandSender, args);
 

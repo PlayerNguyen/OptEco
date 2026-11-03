@@ -1,11 +1,10 @@
 package me.playernguyen.opteco.command;
 
+import java.util.HashSet;
 import me.playernguyen.opteco.OptEco;
 import me.playernguyen.opteco.manager.ManagerSet;
 import org.bukkit.Bukkit;
 import org.bukkit.command.PluginCommand;
-
-import java.util.HashSet;
 
 public class CommandManager extends ManagerSet<OptEcoAbstractCommand> {
 
@@ -23,10 +22,8 @@ public class CommandManager extends ManagerSet<OptEcoAbstractCommand> {
         PluginCommand pluginCommand = Bukkit.getServer().getPluginCommand(item.getCommand());
         if (pluginCommand == null) {
             OptEco.getInstance().getDebugger().error("Failed to register command: " + item.getCommand());
-            throw new IllegalStateException(String.format(
-                    "Developer: You must register %s command in plugin.yml",
-                    item.getCommand()
-            ));
+            throw new IllegalStateException(
+                    String.format("Developer: You must register %s command in plugin.yml", item.getCommand()));
         }
         pluginCommand.setExecutor(item);
         OptEco.getInstance().getDebugger().info("Succeed to register command: " + item.getCommand());

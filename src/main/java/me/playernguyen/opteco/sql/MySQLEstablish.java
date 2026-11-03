@@ -1,13 +1,12 @@
 package me.playernguyen.opteco.sql;
 
 import com.zaxxer.hikari.HikariDataSource;
-import me.playernguyen.opteco.configuration.OptEcoConfiguration;
-
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import me.playernguyen.opteco.configuration.OptEcoConfiguration;
 
 public class MySQLEstablish extends SQLEstablish {
 
@@ -23,13 +22,7 @@ public class MySQLEstablish extends SQLEstablish {
         String port = getConfigurationLoader().getString(OptEcoConfiguration.MYSQL_PORT);
         String database = getConfigurationLoader().getString(OptEcoConfiguration.MYSQL_DATABASE);
         String parameter = getConfigurationLoader().getString(OptEcoConfiguration.MYSQL_PARAMETER);
-        String builtUrl = String.format(
-                "jdbc:mysql://%s:%s/%s?%s",
-                address,
-                port,
-                database,
-                parameter
-        );
+        String builtUrl = String.format("jdbc:mysql://%s:%s/%s?%s", address, port, database, parameter);
 
         // Create dataSource and add the data
         this.dataSource = new HikariDataSource();
@@ -45,7 +38,6 @@ public class MySQLEstablish extends SQLEstablish {
         // Return
         return dataSource.getConnection();
     }
-
 
     /**
      * Linear adding tables of SQL
@@ -68,5 +60,4 @@ public class MySQLEstablish extends SQLEstablish {
         }
         return table;
     }
-
 }

@@ -1,9 +1,8 @@
 package me.playernguyen.opteco.language;
 
+import java.io.IOException;
 import me.playernguyen.opteco.configuration.OptEcoLoaderAbstract;
 import org.bukkit.ChatColor;
-
-import java.io.IOException;
 
 public class OptEcoLanguageLoader extends OptEcoLoaderAbstract {
 
@@ -27,9 +26,7 @@ public class OptEcoLanguageLoader extends OptEcoLoaderAbstract {
         return this.getConfiguration().getString(optEcoLanguage.getPath());
     }
 
-
     public String getLanguage(OptEcoLanguage optEcoLanguage) {
         return ChatColor.translateAlternateColorCodes(COLOR_SYMBOL, this.getRawLanguage(optEcoLanguage));
     }
-
 }

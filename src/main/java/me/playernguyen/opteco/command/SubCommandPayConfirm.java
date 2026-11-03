@@ -1,5 +1,7 @@
 package me.playernguyen.opteco.command;
 
+import java.util.ArrayList;
+import java.util.List;
 import me.playernguyen.opteco.OptEco;
 import me.playernguyen.opteco.configuration.OptEcoConfiguration;
 import me.playernguyen.opteco.language.OptEcoLanguage;
@@ -9,9 +11,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.RemoteConsoleCommandSender;
 import org.bukkit.entity.Player;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class SubCommandPayConfirm extends SubCommand {
     SubCommandPayConfirm(String command, OptEco plugin) {
@@ -28,10 +27,8 @@ public class SubCommandPayConfirm extends SubCommand {
     public boolean onPlayerCommand(Player player, ArrayList<String> args) {
         // If don't have any transaction
         if (!getPlugin().getTransactionManager().hasTransaction(player.getUniqueId())) {
-            player.sendMessage(
-                    getMessageFormat()
-                            .format(getPlugin().getLanguageLoader().getLanguage(OptEcoLanguage.PAY_TRANSACTION_NOT_EXIST))
-            );
+            player.sendMessage(getMessageFormat()
+                    .format(getPlugin().getLanguageLoader().getLanguage(OptEcoLanguage.PAY_TRANSACTION_NOT_EXIST)));
             return true;
         }
 
@@ -43,37 +40,34 @@ public class SubCommandPayConfirm extends SubCommand {
             if (tranSender != null) {
                 String receiverName = "";
                 if (tranReceiver != null) receiverName = tranReceiver.getName();
-                tranSender.sendMessage(
-                        getMessageFormat().format(getPlugin().getLanguageLoader().getLanguage(OptEcoLanguage.PAY_SUCCESS))
-                                .replace("%who%", receiverName)
-                                .replace("%value%", getMessageFormat().numberFormat(transaction.getAmount()))
-                                .replace("%currency%", getPlugin().getConfigurationLoader()
-                                        .getString(OptEcoConfiguration.CURRENCY_SYMBOL)
-                                )
-                );
+                tranSender.sendMessage(getMessageFormat()
+                        .format(getPlugin().getLanguageLoader().getLanguage(OptEcoLanguage.PAY_SUCCESS))
+                        .replace("%who%", receiverName)
+                        .replace("%value%", getMessageFormat().numberFormat(transaction.getAmount()))
+                        .replace(
+                                "%currency%",
+                                getPlugin().getConfigurationLoader().getString(OptEcoConfiguration.CURRENCY_SYMBOL)));
                 // Refresh the cache account
                 this.getAccountManager().refresh(tranSender.getUniqueId());
             }
             if (tranReceiver != null) {
                 String senderName = "";
                 if (tranSender != null) senderName = tranSender.getName();
-                tranReceiver.sendMessage(
-                        getMessageFormat().format(getPlugin().getLanguageLoader().getLanguage(OptEcoLanguage.PAY_SUCCESS_TARGET))
-                                .replace("%who%", senderName)
-                                .replace("%value%", getMessageFormat().numberFormat(transaction.getAmount()))
-                                .replace("%currency%", getPlugin().getConfigurationLoader()
-                                        .getString(OptEcoConfiguration.CURRENCY_SYMBOL)
-                                )
-                );
+                tranReceiver.sendMessage(getMessageFormat()
+                        .format(getPlugin().getLanguageLoader().getLanguage(OptEcoLanguage.PAY_SUCCESS_TARGET))
+                        .replace("%who%", senderName)
+                        .replace("%value%", getMessageFormat().numberFormat(transaction.getAmount()))
+                        .replace(
+                                "%currency%",
+                                getPlugin().getConfigurationLoader().getString(OptEcoConfiguration.CURRENCY_SYMBOL)));
                 // Refresh the cache account
                 this.getAccountManager().refresh(tranReceiver.getUniqueId());
             }
         } else {
             Player tranSender = Bukkit.getPlayer(transaction.getPlayer());
             if (tranSender != null) {
-                tranSender.sendMessage(
-                        getMessageFormat().format(getPlugin().getLanguageLoader().getLanguage(OptEcoLanguage.PAY_FAILED))
-                );
+                tranSender.sendMessage(getMessageFormat()
+                        .format(getPlugin().getLanguageLoader().getLanguage(OptEcoLanguage.PAY_FAILED)));
             }
         }
 
@@ -82,17 +76,15 @@ public class SubCommandPayConfirm extends SubCommand {
 
     @Override
     public boolean onConsoleCommand(CommandSender sender, ArrayList<String> args) {
-        sender.sendMessage(
-                getMessageFormat().format(getPlugin().getLanguageLoader().getLanguage(OptEcoLanguage.FOR_PLAYER_COMMAND))
-        );
+        sender.sendMessage(getMessageFormat()
+                .format(getPlugin().getLanguageLoader().getLanguage(OptEcoLanguage.FOR_PLAYER_COMMAND)));
         return true;
     }
 
     @Override
     public boolean onRemoteConsoleCommand(RemoteConsoleCommandSender sender, ArrayList<String> args) {
-        sender.sendMessage(
-                getMessageFormat().format(getPlugin().getLanguageLoader().getLanguage(OptEcoLanguage.FOR_PLAYER_COMMAND))
-        );
+        sender.sendMessage(getMessageFormat()
+                .format(getPlugin().getLanguageLoader().getLanguage(OptEcoLanguage.FOR_PLAYER_COMMAND)));
         return true;
     }
 

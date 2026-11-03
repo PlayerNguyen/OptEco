@@ -1,18 +1,17 @@
 package me.playernguyen.opteco.command;
 
+import java.util.ArrayList;
+import java.util.List;
 import me.playernguyen.opteco.OptEco;
+import me.playernguyen.opteco.account.OptEcoCacheAccount;
 import me.playernguyen.opteco.configuration.OptEcoConfiguration;
 import me.playernguyen.opteco.language.OptEcoLanguage;
-import me.playernguyen.opteco.account.OptEcoCacheAccount;
 import me.playernguyen.opteco.permission.OptEcoPermission;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.RemoteConsoleCommandSender;
 import org.bukkit.entity.Player;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class SubCommandCheck extends SubCommand {
 
@@ -31,13 +30,16 @@ public class SubCommandCheck extends SubCommand {
         if (args.size() < 1) {
             OptEcoCacheAccount optEcoCacheAccount = getAccountManager().get(player.getUniqueId());
             double val = optEcoCacheAccount.getBalance();
-            player.sendMessage(
-                    getMessageFormat().format(
-                            getPlugin().getLanguageLoader().getLanguage(OptEcoLanguage.CHECK_SELF)
-                                    .replace("%value%", getMessageFormat().numberFormat(val))
-                                    .replace("%currency%", getPlugin().getConfigurationLoader().getString(OptEcoConfiguration.CURRENCY_SYMBOL))
-                    )
-            );
+            player.sendMessage(getMessageFormat()
+                    .format(getPlugin()
+                            .getLanguageLoader()
+                            .getLanguage(OptEcoLanguage.CHECK_SELF)
+                            .replace("%value%", getMessageFormat().numberFormat(val))
+                            .replace(
+                                    "%currency%",
+                                    getPlugin()
+                                            .getConfigurationLoader()
+                                            .getString(OptEcoConfiguration.CURRENCY_SYMBOL))));
             return true;
         }
         return this.exec(player, args);
@@ -63,37 +65,35 @@ public class SubCommandCheck extends SubCommand {
         OfflinePlayer target = Bukkit.getOfflinePlayer(_target);
         // If this offline player is not online and does not have an account
         if (!target.isOnline() && !getPlugin().getAccountDatabase().hasAccount(target.getUniqueId())) {
-            sender.sendMessage(
-                    getMessageFormat()
-                            .format(getPlugin().getLanguageLoader().getLanguage(OptEcoLanguage.VAR_PLAYER_NOT_FOUND))
-                            .replace("%who%", _target)
-            );
+            sender.sendMessage(getMessageFormat()
+                    .format(getPlugin().getLanguageLoader().getLanguage(OptEcoLanguage.VAR_PLAYER_NOT_FOUND))
+                    .replace("%who%", _target));
             return true;
         }
 
         double val;
         // Player is online
         if (target.isOnline()) {
-            OptEcoCacheAccount optEcoCacheAccount = getPlugin().getAccountManager().get(target.getUniqueId());
+            OptEcoCacheAccount optEcoCacheAccount =
+                    getPlugin().getAccountManager().get(target.getUniqueId());
             if (optEcoCacheAccount == null)
                 throw new NullPointerException("Cache player not found: " + target.getUniqueId());
             val = optEcoCacheAccount.getBalance();
         }
-        //Player is not online
+        // Player is not online
         else {
             val = getPlugin().getAccountDatabase().getBalance(target.getUniqueId());
         }
         // Send the message to check
-        sender.sendMessage(
-                getMessageFormat().format(
-                        getPlugin().getLanguageLoader().getLanguage(OptEcoLanguage.CHECK_ANOTHER)
-                                .replace("%who%", _target)
-                                .replace("%value%", getMessageFormat().numberFormat(val))
-                                .replace("%currency%", getPlugin().getConfigurationLoader()
-                                        .getString(OptEcoConfiguration.CURRENCY_SYMBOL)
-                                )
-                )
-        );
+        sender.sendMessage(getMessageFormat()
+                .format(getPlugin()
+                        .getLanguageLoader()
+                        .getLanguage(OptEcoLanguage.CHECK_ANOTHER)
+                        .replace("%who%", _target)
+                        .replace("%value%", getMessageFormat().numberFormat(val))
+                        .replace(
+                                "%currency%",
+                                getPlugin().getConfigurationLoader().getString(OptEcoConfiguration.CURRENCY_SYMBOL))));
         return true;
     }
 

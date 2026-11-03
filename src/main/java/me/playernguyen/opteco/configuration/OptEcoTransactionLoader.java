@@ -1,12 +1,11 @@
 package me.playernguyen.opteco.configuration;
 
-import me.playernguyen.opteco.transaction.Transaction;
-import me.playernguyen.opteco.transaction.TransactionResult;
-import me.playernguyen.opteco.transaction.TransactionState;
-
 import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
+import me.playernguyen.opteco.transaction.Transaction;
+import me.playernguyen.opteco.transaction.TransactionResult;
+import me.playernguyen.opteco.transaction.TransactionState;
 
 public class OptEcoTransactionLoader extends OptEcoLoaderAbstract {
 
@@ -20,23 +19,26 @@ public class OptEcoTransactionLoader extends OptEcoLoaderAbstract {
         if (!getFile().exists()) {
             save();
         }
-
     }
 
     public boolean saveTransaction(Transaction transaction) {
         getDebugger().info("Save transaction " + transaction.getId() + " into yaml file...");
         // Set data
         getConfiguration().set(transaction.getId() + ".time", transaction.getTime());
-        getConfiguration().set(transaction.getId() + ".sender", transaction.getPlayer().toString());
-        getConfiguration().set(transaction.getId() + ".receiver", transaction.getTarget().toString());
+        getConfiguration()
+                .set(transaction.getId() + ".sender", transaction.getPlayer().toString());
+        getConfiguration()
+                .set(transaction.getId() + ".receiver", transaction.getTarget().toString());
         getConfiguration().set(transaction.getId() + ".amount", transaction.getAmount());
-        getConfiguration().set(transaction.getId() + ".state", transaction.getState().toString());
+        getConfiguration()
+                .set(transaction.getId() + ".state", transaction.getState().toString());
         // Return a saving state
         return save();
     }
 
     public Set<String> getStorageTransactions() {
-        return Objects.requireNonNull(getConfiguration().getConfigurationSection("")).getKeys(false);
+        return Objects.requireNonNull(getConfiguration().getConfigurationSection(""))
+                .getKeys(false);
     }
 
     public TransactionResult getTransaction(String id) {
@@ -49,8 +51,6 @@ public class OptEcoTransactionLoader extends OptEcoLoaderAbstract {
                 UUID.fromString(Objects.requireNonNull(getConfiguration().getString(id + ".receiver"))),
                 getConfiguration().getDouble(id + ".amount"),
                 TransactionState.valueOf(getConfiguration().getString(id + ".state")),
-                Long.parseLong(Objects.requireNonNull(getConfiguration().getString(id + ".time")))
-        );
+                Long.parseLong(Objects.requireNonNull(getConfiguration().getString(id + ".time"))));
     }
-
 }

@@ -20,5 +20,4 @@ public abstract class OptEcoEvent extends Event {
     public static HandlerList getHandlerList() {
         return handlerList;
     }
-
 }

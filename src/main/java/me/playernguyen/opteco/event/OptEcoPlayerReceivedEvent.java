@@ -7,5 +7,4 @@ public class OptEcoPlayerReceivedEvent extends TransactionEvent {
     public OptEcoPlayerReceivedEvent(Transaction transaction) {
         super(transaction);
     }
-
 }

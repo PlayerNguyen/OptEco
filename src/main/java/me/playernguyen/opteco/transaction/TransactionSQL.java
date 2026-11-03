@@ -1,14 +1,13 @@
 package me.playernguyen.opteco.transaction;
 
-import me.playernguyen.opteco.OptEcoImplementation;
-import me.playernguyen.opteco.sql.SQLEstablish;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.UUID;
+import me.playernguyen.opteco.OptEcoImplementation;
+import me.playernguyen.opteco.sql.SQLEstablish;
 
 public abstract class TransactionSQL extends OptEcoImplementation implements TransactionStorage {
 
@@ -39,8 +38,7 @@ public abstract class TransactionSQL extends OptEcoImplementation implements Tra
         ArrayList<TransactionResult> temp = new ArrayList<>();
         try (Connection connection = getEstablish().openConnect()) {
             PreparedStatement preparedStatement = connection.prepareStatement(
-                    String.format("SELECT * FROM %s", getEstablish().getTableName())
-            );
+                    String.format("SELECT * FROM %s", getEstablish().getTableName()));
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
                 temp.add(fromResultSetToTransaction(resultSet));
@@ -55,9 +53,7 @@ public abstract class TransactionSQL extends OptEcoImplementation implements Tra
     public TransactionResult getTransaction(String id) {
         try (Connection connection = getEstablish().openConnect()) {
             PreparedStatement preparedStatement = connection.prepareStatement(String.format(
-                    "SELECT * FROM %s WHERE transaction_id = ?",
-                    getEstablish().getTableName()
-            ));
+                    "SELECT * FROM %s WHERE transaction_id = ?", getEstablish().getTableName()));
             preparedStatement.setObject(1, id);
 
             // Result the data
@@ -81,12 +77,9 @@ public abstract class TransactionSQL extends OptEcoImplementation implements Tra
         }
         try (Connection connection = getEstablish().openConnect()) {
 
-            PreparedStatement preparedStatement =
-                    connection.prepareStatement(String.format(
-                            "UPDATE %s SET transaction_id=?, sender=?, receiver=?, amount=?, state=?, time=? WHERE transaction_id=?",
-                            getEstablish().getTableName()
-                            )
-                    );
+            PreparedStatement preparedStatement = connection.prepareStatement(String.format(
+                    "UPDATE %s SET transaction_id=?, sender=?, receiver=?, amount=?, state=?, time=? WHERE transaction_id=?",
+                    getEstablish().getTableName()));
 
             generateTransactionData(transaction, preparedStatement);
             preparedStatement.setObject(7, transaction.getId());
@@ -102,11 +95,10 @@ public abstract class TransactionSQL extends OptEcoImplementation implements Tra
 
     @Override
     public boolean createStorageTransaction(Transaction transaction) {
-        try (Connection connection = getEstablish().openConnect();) {
-            PreparedStatement preparedStatement = connection.prepareStatement(
-                    String.format("INSERT INTO %s (transaction_id, sender, receiver, amount, state, time) VALUES (?,?,?,?,?,?)"
-                            , getEstablish().getTableName())
-            );
+        try (Connection connection = getEstablish().openConnect(); ) {
+            PreparedStatement preparedStatement = connection.prepareStatement(String.format(
+                    "INSERT INTO %s (transaction_id, sender, receiver, amount, state, time) VALUES (?,?,?,?,?,?)",
+                    getEstablish().getTableName()));
 
             this.generateTransactionData(transaction, preparedStatement);
 
@@ -125,7 +117,8 @@ public abstract class TransactionSQL extends OptEcoImplementation implements Tra
      * @param preparedStatement The prepared statement to put it into
      * @throws SQLException The exception
      */
-    private void generateTransactionData(Transaction transaction, PreparedStatement preparedStatement) throws SQLException {
+    private void generateTransactionData(Transaction transaction, PreparedStatement preparedStatement)
+            throws SQLException {
         preparedStatement.setObject(1, transaction.getId());
         preparedStatement.setObject(2, transaction.getPlayer().toString());
         preparedStatement.setObject(3, transaction.getTarget().toString());
@@ -155,8 +148,7 @@ public abstract class TransactionSQL extends OptEcoImplementation implements Tra
                     UUID.fromString(receiver),
                     Double.parseDouble(amount),
                     TransactionState.valueOf(state),
-                    Long.parseLong(time)
-            );
+                    Long.parseLong(time));
         } catch (SQLException e) {
             e.printStackTrace();
         }

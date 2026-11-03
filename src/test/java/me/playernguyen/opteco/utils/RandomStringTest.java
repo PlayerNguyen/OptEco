@@ -1,9 +1,9 @@
 package me.playernguyen.opteco.utils;
 
-import org.junit.jupiter.api.Test;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import org.junit.jupiter.api.Test;
 
 class RandomStringTest {
 
@@ -41,10 +41,7 @@ class RandomStringTest {
 
         // Assert
         for (int i = 0; i < value.length(); i++) {
-            assertTrue(
-                    Character.isLetterOrDigit(value.charAt(i)),
-                    "Unexpected character at index " + i
-            );
+            assertTrue(Character.isLetterOrDigit(value.charAt(i)), "Unexpected character at index " + i);
         }
     }
 }

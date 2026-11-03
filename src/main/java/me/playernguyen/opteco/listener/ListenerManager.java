@@ -1,11 +1,10 @@
 package me.playernguyen.opteco.listener;
 
+import java.util.HashSet;
 import me.playernguyen.opteco.OptEco;
 import me.playernguyen.opteco.manager.ManagerSet;
 import org.bukkit.Bukkit;
 import org.bukkit.event.HandlerList;
-
-import java.util.HashSet;
 
 public class ListenerManager extends ManagerSet<OptEcoListener> {
 
@@ -15,7 +14,6 @@ public class ListenerManager extends ManagerSet<OptEcoListener> {
         super(new HashSet<>());
         this.optEco = optEco;
     }
-
 
     @Override
     public void add(OptEcoListener item) {

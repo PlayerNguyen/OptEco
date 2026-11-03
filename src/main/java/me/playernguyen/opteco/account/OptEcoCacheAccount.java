@@ -32,7 +32,7 @@ public class OptEcoCacheAccount {
     }
 
     public static OptEcoCacheAccount loadFromAccount(Account account) {
-    	return (account != null)
+        return (account != null)
                 ? new OptEcoCacheAccount(account.getBalance(), System.currentTimeMillis())
                 : new OptEcoCacheAccount(0, System.currentTimeMillis());
     }

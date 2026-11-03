@@ -1,9 +1,8 @@
 package me.playernguyen.opteco.event;
 
+import java.util.UUID;
 import org.bukkit.event.HandlerList;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.UUID;
 
 public class OptEcoPointChangedEvent extends OptEcoEvent {
 
@@ -41,6 +40,7 @@ public class OptEcoPointChangedEvent extends OptEcoEvent {
     }
 
     public enum ModifyType {
-        INCREASE, DECREASE
+        INCREASE,
+        DECREASE
     }
 }

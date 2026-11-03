@@ -3,22 +3,12 @@ package me.playernguyen.opteco;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.logging.Logger;
-
-import me.playernguyen.opteco.api.OptEcoAPI;
-import me.playernguyen.opteco.api.OptEcoAPIAbstract;
-import me.playernguyen.opteco.configuration.OptEcoConfiguration;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.entity.Player;
-import org.bukkit.plugin.Plugin;
-import org.bukkit.plugin.PluginManager;
-import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.scheduler.BukkitScheduler;
-
 import me.playernguyen.opteco.account.IAccountDatabase;
 import me.playernguyen.opteco.account.OptEcoCacheAccountManager;
 import me.playernguyen.opteco.account.mysql.MySQLAccountDatabase;
 import me.playernguyen.opteco.account.sqlite.SQLiteAccountDatabase;
+import me.playernguyen.opteco.api.OptEcoAPI;
+import me.playernguyen.opteco.api.OptEcoAPIAbstract;
 import me.playernguyen.opteco.api.bossshoppro.OptEcoBossShopPro;
 import me.playernguyen.opteco.api.mvdwplaceholder.OptEcoMVdWPlaceholderAPI;
 import me.playernguyen.opteco.api.placeholderapi.OptEcoExpansion;
@@ -27,9 +17,10 @@ import me.playernguyen.opteco.bStats.Metrics;
 import me.playernguyen.opteco.command.CommandManager;
 import me.playernguyen.opteco.command.OptEcoCommand;
 import me.playernguyen.opteco.command.PlayerPointToOptEcoCommand;
+import me.playernguyen.opteco.configuration.OptEcoConfiguration;
 import me.playernguyen.opteco.configuration.OptEcoConfigurationLoader;
-import me.playernguyen.opteco.language.OptEcoLanguageLoader;
 import me.playernguyen.opteco.configuration.StorageType;
+import me.playernguyen.opteco.language.OptEcoLanguageLoader;
 import me.playernguyen.opteco.listener.ListenerManager;
 import me.playernguyen.opteco.listener.OptEcoListener;
 import me.playernguyen.opteco.listener.OptEcoPlayerListener;
@@ -40,6 +31,13 @@ import me.playernguyen.opteco.schedule.ScheduleManager;
 import me.playernguyen.opteco.transaction.TransactionManager;
 import me.playernguyen.opteco.updater.OptEcoUpdater;
 import me.playernguyen.opteco.utils.MessageFormat;
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.entity.Player;
+import org.bukkit.plugin.Plugin;
+import org.bukkit.plugin.PluginManager;
+import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scheduler.BukkitScheduler;
 
 /**
  * Main class of OptEco plugin
@@ -93,9 +91,7 @@ public class OptEco extends JavaPlugin {
         }
     }
 
-    private void hookWithVault() {
-
-    }
+    private void hookWithVault() {}
 
     private void hookMVdWPlaceholderAPI() {
         if (Bukkit.getPluginManager().isPluginEnabled("MVdWPlaceholderAPI")) {
@@ -108,7 +104,7 @@ public class OptEco extends JavaPlugin {
     private void hookShopGuiPlus() {
         PluginManager pluginManager = Bukkit.getPluginManager();
         Plugin pluginSGP = pluginManager.getPlugin("ShopGUIPlus");
-        if(pluginSGP == null) return;
+        if (pluginSGP == null) return;
 
         Runnable task = () -> {
             Logger logger = getLogger();
@@ -128,8 +124,9 @@ public class OptEco extends JavaPlugin {
         Plugin plugin = Bukkit.getPluginManager().getPlugin("PlayerPoints");
         // Whether found PlayerPoints
         if (plugin != null) {
-            Bukkit.getConsoleSender().sendMessage(ChatColor.GOLD + "Detect PlayerPoints, using " +
-                    ChatColor.RED + "/ppto " + ChatColor.GOLD + "to convert the data.");
+            Bukkit.getConsoleSender()
+                    .sendMessage(ChatColor.GOLD + "Detect PlayerPoints, using " + ChatColor.RED + "/ppto "
+                            + ChatColor.GOLD + "to convert the data.");
         }
     }
 
@@ -140,8 +137,8 @@ public class OptEco extends JavaPlugin {
         if (plugin != null) {
             // Announce to user
             logger.info("[Hooker] Found BossShopPro ~ v"
-                    + plugin.getDescription().getVersion() + ". Creating hook. Please make sure you has " +
-                    "config this (PointsPlugin: 'OptEco')");
+                    + plugin.getDescription().getVersion() + ". Creating hook. Please make sure you has "
+                    + "config this (PointsPlugin: 'OptEco')");
             // Register API
             new OptEcoBossShopPro(this).register();
         }
@@ -150,20 +147,16 @@ public class OptEco extends JavaPlugin {
     @Override
     public void onDisable() {
         // Unregister listen
-        if (listenerManager != null)
-            listenerManager.unregisterAll();
+        if (listenerManager != null) listenerManager.unregisterAll();
         // Command manager
-        if (commandManager != null)
-            commandManager.getContainer().clear();
+        if (commandManager != null) commandManager.getContainer().clear();
     }
 
     private void setupMetric() {
         this.metrics = new Metrics(getPlugin(), METRICS_ID);
         // Create pies
-        getMetrics().addCustomChart(new Metrics.SimplePie(
-                "storage_option_type",
-                () -> getStorageType().toString())
-        );
+        getMetrics().addCustomChart(new Metrics.SimplePie("storage_option_type", () -> getStorageType()
+                .toString()));
     }
 
     private void setupInstance() {
@@ -183,9 +176,8 @@ public class OptEco extends JavaPlugin {
         // Configuration Loader
         this.optEcoConfigurationLoader = new OptEcoConfigurationLoader();
         // Language Loader
-        this.optEcoLanguageLoader = new OptEcoLanguageLoader(
-                getConfigurationLoader().getString(OptEcoConfiguration.LANGUAGE_FILE)
-        );
+        this.optEcoLanguageLoader =
+                new OptEcoLanguageLoader(getConfigurationLoader().getString(OptEcoConfiguration.LANGUAGE_FILE));
     }
 
     private void setupAccount() {
@@ -217,7 +209,8 @@ public class OptEco extends JavaPlugin {
         waterMarks.add(" ___     ___   _______  ");
         waterMarks.add("|   |   |    )    |     " + ChatColor.AQUA + "Supported Bukkit - Spigot - PaperMC");
         waterMarks.add("|   |   |---/     |     " + ChatColor.AQUA + "__________ ");
-        waterMarks.add("|___/   |         |     Eco" + ChatColor.RED + " v" + getDescription().getVersion());
+        waterMarks.add("|___/   |         |     Eco" + ChatColor.RED + " v"
+                + getDescription().getVersion());
         waterMarks.add("                     ");
         for (String waterMark : waterMarks) {
             getServer().getConsoleSender().sendMessage(ChatColor.YELLOW + waterMark);
@@ -303,10 +296,9 @@ public class OptEco extends JavaPlugin {
             if (!this.getDescription().getVersion().equalsIgnoreCase(version)) {
                 Bukkit.getConsoleSender()
                         .sendMessage(String.format(
-                                ChatColor.YELLOW +
-                                        "Detected new update (%s), download at https://www.spigotmc.org/resources/76179",
-                                version)
-                        );
+                                ChatColor.YELLOW
+                                        + "Detected new update (%s), download at https://www.spigotmc.org/resources/76179",
+                                version));
             } else {
                 logger.fine("Nothing to update!");
             }
@@ -319,15 +311,17 @@ public class OptEco extends JavaPlugin {
         this.storageType = StorageType.fromString(rawStorageType);
         if (this.storageType == null) {
             Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "*****************************************");
-            Bukkit.getConsoleSender().sendMessage(
-                    ChatColor.RED + "[!] " + String.format("Storage type not found %s. Using SQLite instead!",
-                            rawStorageType)
-            );
+            Bukkit.getConsoleSender()
+                    .sendMessage(ChatColor.RED + "[!] "
+                            + String.format("Storage type not found %s. Using SQLite instead!", rawStorageType));
             Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "*****************************************");
             this.storageType = StorageType.SQLITE;
             // Set to default setting (SQLite)
-            this.getConfigurationLoader().getConfiguration().set(OptEcoConfiguration.STORAGE_TYPE.getPath(),
-                    OptEcoConfiguration.STORAGE_TYPE.getDefaultSetting());
+            this.getConfigurationLoader()
+                    .getConfiguration()
+                    .set(
+                            OptEcoConfiguration.STORAGE_TYPE.getPath(),
+                            OptEcoConfiguration.STORAGE_TYPE.getDefaultSetting());
             this.getConfigurationLoader().save();
         }
 
