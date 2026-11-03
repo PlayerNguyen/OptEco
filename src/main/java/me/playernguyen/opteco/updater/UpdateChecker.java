@@ -23,11 +23,21 @@ import org.jetbrains.annotations.NotNull;
  */
 public final class UpdateChecker {
 
+    /** GitHub endpoint returning the newest published release. */
     private static final String LATEST_RELEASE = "https://api.github.com/repos/PlayerNguyen/OptEco/releases/latest";
 
+    /** Plugin used for the asynchronous scheduler task and fine-level logging. */
     private final Plugin plugin;
+
+    /** Executor used to hop back to the main thread before printing the notice. */
     private final AsyncExecutor async;
 
+    /**
+     * Creates a checker.
+     *
+     * @param plugin owning plugin, used to schedule the background request and log failures
+     * @param async executor that delivers the console notice on the main thread
+     */
     public UpdateChecker(@NotNull Plugin plugin, @NotNull AsyncExecutor async) {
         this.plugin = plugin;
         this.async = async;
@@ -51,6 +61,15 @@ public final class UpdateChecker {
         });
     }
 
+    /**
+     * Performs the GitHub request with short timeouts.
+     *
+     * <p>Every failure, including a non-200 response, malformed JSON or a
+     * network error, is logged at fine level and reported as {@code null} so the
+     * update check never disrupts startup.</p>
+     *
+     * @return the latest release, or {@code null} when it could not be read
+     */
     @SuppressWarnings("deprecation") // JsonParser's instance API works on the Gson bundled by 1.13 servers.
     private Release fetchLatestRelease() {
         HttpURLConnection connection = null;
@@ -88,14 +107,30 @@ public final class UpdateChecker {
         }
     }
 
+    /**
+     * Removes a leading {@code v} or {@code V} so tags and manifest versions compare equally.
+     *
+     * @param version version text from the release tag or {@code plugin.yml}
+     * @return the version without its optional leading {@code v}
+     */
     private String normalize(String version) {
         return version.startsWith("v") || version.startsWith("V") ? version.substring(1) : version;
     }
 
+    /** Minimal view of the GitHub release fields used by the notice. */
     private static final class Release {
+        /** Release tag, for example {@code v1.2.3}. */
         private final String tag;
+
+        /** Browser URL of the release. */
         private final String url;
 
+        /**
+         * Creates the release view.
+         *
+         * @param tag release tag
+         * @param url release page URL
+         */
         private Release(String tag, String url) {
             this.tag = tag;
             this.url = url;

@@ -44,43 +44,125 @@ import org.bukkit.scheduler.BukkitTask;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+/**
+ * OptEco plugin bootstrap and lifecycle owner.
+ *
+ * <p>The class builds the service graph during {@link #onEnable()}, wires the
+ * Bukkit adapters (commands, listeners, optional hooks, metrics and update
+ * check), and releases everything in reverse order during {@link #onDisable()}.
+ * Startup order matters: configuration and messages load first, then storage is
+ * opened and migrated, then repositories, the write-through cache, the economy
+ * service and the payment service are created. Only after that are commands,
+ * listeners, the public API, hooks, the countdown task, metrics and the update
+ * check registered.</p>
+ *
+ * <p>When a startup step throws, {@link #onEnable()} logs the failure and asks
+ * Bukkit to disable the plugin, which runs {@link #onDisable()} and closes the
+ * resources created so far. Lifecycle methods and the accessors run on the
+ * Bukkit main thread; database work is delegated to
+ * {@link me.playernguyen.opteco.runtime.AsyncExecutor}. The static
+ * {@link #getInstance()} reference is volatile and cleared on disable, so other
+ * plugins must not cache it across a reload.</p>
+ */
 public class OptEco extends JavaPlugin {
 
+    /** Human-readable plugin name used by integrations and log output. */
     public static final String PLUGIN_NAME = "OptEco";
+
+    /** bStats service identifier for OptEco. */
     private static final int METRICS_ID = 6793;
 
+    /** Running plugin instance; {@code null} before enable and after disable. */
     private static volatile OptEco instance;
 
+    /** Configuration file owner and current validated snapshot. */
     private ConfigService configService;
+
+    /** Language file loader and message renderer. */
     private MessageService messages;
+
+    /** Database worker pool, sized from the storage backend. */
     private AsyncExecutor async;
+
+    /** SQLite or MySQL connection source. */
     private ConnectionProvider connectionProvider;
+
+    /** Transaction runner shared by the repositories. */
     private JdbcUnitOfWork unitOfWork;
+
+    /** Persists account rows. */
     private JdbcAccountRepository accountRepository;
+
+    /** Persists payment transaction rows. */
     private JdbcPaymentRepository paymentRepository;
+
+    /** Authoritative read cache for balances of loaded players. */
     private WriteThroughAccountCache cache;
+
+    /** Bridges core balance and transaction changes onto Bukkit events. */
     private BukkitEconomyEventBus eventBus;
+
+    /** Balance mutations, transfers and cache maintenance. */
     private EconomyService economy;
+
+    /** Pending payment state machine. */
     private PaymentService payments;
+
+    /** Resolves command arguments to online or stored players. */
     private PlayerResolver playerResolver;
+
+    /** Shared services handed to every subcommand. */
     private CommandDependencies commandDependencies;
+
+    /** Executor for {@code /opteco} and its aliases. */
     private PointsCommand pointsCommand;
+
+    /** Animated balance title listener, cancelled on disable. */
     private BalanceTitleListener balanceTitleListener;
+
+    /** Countdown ticker for pending payments. */
     private PaymentCountdownTask countdownTask;
+
+    /** Bukkit scheduler handle for {@link #countdownTask}. */
     private BukkitTask countdownBukkitTask;
+
+    /** API instance exposed through Bukkit's {@code ServicesManager}. */
     private OptEcoAPI api;
+
+    /** PlaceholderAPI expansion, when the plugin is present. */
     private PlaceholderApiHook placeholderHook;
+
+    /** MVdWPlaceholderAPI expansion, when the plugin is present. */
     private MvdwPlaceholderHook mvdwHook;
+
+    /** BossShopPro price hook, when the plugin is present. */
     private BossShopProHook bossShopHook;
+
+    /** ShopGUIPlus price hook, when the plugin is present. */
     private ShopGuiPlusHook shopGuiHook;
+
+    /** bStats reporter. */
     private Metrics metrics;
+
+    /** GitHub release checker, created only when the update check is enabled. */
     private UpdateChecker updateChecker;
 
+    /**
+     * Returns the running plugin instance.
+     *
+     * @return the enabled plugin, or {@code null} before enable and after disable
+     */
     @Nullable
     public static OptEco getInstance() {
         return instance;
     }
 
+    /**
+     * Starts the plugin.
+     *
+     * <p>Any failure is logged and leads to a Bukkit-initiated disable so a
+     * partially initialized service graph is never left running.</p>
+     */
     @Override
     public void onEnable() {
         instance = this;
@@ -92,6 +174,20 @@ public class OptEco extends JavaPlugin {
         }
     }
 
+    /**
+     * Builds and wires the service graph in dependency order.
+     *
+     * <p>Configuration and messages come first, then the database executor and
+     * connection provider, the schema migration, and the repositories. The
+     * cache, event bus, economy service and payment service follow, after which
+     * overdue payments from a previous run are expired. Commands, listeners,
+     * online-player accounts, the API and optional hooks are registered next,
+     * and the countdown task, metrics and update check start last.</p>
+     *
+     * @throws RuntimeException when any service cannot be created
+     * @throws me.playernguyen.opteco.core.exception.StorageException when the database is unreachable or the
+     *     schema migration fails
+     */
     private void start() {
         configService = new ConfigService(this);
         OptEcoConfig config = configService.current();
@@ -135,6 +231,14 @@ public class OptEco extends JavaPlugin {
                         + " database thread(s).");
     }
 
+    /**
+     * Creates the connection provider selected by the snapshot.
+     *
+     * @param config validated configuration snapshot
+     * @return a MySQL pool or a SQLite file provider
+     * @throws IllegalStateException when the SQLite parent folder cannot be created
+     * @throws me.playernguyen.opteco.core.exception.StorageException when the MySQL driver is missing
+     */
     private ConnectionProvider createConnectionProvider(@NotNull OptEcoConfig config) {
         if (config.storageType() == StorageType.MYSQL) {
             return new MysqlConnectionProvider(config);
@@ -147,6 +251,11 @@ public class OptEco extends JavaPlugin {
         return new SqliteConnectionProvider(sqliteFile);
     }
 
+    /**
+     * Attaches the dispatcher to the {@code opteco} command declared in {@code plugin.yml}.
+     *
+     * @throws IllegalStateException when {@code plugin.yml} does not declare the command
+     */
     private void registerCommands() {
         PluginCommand command = getCommand("opteco");
         if (command == null) {
@@ -156,6 +265,7 @@ public class OptEco extends JavaPlugin {
         command.setTabCompleter(pointsCommand);
     }
 
+    /** Registers the join/quit account loader and the balance title listener. */
     private void registerListeners() {
         PlayerConnectionListener connectionListener = new PlayerConnectionListener(this, async, economy);
         balanceTitleListener = new BalanceTitleListener(this, configService, messages);
@@ -163,6 +273,7 @@ public class OptEco extends JavaPlugin {
         getServer().getPluginManager().registerEvents(balanceTitleListener, this);
     }
 
+    /** Creates or caches accounts for players already online when the plugin starts. */
     private void loadOnlinePlayers() {
         for (Player player : Bukkit.getOnlinePlayers()) {
             async.run(
@@ -176,11 +287,19 @@ public class OptEco extends JavaPlugin {
         }
     }
 
+    /** Publishes the API through Bukkit's {@code ServicesManager} at normal priority. */
     private void registerApi() {
         api = new OptEcoApiImpl(async, economy, payments, configService);
         getServer().getServicesManager().register(OptEcoAPI.class, api, this, ServicePriority.Normal);
     }
 
+    /**
+     * Registers the optional PlaceholderAPI, MVdWPlaceholderAPI, BossShopPro and ShopGUIPlus adapters.
+     *
+     * <p>Each integration is created inside its own try block so a missing or
+     * incompatible plugin only logs a warning. The ShopGUIPlus hook is deferred
+     * by one tick to let that plugin finish its own enable.</p>
+     */
     private void registerHooks() {
         PluginManager pluginManager = getServer().getPluginManager();
         if (pluginManager.isPluginEnabled("PlaceholderAPI")) {
@@ -230,11 +349,13 @@ public class OptEco extends JavaPlugin {
         }
     }
 
+    /** Starts the once-per-second payment countdown ticker. */
     private void startCountdown() {
         countdownTask = new PaymentCountdownTask(this, configService, messages, payments, async);
         countdownBukkitTask = countdownTask.runTaskTimer(this, 20L, 20L);
     }
 
+    /** Creates the bStats reporter and its storage-type chart. */
     private void setupMetrics() {
         metrics = new Metrics(this, METRICS_ID);
         metrics.addCustomChart(new Metrics.SimplePie(
@@ -242,9 +363,16 @@ public class OptEco extends JavaPlugin {
     }
 
     /**
-     * Reloads config and language files without disabling the plugin.
+     * Reloads the configuration and language files without disabling the plugin.
      *
-     * @return true when storage settings changed and a restart is required
+     * <p>The new snapshot is validated before it replaces the old one, and the
+     * language service then switches to the file named by the new snapshot.
+     * Services that hold a supplier of the snapshot pick up the change
+     * immediately; the storage backend and its connection pool do not, so the
+     * return value tells the caller whether a restart is required.</p>
+     *
+     * @return {@code true} when a storage setting changed and a restart is required
+     * @throws me.playernguyen.opteco.config.ConfigException when the new configuration is invalid
      */
     public boolean reloadConfiguration() {
         OptEcoConfig previous = configService.current();
@@ -253,6 +381,13 @@ public class OptEco extends JavaPlugin {
         return storageChanged(previous, updated);
     }
 
+    /**
+     * Compares the settings that are bound to the open database connection.
+     *
+     * @param previous snapshot before the reload
+     * @param updated snapshot after the reload
+     * @return {@code true} when the backend, table names, SQLite file or MySQL connection details differ
+     */
     private boolean storageChanged(@NotNull OptEcoConfig previous, @NotNull OptEcoConfig updated) {
         return previous.storageType() != updated.storageType()
                 || !previous.accountTable().equals(updated.accountTable())
@@ -266,6 +401,16 @@ public class OptEco extends JavaPlugin {
                 || !previous.mysqlParameters().equals(updated.mysqlParameters());
     }
 
+    /**
+     * Stops scheduled work and closes the service graph in reverse startup order.
+     *
+     * <p>Countdown tasks and title animations are cancelled first, then Bukkit
+     * listeners, the PlaceholderAPI expansion and the registered services are
+     * removed. The payment service clears its pending map, the economy service
+     * clears the account cache, and the database executor and connection
+     * provider are closed last. Fields are nulled and the static instance is
+     * cleared so a failed partial enable can be disabled safely.</p>
+     */
     @Override
     public void onDisable() {
         if (countdownBukkitTask != null) {
@@ -310,38 +455,72 @@ public class OptEco extends JavaPlugin {
         instance = null;
     }
 
+    /**
+     * Returns the configuration service.
+     *
+     * @return the live configuration service
+     */
     @NotNull
     public ConfigService configService() {
         return configService;
     }
 
+    /**
+     * Returns the message service.
+     *
+     * @return the language loader and message renderer
+     */
     @NotNull
     public MessageService messages() {
         return messages;
     }
 
+    /**
+     * Returns the database executor.
+     *
+     * @return the shared worker pool used for database and network work
+     */
     @NotNull
     public AsyncExecutor async() {
         return async;
     }
 
+    /**
+     * Returns the economy service.
+     *
+     * @return the balance mutation and transfer service
+     */
     @NotNull
     public EconomyService economy() {
         return economy;
     }
 
+    /**
+     * Returns the payment service.
+     *
+     * @return the pending-payment state machine
+     */
     @NotNull
     public PaymentService payments() {
         return payments;
     }
 
+    /**
+     * Returns the registered API instance.
+     *
+     * @return the API also available through Bukkit's {@code ServicesManager}
+     */
     @NotNull
     public OptEcoAPI api() {
         return api;
     }
 
     /**
-     * @deprecated use the Bukkit ServicesManager or {@link #api()}.
+     * Returns the API instance.
+     *
+     * @return the API instance, or {@code null} after disable
+     * @deprecated use the Bukkit {@code ServicesManager} or {@link #api()}; this alias keeps older integrations
+     *     working without depending on the plugin object
      */
     @Deprecated
     @Nullable
@@ -349,6 +528,11 @@ public class OptEco extends JavaPlugin {
         return api;
     }
 
+    /**
+     * Returns the bStats reporter.
+     *
+     * @return the metrics instance created during startup
+     */
     @NotNull
     public Metrics metrics() {
         return metrics;

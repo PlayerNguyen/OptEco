@@ -23,16 +23,55 @@ import me.playernguyen.opteco.core.port.UnitOfWork;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+/**
+ * Implements the persisted pending-payment state machine.
+ *
+ * <p>A payment request creates a {@link Transaction} in
+ * {@link TransactionState#PENDING} and caches it by sender. Confirmation
+ * atomically claims the transition to {@link TransactionState#CONFIRMED} and
+ * moves funds in the same database transaction; cancellation and expiry move it
+ * to {@link TransactionState#CANCELLED} or {@link TransactionState#EXPIRED}
+ * without touching balances. The request, confirm, cancel, and expire operations
+ * are {@code synchronized} so the in-memory index stays consistent with the
+ * conditional database updates.</p>
+ *
+ * <p>Storage failures surface as {@link StorageException}. Expiry is driven by
+ * the countdown task through {@link #expire(UUID)}; {@link #expireOverdue()}
+ * cleans up payments left over from a previous run.</p>
+ */
 public final class PaymentService {
 
+    /** Payment persistence for the pending and historical transaction rows. */
     private final PaymentRepository payments;
+
+    /** Transaction runner shared with the balance moves. */
     private final UnitOfWork unitOfWork;
+
+    /** Economy service used to validate and move funds. */
     private final EconomyService economy;
+
+    /** Event sink notified after committed state transitions. */
     private final EconomyEventBus events;
+
+    /** Supplies the current config snapshot, which a reload can replace. */
     private final Supplier<OptEcoConfig> config;
+
+    /** Time source used for creation, expiry, and duration calculations. */
     private final Clock clock;
+
+    /** In-memory index of the newest pending payment per sender, populated lazily from storage. */
     private final ConcurrentMap<UUID, Transaction> pending = new ConcurrentHashMap<>();
 
+    /**
+     * Creates the payment service.
+     *
+     * @param payments payment persistence
+     * @param unitOfWork transaction runner used by confirmation
+     * @param economy economy service that supplies balances and transfers
+     * @param events event sink for transaction transitions
+     * @param config supplies the current configuration snapshot
+     * @param clock time source for expiry calculations
+     */
     public PaymentService(
             PaymentRepository payments,
             UnitOfWork unitOfWork,
@@ -48,6 +87,23 @@ public final class PaymentService {
         this.clock = clock;
     }
 
+    /**
+     * Creates a pending payment from one player to another.
+     *
+     * <p>The amount must be positive, representable, and fractional only when
+     * fractional amounts are enabled. The sender must be able to cover it without
+     * crossing the configured minimum balance. A sender may have only one
+     * unexpired pending payment; an expired one is marked expired first. Both
+     * accounts are created when missing.</p>
+     *
+     * @param sender sender UUID
+     * @param senderName sender name used when the account is created
+     * @param receiver receiver UUID
+     * @param receiverName receiver name used when the account is created
+     * @param amount amount to pay
+     * @return a result with the created transaction on success, or an explanatory status
+     * @throws StorageException if the payment row cannot be stored
+     */
     @NotNull
     public synchronized PaymentResult request(
             @NotNull UUID sender,
@@ -109,6 +165,18 @@ public final class PaymentService {
         }
     }
 
+    /**
+     * Confirms a sender's pending payment and moves the funds.
+     *
+     * <p>An expired payment is marked expired instead of being confirmed. The
+     * lock covers both participants, and the state transition plus debit/credit
+     * share one database transaction; a failed transfer rolls the claim back and
+     * marks the payment {@link TransactionState#FAILED}.</p>
+     *
+     * @param sender sender UUID
+     * @return a result with both resulting balances on success, or an explanatory status
+     * @throws StorageException if the confirmation cannot be completed in storage
+     */
     @NotNull
     public synchronized PaymentResult confirm(@NotNull UUID sender) {
         Transaction transaction = findPending(sender);
@@ -124,6 +192,13 @@ public final class PaymentService {
         return economy.withBalanceLocks(transaction.sender(), transaction.receiver(), () -> confirmLocked(transaction));
     }
 
+    /**
+     * Runs the claim-and-transfer step while the caller holds both player locks.
+     *
+     * @param transaction pending payment to confirm
+     * @return confirmation result
+     * @throws StorageException if the transaction fails
+     */
     @NotNull
     private PaymentResult confirmLocked(@NotNull Transaction transaction) {
         TransferOutcome outcome;
@@ -170,6 +245,13 @@ public final class PaymentService {
         return PaymentResult.success(confirmed, senderBalance, receiverBalance);
     }
 
+    /**
+     * Cancels a sender's pending payment without moving funds.
+     *
+     * @param sender sender UUID
+     * @return a result carrying the cancelled transaction, or an explanatory status
+     * @throws StorageException if the state change cannot be stored
+     */
     @NotNull
     public synchronized PaymentResult cancel(@NotNull UUID sender) {
         Transaction transaction = findPending(sender);
@@ -186,6 +268,13 @@ public final class PaymentService {
         return PaymentResult.of(PaymentStatus.SUCCESS, cancelled);
     }
 
+    /**
+     * Marks a sender's pending payment as expired when its deadline has passed.
+     *
+     * @param sender sender UUID
+     * @return a result with status {@link PaymentStatus#EXPIRED} when a payment expired, or an explanatory status
+     * @throws StorageException if the state change cannot be stored
+     */
     @NotNull
     public synchronized PaymentResult expire(@NotNull UUID sender) {
         Transaction transaction = findPending(sender);
@@ -199,28 +288,74 @@ public final class PaymentService {
         return PaymentResult.of(PaymentStatus.EXPIRED, transaction.withState(TransactionState.EXPIRED));
     }
 
+    /**
+     * Expires every overdue pending payment in storage.
+     *
+     * <p>This bulk update publishes no per-payment events and leaves the
+     * in-memory index alone; the plugin uses it at startup to clean up payments
+     * left pending by a previous run.</p>
+     *
+     * @return number of payments moved to {@link TransactionState#EXPIRED}
+     * @throws StorageException if the update fails
+     */
     public int expireOverdue() {
         return payments.expireOverdue(clock.now());
     }
 
+    /**
+     * Returns the pending payment for a sender, loading it from storage on a miss.
+     *
+     * @param sender sender UUID
+     * @return the pending payment, or empty when the sender has none
+     * @throws StorageException if the lookup fails
+     */
     @NotNull
     public Optional<Transaction> pendingFor(@NotNull UUID sender) {
         return Optional.ofNullable(findPending(sender));
     }
 
+    /**
+     * Tests whether a sender has a pending payment.
+     *
+     * @param sender sender UUID
+     * @return {@code true} when a pending payment exists
+     * @throws StorageException if the lookup fails
+     */
     public boolean isPending(@NotNull UUID sender) {
         return findPending(sender) != null;
     }
 
+    /**
+     * Returns a snapshot of the currently indexed pending payments.
+     *
+     * <p>The returned list is a copy and is safe to iterate while payments are
+     * confirmed or expired concurrently.</p>
+     *
+     * @return pending payments currently held in memory
+     */
     @NotNull
     public List<Transaction> pendingTransactions() {
         return new ArrayList<>(pending.values());
     }
 
+    /**
+     * Drops the in-memory pending index.
+     *
+     * <p>Stored payments are untouched; they are reloaded lazily on the next
+     * lookup and expired at the next startup if their deadline passed.</p>
+     */
     public void shutdown() {
         pending.clear();
     }
 
+    /**
+     * Finds a sender's pending payment, consulting the in-memory index first and
+     * caching the stored row on a miss.
+     *
+     * @param sender sender UUID
+     * @return the pending payment, or null when none exists
+     * @throws StorageException if the storage lookup fails
+     */
     @Nullable
     private Transaction findPending(@NotNull UUID sender) {
         Transaction transaction = pending.get(sender);
@@ -235,13 +370,26 @@ public final class PaymentService {
         return null;
     }
 
+    /**
+     * Transitions a payment from pending to expired, updates the index, and
+     * publishes the event.
+     *
+     * @param transaction pending payment whose deadline has passed
+     * @throws StorageException if the state change cannot be stored
+     */
     private void expireTransaction(Transaction transaction) {
         payments.transition(transaction.id(), TransactionState.PENDING, TransactionState.EXPIRED);
         pending.remove(transaction.sender());
         events.transactionChanged(transaction.withState(TransactionState.EXPIRED), TransactionState.PENDING);
     }
 
+    /**
+     * Internal marker used to roll back a confirmation when the transfer cannot
+     * complete; never escapes this class.
+     */
     private static final class PaymentRollbackException extends RuntimeException {
+
+        /** Serialization id required because exceptions are {@link java.io.Serializable}. */
         private static final long serialVersionUID = 1L;
     }
 }

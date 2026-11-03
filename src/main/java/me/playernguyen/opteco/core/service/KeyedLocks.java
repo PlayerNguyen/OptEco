@@ -26,6 +26,7 @@ import java.util.function.Supplier;
  */
 public final class KeyedLocks {
 
+    /** Fixed lock stripes; a UUID hash selects one of them. */
     private final ReentrantLock[] locks;
 
     /**

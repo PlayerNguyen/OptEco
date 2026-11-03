@@ -19,13 +19,38 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * Listener that animates the balance title effect after a balance change.
+ *
+ * <p>Every {@link OptEcoPointChangedEvent} for an online player starts a
+ * {@link BalanceTitleAnimator} in place of the previous one for that player, so
+ * rapid changes never stack animations. The effect is skipped entirely when
+ * {@code titleEnabled} is off. Tasks run on the main thread once per tick and are
+ * cancelled for players who disconnect; {@link #cancelAll()} must be called on
+ * disable so no task outlives the plugin. The task map is a
+ * {@link ConcurrentHashMap} because events may arrive from the runtime bridge.
+ */
 public final class BalanceTitleListener implements Listener {
 
+    /** Plugin used to schedule the animation tasks. */
     private final Plugin plugin;
+
+    /** Reloadable configuration supplying the title settings. */
     private final ConfigService config;
+
+    /** Language service used to format the title and subtitle. */
     private final MessageService messages;
+
+    /** Currently running animation task per player. */
     private final Map<UUID, BukkitTask> tasks = new ConcurrentHashMap<>();
 
+    /**
+     * Creates the listener.
+     *
+     * @param plugin the owning plugin, used for scheduling
+     * @param config the reloadable configuration source
+     * @param messages the language service used for title text
+     */
     public BalanceTitleListener(
             @NotNull Plugin plugin, @NotNull ConfigService config, @NotNull MessageService messages) {
         this.plugin = plugin;
@@ -33,6 +58,12 @@ public final class BalanceTitleListener implements Listener {
         this.messages = messages;
     }
 
+    /**
+     * Restarts the title animation for the player whose balance changed.
+     *
+     * @param event the balance change event, ignored when the effect is disabled
+     *         or the player is offline
+     */
     @EventHandler
     public void onBalanceChanged(@NotNull OptEcoPointChangedEvent event) {
         if (!config.current().titleEnabled()) {
@@ -52,6 +83,9 @@ public final class BalanceTitleListener implements Listener {
         tasks.put(player.getUniqueId(), task);
     }
 
+    /**
+     * Cancels every running animation. Called during plugin disable.
+     */
     public void cancelAll() {
         for (BukkitTask task : tasks.values()) {
             task.cancel();
@@ -59,15 +93,48 @@ public final class BalanceTitleListener implements Listener {
         tasks.clear();
     }
 
+    /**
+     * Per-player repeating task that interpolates a title from the old balance
+     * to the new one.
+     *
+     * <p>The number of steps is derived from {@code titleSpeed} and clamped to
+     * five through one hundred ticks. To avoid counting through a huge delta, the
+     * starting value is pulled towards the target by {@code titleLimit}. Each tick
+     * sends the {@code TITLE_INCREASE} or {@code TITLE_DECREASE} message plus its
+     * subtitle with the running value and the remaining difference, and the task
+     * cancels itself when the player leaves or the animation ends.
+     */
     private static final class BalanceTitleAnimator extends BukkitRunnable {
+        /** Reloadable configuration supplying the title settings. */
         private final ConfigService config;
+
+        /** Language service used to format the title and subtitle. */
         private final MessageService messages;
+
+        /** Player receiving the animation. */
         private final UUID playerId;
+
+        /** First value shown, clamped towards {@code end} by {@code titleLimit}. */
         private final BigDecimal start;
+
+        /** Final balance shown when the animation completes. */
         private final BigDecimal end;
+
+        /** Total number of animation steps. */
         private final int ticks;
+
+        /** Number of steps already rendered. */
         private int step;
 
+        /**
+         * Captures the animation range for one balance change.
+         *
+         * @param config the reloadable configuration source
+         * @param messages the language service used for title text
+         * @param playerId the player receiving the animation
+         * @param oldBalance the balance before the change
+         * @param newBalance the balance after the change
+         */
         private BalanceTitleAnimator(
                 ConfigService config,
                 MessageService messages,
@@ -90,6 +157,9 @@ public final class BalanceTitleListener implements Listener {
             }
         }
 
+        /**
+         * Renders one animation step and cancels the task at the end.
+         */
         @Override
         public void run() {
             Player player = Bukkit.getPlayer(playerId);

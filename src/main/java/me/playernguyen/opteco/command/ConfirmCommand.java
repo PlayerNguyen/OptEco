@@ -9,12 +9,32 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * {@code /points confirm} subcommand: settles the sender's pending payment.
+ *
+ * <p>Gated by {@link OptEcoPermission#CONFIRM} and player-only. Confirmation
+ * runs through {@link me.playernguyen.opteco.core.service.PaymentService#confirm},
+ * which moves the balance and closes the transaction in one database unit of
+ * work. The sender is always notified, and the receiver is notified too when
+ * they are still online.
+ */
 public final class ConfirmCommand extends SubCommand {
 
+    /**
+     * Creates the subcommand descriptor.
+     */
     public ConfirmCommand() {
         super("confirm", OptEcoPermission.CONFIRM, MessageKey.CONFIRM_DESCRIPTION, "confirm", true);
     }
 
+    /**
+     * Schedules confirmation of the sender's pending payment.
+     *
+     * <p>Takes no arguments; the payment service derives the pending transaction
+     * from the sender's UUID. The result is reported by {@link #handleResult}.
+     *
+     * @param context invocation state; the sender is guaranteed to be a player
+     */
     @Override
     public void execute(@NotNull CommandContext context) {
         Player sender = context.player();
@@ -26,6 +46,19 @@ public final class ConfirmCommand extends SubCommand {
                         context::handleError);
     }
 
+    /**
+     * Reports the confirmation outcome and notifies the receiver on success.
+     *
+     * <p>Missing, expired, and underfunded transactions receive their dedicated
+     * messages; other failures fall back to {@link MessageKey#PAY_FAILED}. On
+     * success the sender sees {@link MessageKey#PAY_SUCCESS} with the amount and
+     * receiver name, and an online receiver also gets
+     * {@link MessageKey#PAY_SUCCESS_TARGET}.
+     *
+     * @param context invocation state used to reply to the sender
+     * @param sender the player who confirmed the payment
+     * @param result outcome reported by the payment service
+     */
     private void handleResult(CommandContext context, Player sender, @NotNull PaymentResult result) {
         PaymentStatus status = result.status();
         if (status != PaymentStatus.SUCCESS) {
@@ -76,6 +109,12 @@ public final class ConfirmCommand extends SubCommand {
         }
     }
 
+    /**
+     * Picks a display name for the receiver of a completed transaction.
+     *
+     * @param transaction the completed payment
+     * @return the receiver's live name when online, otherwise the UUID string
+     */
     @NotNull
     private String receiverName(@NotNull Transaction transaction) {
         Player receiver = Bukkit.getPlayer(transaction.receiver());
