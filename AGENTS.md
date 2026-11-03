@@ -22,8 +22,7 @@ changes over large rewrites.
 - `gradle/wrapper/gradle-wrapper.jar` is tracked intentionally; keep the
   `.gitignore` exception so `./gradlew` works in a fresh clone.
 - The JAR bundles HikariCP; plugin and server APIs are `compileOnly`.
-- `pom.xml` is a stale legacy file. Use Gradle; do not trust its version or
-  dependency list.
+- The build is Gradle-only. Do not add or maintain a Maven `pom.xml`.
 - The plugin version is injected into `src/main/resources/plugin.yml` through
   `ReplaceTokens`. Set it with `-Pversion=X.Y.Z` or `VERSION`; local builds
   default to `0.0.0-dev`.

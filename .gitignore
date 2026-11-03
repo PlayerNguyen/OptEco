@@ -17,10 +17,6 @@ bin/
 .classpath
 .project
 
-# Maven
-target/
-dependency-reduced-pom.xml
-
 # Gradle
 .gradle/
 build/
