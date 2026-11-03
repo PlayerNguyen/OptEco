@@ -38,7 +38,10 @@ OptEco is a point system plugin for Bukkit/Spigot/PaperMC made with love by Play
   - [API Guide](https://github.com/PlayerNguyen/OptEco/wiki/Developers#api-guide)
 
 ## Website Integration
-Check out our example website integration PHP [here](web_integration).
+The PHP web integration in [`web_integration/`](web_integration) is
+**deprecated and unmaintained**. Do not deploy it. See
+[web_integration/README.md](web_integration/README.md) for the security notice
+and migration guidance.
 # Links
 - [**JavaDoc**](https://playernguyen.github.io/OptEco/me/playernguyen/opteco/api/OptEcoAPI.html)
 - [**Spigot Resource**](https://www.spigotmc.org/resources/76179/)
