@@ -1,34 +1,27 @@
 package me.playernguyen.opteco.permission;
 
+import lombok.Getter;
+import lombok.experimental.Accessors;
+
+@Getter
+@Accessors(fluent = true)
 public enum OptEcoPermission {
-
     ADMIN("opteco.admin"),
-    EVERYTHING("opteco.*"),
     USER("opteco.user"),
-
     ADD("opteco.add"),
     TAKE("opteco.take"),
+    SET("opteco.set"),
     CHECK("opteco.check"),
     ME("opteco.me"),
     PAY("opteco.pay"),
-    RELOAD("opteco.reload"),
-    SET("opteco.set"),
     CONFIRM("opteco.confirm"),
     CANCEL("opteco.cancel"),
     TOP("opteco.top"),
+    RELOAD("opteco.reload");
 
-    PPTO("opteco.ppto")
+    private final String node;
 
-    ;
-
-    private final String permission;
-
-    OptEcoPermission(String permission) {
-        this.permission = permission;
+    OptEcoPermission(String node) {
+        this.node = node;
     }
-
-    public String getPermission() {
-        return permission;
-    }
-
 }

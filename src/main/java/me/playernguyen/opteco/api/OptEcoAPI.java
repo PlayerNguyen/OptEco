@@ -1,65 +1,66 @@
 package me.playernguyen.opteco.api;
 
+import java.math.BigDecimal;
+import java.util.Optional;
+import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
+import me.playernguyen.opteco.core.model.Transaction;
+import me.playernguyen.opteco.core.model.TransferResult;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.UUID;
-
+/**
+ * Public OptEco API. Balance amounts are exact decimals; use
+ * {@link #getBalanceAsync(UUID)} when calling from the Bukkit main thread.
+ */
 public interface OptEcoAPI {
 
-    /**
-     * Check whether the account that exist or not.
-     *
-     * @param uuid a uuid to check
-     * @return boolean has this account on database or not
-     */
     boolean hasAccount(@NotNull UUID uuid);
 
-    /**
-     * Set points to player uuid.
-     *
-     * @param uuid   a player that will set
-     * @param amount amount you want to set
-     * @return boolean is set or not
-     */
-    boolean setPoints(@NotNull UUID uuid, double amount);
+    @NotNull
+    BigDecimal getBalance(@NotNull UUID uuid);
 
-    /**
-     * Get points of player
-     *
-     * @return double balance of that player
-     */
-    double getPoints(@NotNull UUID player);
+    @NotNull
+    BigDecimal getCachedBalance(@NotNull UUID uuid);
 
-    /**
-     * Check status that whether individual is on pending transaction or not.
-     *
-     * @param uuid a player to check pending status
-     * @return boolean is pending or not
-     */
+    @NotNull
+    CompletableFuture<BigDecimal> getBalanceAsync(@NotNull UUID uuid);
+
+    void setBalance(@NotNull UUID uuid, @NotNull BigDecimal amount);
+
+    void addBalance(@NotNull UUID uuid, @NotNull BigDecimal amount);
+
+    boolean takeBalance(@NotNull UUID uuid, @NotNull BigDecimal amount);
+
+    @NotNull
+    TransferResult transfer(@NotNull UUID from, @NotNull UUID to, @NotNull BigDecimal amount);
+
     boolean isPending(@NotNull UUID uuid);
 
-    /**
-     * Credit an amount of point into player account.
-     *
-     * @param amount an amount to credit
-     * @return true whether credited or false otherwise
-     */
-    boolean addPoints(@NotNull UUID player, double amount);
+    @NotNull
+    Optional<Transaction> getPendingTransaction(@NotNull UUID uuid);
 
-    /**
-     * Withdraw points out of player's account
-     *
-     *
-     * @param amount an amount to withdraw
-     * @return true whether withdrawn or false otherwise
-     */
-    boolean takePoints(@NotNull UUID player, double amount);
-
-    /**
-     * A currently symbol which was configured by user.
-     *
-     * @return currency symbol
-     */
+    @NotNull
     String getCurrencySymbol();
 
+    @Deprecated
+    default double getPoints(@NotNull UUID uuid) {
+        return getBalance(uuid).doubleValue();
+    }
+
+    @Deprecated
+    default boolean setPoints(@NotNull UUID uuid, double amount) {
+        setBalance(uuid, BigDecimal.valueOf(amount));
+        return true;
+    }
+
+    @Deprecated
+    default boolean addPoints(@NotNull UUID uuid, double amount) {
+        addBalance(uuid, BigDecimal.valueOf(amount));
+        return true;
+    }
+
+    @Deprecated
+    default boolean takePoints(@NotNull UUID uuid, double amount) {
+        return takeBalance(uuid, BigDecimal.valueOf(amount));
+    }
 }

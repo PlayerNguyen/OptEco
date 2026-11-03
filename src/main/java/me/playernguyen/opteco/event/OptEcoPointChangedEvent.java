@@ -1,46 +1,51 @@
 package me.playernguyen.opteco.event;
 
-import org.bukkit.event.HandlerList;
-import org.jetbrains.annotations.NotNull;
-
+import java.math.BigDecimal;
+import java.util.Objects;
 import java.util.UUID;
+import me.playernguyen.opteco.core.model.BalanceChange;
+import me.playernguyen.opteco.core.model.BalanceChangeReason;
+import org.bukkit.event.Event;
+import org.bukkit.event.HandlerList;
 
-public class OptEcoPointChangedEvent extends OptEcoEvent {
+public final class OptEcoPointChangedEvent extends Event {
 
-    private final UUID who;
-    private final double oldPoint;
-    private final double newPoint;
-    private final ModifyType type;
+    private static final HandlerList HANDLERS = new HandlerList();
 
-    public OptEcoPointChangedEvent(UUID who, double oldPoint, double newPoint, ModifyType type) {
-        this.who = who;
-        this.oldPoint = oldPoint;
-        this.newPoint = newPoint;
-        this.type = type;
+    private final UUID player;
+    private final BigDecimal oldBalance;
+    private final BigDecimal newBalance;
+    private final BalanceChangeReason reason;
+
+    public OptEcoPointChangedEvent(BalanceChange change) {
+        this.player = Objects.requireNonNull(change, "change").player();
+        this.oldBalance = change.oldBalance();
+        this.newBalance = change.newBalance();
+        this.reason = change.reason();
+    }
+
+    public UUID player() {
+        return player;
+    }
+
+    public BigDecimal oldBalance() {
+        return oldBalance;
+    }
+
+    public BigDecimal newBalance() {
+        return newBalance;
+    }
+
+    public BalanceChangeReason reason() {
+        return reason;
     }
 
     @Override
-    public @NotNull HandlerList getHandlers() {
-        return super.getHandlers();
+    public HandlerList getHandlers() {
+        return HANDLERS;
     }
 
-    public double getNewPoint() {
-        return newPoint;
-    }
-
-    public double getOldPoint() {
-        return oldPoint;
-    }
-
-    public UUID getWho() {
-        return who;
-    }
-
-    public ModifyType getType() {
-        return type;
-    }
-
-    public enum ModifyType {
-        INCREASE, DECREASE
+    public static HandlerList getHandlerList() {
+        return HANDLERS;
     }
 }
