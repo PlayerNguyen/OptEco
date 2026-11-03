@@ -31,6 +31,7 @@ Closes #
 
 - [ ] `./gradlew clean build` passes
 - [ ] `./gradlew test` passes (Java changes)
+- [ ] `./gradlew spotlessApply` run before committing (Java changes)
 - [ ] `bun test` passes (repository tooling changes)
 - [ ] Manually tested on Paper/Spigot version:
 - [ ] Tested with storage backend: SQLite / MySQL

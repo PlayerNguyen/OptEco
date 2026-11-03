@@ -32,6 +32,13 @@ changes over large rewrites.
   `./gradlew clean build`, which runs tests as part of `build`).
 - CI runs `./gradlew clean build` on JDK 21 in
   `.github/workflows/java-tests.yml`.
+- `build` also runs static analysis. Spotless enforces Palantir Java Format
+  (4-space indentation, 120 columns); run `./gradlew spotlessApply` before
+  committing. SpotBugs analyzes the compiled classes; run
+  `./gradlew spotbugsMain` and read `build/reports/spotbugs/main.html`.
+- `config/spotbugs/exclude.xml` freezes findings that predate SpotBugs. Fix the
+  issue and delete the matching entry instead of widening an exclusion. Only
+  add entries for confirmed false positives, and say why in the pull request.
 - For behavior changes, also manually test on a supported Paper/Spigot server
   (SQLite storage is the easiest setup).
 
