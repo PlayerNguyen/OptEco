@@ -44,7 +44,7 @@ import org.bukkit.scheduler.BukkitTask;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public final class OptEco extends JavaPlugin {
+public class OptEco extends JavaPlugin {
 
     public static final String PLUGIN_NAME = "OptEco";
     private static final int METRICS_ID = 6793;
