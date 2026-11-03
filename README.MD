@@ -1,6 +1,3 @@
-## Discontinued project, changed to [OptEcoPrime](https://github.com/PlayerNguyen/OptEcoPrime)
-This plugin is abandoned. Let's move to my new plugin, [OptEcoPrime](https://github.com/PlayerNguyen/OptEcoPrime). at the moment, OptEcoPrime has lots of utitlies and can be replaced by OptEco. If you are my OptEco users, please stand by for a while until I make a tool to convert database. Otherwise, you should ensure that your database will be lost.
-
 ![alt text][logo]
 
 [logo]: https://raw.githubusercontent.com/PlayerNguyen/OptEco/0be367354df5f3341272e27604bfe7afe66a26ea/logo/Banner.png "Logo"
@@ -45,6 +42,12 @@ and migration guidance.
 # Links
 - [**JavaDoc**](https://playernguyen.github.io/OptEco/me/playernguyen/opteco/api/OptEcoAPI.html)
 - [**Spigot Resource**](https://www.spigotmc.org/resources/76179/)
+# Contributing
+- Follow the [commit convention](AGENTS.md#commit-convention) in AGENTS.md for commit messages.
+- Use the [pull request template](.github/pull_request_template.md) when opening a PR.
+- Read [AGENTS.md](AGENTS.md) for the architecture and development workflow.
+- CI validates the PR title, template, and commit subjects with Bun ([`scripts/check-pr`](scripts/check-pr/README.md)).
+
 # License & Contribution 
 Copyright (c) by Player_Nguyen. All rights reserved.
 
