@@ -30,7 +30,7 @@ changes over large rewrites.
 
 - Bun is used only for repository tooling; it is not a runtime dependency of the
   plugin.
-- `bun test` runs the PR validator tests in `scripts/check-pr.test.ts`.
+- `bun test` runs the PR validator tests in `scripts/check-pr/index.test.ts`.
 - `bun run check:pr` validates the current PR title, body, and commit subjects.
   CI runs both commands in `.github/workflows/pr-check.yml`.
 - Pull requests must use `.github/pull_request_template.md`. Add the
@@ -177,8 +177,8 @@ This reverts commit 1234abcd.
 ### Verification
 
 - Pull requests are checked by `.github/workflows/pr-check.yml` using
-  `scripts/check-pr.ts`. The check validates the PR title, the PR template, and
-  every non-merge commit subject.
+  `scripts/check-pr/index.ts`. The check validates the PR title, the PR
+  template, and every non-merge commit subject.
 - Run the validator locally with `bun test` and `bun run check:pr` (set
   `PR_TITLE` and `PR_BODY` when running outside GitHub Actions).
 - Use the `skip-pr-check` label only for bot PRs or exceptional cases.

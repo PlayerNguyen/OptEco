@@ -4,7 +4,7 @@ import {
   validateCommitSubject,
   validateCommits,
   validateTitle,
-} from "./check-pr";
+} from "./index";
 
 const VALID_BODY = `## Summary
 

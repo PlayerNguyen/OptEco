@@ -43,7 +43,7 @@ Check out our example website integration PHP [here](web_integration).
 - Follow the [commit convention](AGENTS.md#commit-convention) in AGENTS.md for commit messages.
 - Use the [pull request template](.github/pull_request_template.md) when opening a PR.
 - Read [AGENTS.md](AGENTS.md) for the architecture and development workflow.
-- CI validates the PR title, template, and commit subjects with Bun (`scripts/check-pr.ts`).
+- CI validates the PR title, template, and commit subjects with Bun (`scripts/check-pr/index.ts`).
 
 # License & Contribution 
 Copyright (c) by Player_Nguyen. All rights reserved.
