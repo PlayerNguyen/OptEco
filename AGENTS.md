@@ -24,8 +24,8 @@ changes over large rewrites.
   `.gitignore` exception so `./gradlew` works in a fresh clone.
 - The JAR bundles HikariCP, SQLite JDBC, and MySQL Connector/J; plugin and
   server APIs are `compileOnly`.
-- `pom.xml` is a stale legacy file. Use Gradle; do not trust its version or
-  dependency list.
+- The build is Gradle-only. The legacy Maven `pom.xml` was removed; do not
+  reintroduce it.
 - The plugin version is injected into `src/main/resources/plugin.yml` through
   `ReplaceTokens`. Set it with `-Pversion=X.Y.Z` or `VERSION`; local builds
   default to `0.0.0-dev`.
