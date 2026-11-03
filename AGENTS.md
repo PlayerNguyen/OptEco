@@ -26,6 +26,16 @@ changes over large rewrites.
   for behavior changes, manually testing on a supported Paper/Spigot server
   (SQLite storage is the easiest setup).
 
+## Repository tooling
+
+- Bun is used only for repository tooling; it is not a runtime dependency of the
+  plugin.
+- `bun test` runs the PR validator tests in `scripts/check-pr.test.ts`.
+- `bun run check:pr` validates the current PR title, body, and commit subjects.
+  CI runs both commands in `.github/workflows/pr-check.yml`.
+- Pull requests must use `.github/pull_request_template.md`. Add the
+  `skip-pr-check` label only for bot PRs or exceptional cases.
+
 ## Architecture map
 
 - `src/main/java/me/playernguyen/opteco/OptEco.java` — plugin entry point and

@@ -29,17 +29,17 @@ Closes #
 <!-- Describe the server version, storage backend, and commands used. -->
 
 - [ ] `./gradlew clean build` passes
+- [ ] `bun test` passes (repository tooling changes)
 - [ ] Manually tested on Paper/Spigot version:
 - [ ] Tested with storage backend: SQLite / MySQL
+- [ ] Not applicable (documentation/config-only change)
 
 ## Checklist
 
 - [ ] Commit messages follow `COMMIT_CONVENTION.md`
-- [ ] New config keys are added to `OptEcoConfiguration` with defaults
-- [ ] New messages are added to `OptEcoLanguage` and the language files
-- [ ] New permissions are declared in `plugin.yml`
-- [ ] Documentation (`README.MD`, `CONFIGURATION.md`, `API.MD`) is updated if needed
-- [ ] Public API compatibility has been considered
+- [ ] Build passes, or the change does not affect Java code
+- [ ] Config, language, permissions, and docs updated where applicable
+- [ ] Public API compatibility considered
 - [ ] No secrets, credentials, or server-specific data are committed
 
 ## Screenshots or logs

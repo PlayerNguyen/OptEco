@@ -1,0 +1,11 @@
+{
+  "name": "opteco-pr-tooling",
+  "private": true,
+  "scripts": {
+    "check:pr": "bun run scripts/check-pr.ts",
+    "test": "bun test"
+  },
+  "engines": {
+    "bun": ">=1.0.0"
+  }
+}

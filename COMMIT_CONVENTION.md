@@ -96,8 +96,12 @@ This reverts commit 1234abcd.
 
 ## Notes
 
-- This convention is currently enforced during review; there is no automated
-  commit-msg hook yet.
+- Pull requests are checked by `.github/workflows/pr-check.yml` using
+  `scripts/check-pr.ts`. The check validates the PR title, the PR template, and
+  every non-merge commit subject.
+- Run the validator locally with `bun test` and `bun run check:pr` (set
+  `PR_TITLE` and `PR_BODY` when running outside GitHub Actions).
+- Use the `skip-pr-check` label only for bot PRs or exceptional cases.
 - Pull requests should follow the template in
   `.github/pull_request_template.md`.
 - Keep commit messages in English, even if discussion or documentation is in
