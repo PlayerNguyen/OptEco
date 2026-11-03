@@ -20,7 +20,7 @@ Closes #42
 
 ## What changed
 
-- Added AGENTS.md and COMMIT_CONVENTION.md.
+- Added AGENTS.md with the commit convention.
 - Added the pull request template.
 
 ## How tested
@@ -29,7 +29,7 @@ Closes #42
 
 ## Checklist
 
-- [x] Commit messages follow \`COMMIT_CONVENTION.md\`
+- [x] Commit messages follow the commit convention in \`AGENTS.md\`
 - [x] Build passes, or the change does not affect Java code
 - [x] Config/language/permissions/docs updated where applicable
 - [x] Public API compatibility considered

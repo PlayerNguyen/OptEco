@@ -100,7 +100,7 @@ export function validateTitle(title: string): string[] {
   }
   if (!TITLE_PATTERN.test(title)) {
     errors.push(
-      'PR title must follow Conventional Commits, e.g. "docs: add PR template" or "fix(account): refresh cache".',
+      'PR title must follow Conventional Commits (see AGENTS.md#commit-convention), e.g. "docs: add PR template".',
     );
   }
 
@@ -121,7 +121,7 @@ export function validateCommitSubject(subject: string): string[] {
   }
   if (!TITLE_PATTERN.test(subject)) {
     errors.push(
-      'Commit subject must follow Conventional Commits, e.g. "fix(account): refresh cache".',
+      'Commit subject must follow Conventional Commits (see AGENTS.md#commit-convention).',
     );
   }
 

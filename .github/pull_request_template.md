@@ -36,7 +36,7 @@ Closes #
 
 ## Checklist
 
-- [ ] Commit messages follow `COMMIT_CONVENTION.md`
+- [ ] Commit messages follow the commit convention in `AGENTS.md`
 - [ ] Build passes, or the change does not affect Java code
 - [ ] Config, language, permissions, and docs updated where applicable
 - [ ] Public API compatibility considered
