@@ -412,6 +412,20 @@ public class OptEco extends JavaPlugin {
     }
 
     /**
+     * Returns the number of balance title animations currently tracked.
+     *
+     * <p>Intended for diagnostics and the opt-in soak test. The plugin cancels
+     * every animation on disable, so this is zero before enable and after
+     * disable.</p>
+     *
+     * @return tracked animation count
+     */
+    int activeTitleAnimations() {
+        BalanceTitleListener listener = balanceTitleListener;
+        return listener == null ? 0 : listener.activeAnimations();
+    }
+
+    /**
      * Stops scheduled work and closes the service graph in reverse startup order.
      *
      * <p>Countdown tasks and title animations are cancelled first, then Bukkit

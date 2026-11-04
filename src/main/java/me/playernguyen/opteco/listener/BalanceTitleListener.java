@@ -25,8 +25,10 @@ import org.jetbrains.annotations.NotNull;
  * <p>Every {@link OptEcoPointChangedEvent} for an online player starts a
  * {@link BalanceTitleAnimator} in place of the previous one for that player, so
  * rapid changes never stack animations. The effect is skipped entirely when
- * {@code titleEnabled} is off. Tasks run on the main thread once per tick and are
- * cancelled for players who disconnect; {@link #cancelAll()} must be called on
+ * {@code titleEnabled} is off. Tasks run on the main thread once per tick, are
+ * cancelled for players who disconnect, and remove themselves from the tracking
+ * map when they finish so a long-lived server does not retain one entry per
+ * player that ever received points; {@link #cancelAll()} must be called on
  * disable so no task outlives the plugin. The task map is a
  * {@link ConcurrentHashMap} because events may arrive from the runtime bridge.
  */
@@ -77,10 +79,16 @@ public final class BalanceTitleListener implements Listener {
         if (previous != null) {
             previous.cancel();
         }
+        UUID playerId = player.getUniqueId();
         BukkitTask task = new BalanceTitleAnimator(
-                        config, messages, player.getUniqueId(), event.oldBalance(), event.newBalance())
+                        config,
+                        messages,
+                        playerId,
+                        event.oldBalance(),
+                        event.newBalance(),
+                        () -> tasks.remove(playerId))
                 .runTaskTimer(plugin, 0L, 1L);
-        tasks.put(player.getUniqueId(), task);
+        tasks.put(playerId, task);
     }
 
     /**
@@ -91,6 +99,19 @@ public final class BalanceTitleListener implements Listener {
             task.cancel();
         }
         tasks.clear();
+    }
+
+    /**
+     * Returns the number of tracked animations.
+     *
+     * <p>Intended for diagnostics and soak tests. A finished animation removes
+     * itself, so this must drop back to zero once every animation has run its
+     * course and every player has disconnected.</p>
+     *
+     * @return number of animations currently tracked
+     */
+    public int activeAnimations() {
+        return tasks.size();
     }
 
     /**
@@ -126,6 +147,9 @@ public final class BalanceTitleListener implements Listener {
         /** Number of steps already rendered. */
         private int step;
 
+        /** Releases the listener's bookkeeping when the animation ends. */
+        private final Runnable onFinished;
+
         /**
          * Captures the animation range for one balance change.
          *
@@ -134,16 +158,19 @@ public final class BalanceTitleListener implements Listener {
          * @param playerId the player receiving the animation
          * @param oldBalance the balance before the change
          * @param newBalance the balance after the change
+         * @param onFinished callback that drops the listener's tracking entry
          */
         private BalanceTitleAnimator(
                 ConfigService config,
                 MessageService messages,
                 UUID playerId,
                 BigDecimal oldBalance,
-                BigDecimal newBalance) {
+                BigDecimal newBalance,
+                Runnable onFinished) {
             this.config = config;
             this.messages = messages;
             this.playerId = playerId;
+            this.onFinished = onFinished;
             this.end = Money.normalize(newBalance);
             this.ticks = Math.max(5, Math.min(100, 100 / config.current().titleSpeed()));
             BigDecimal limit = BigDecimal.valueOf(config.current().titleLimit());
@@ -165,6 +192,7 @@ public final class BalanceTitleListener implements Listener {
             Player player = Bukkit.getPlayer(playerId);
             if (player == null) {
                 cancel();
+                onFinished.run();
                 return;
             }
             step++;
@@ -184,6 +212,7 @@ public final class BalanceTitleListener implements Listener {
                     config.current().titleFadeOut());
             if (step >= ticks) {
                 cancel();
+                onFinished.run();
             }
         }
     }

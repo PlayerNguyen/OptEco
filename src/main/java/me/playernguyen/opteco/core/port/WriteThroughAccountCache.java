@@ -60,4 +60,17 @@ public final class WriteThroughAccountCache implements AccountCache {
     public void clear() {
         balances.clear();
     }
+
+    /**
+     * Returns the number of cached balances.
+     *
+     * <p>Intended for diagnostics and soak tests; the value is a snapshot and may
+     * change immediately when another thread mutates the cache.</p>
+     *
+     * @return number of cached players
+     */
+    @Override
+    public int size() {
+        return balances.size();
+    }
 }

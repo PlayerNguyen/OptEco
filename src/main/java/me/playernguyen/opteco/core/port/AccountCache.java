@@ -44,4 +44,14 @@ public interface AccountCache {
      * Drops every cached balance, for example when the plugin shuts down.
      */
     void clear();
+
+    /**
+     * Returns the number of cached balances.
+     *
+     * <p>Intended for diagnostics and soak tests. The value is only a snapshot;
+     * concurrent mutations can change it immediately after it is read.</p>
+     *
+     * @return number of players currently cached
+     */
+    int size();
 }

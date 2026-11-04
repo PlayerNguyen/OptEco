@@ -149,6 +149,19 @@ public final class EconomyService {
     }
 
     /**
+     * Returns the number of cached balances.
+     *
+     * <p>Intended for diagnostics and soak tests; online players are the only
+     * accounts that should remain cached, so this must return zero after every
+     * player has quit.</p>
+     *
+     * @return cached account count
+     */
+    public int cachedAccounts() {
+        return cache.size();
+    }
+
+    /**
      * Drops every cached balance, for example during shutdown.
      */
     public void clearCache() {

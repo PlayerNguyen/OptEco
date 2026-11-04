@@ -4,6 +4,7 @@ import java.util.UUID;
 import java.util.logging.Level;
 import me.playernguyen.opteco.core.service.EconomyService;
 import me.playernguyen.opteco.runtime.AsyncExecutor;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -18,8 +19,10 @@ import org.jetbrains.annotations.NotNull;
  *
  * <p>On join the account is created when missing and loaded into the cache; that
  * touches the database, so the work is dispatched to an {@link AsyncExecutor}
- * thread and only failures are reported back. On quit the entry is evicted on the
- * calling (main) thread because it is an in-memory operation. Both handlers use
+ * thread. The completion callback runs on the main thread and evicts the entry
+ * when the player already disconnected, so a join/quit race cannot retain
+ * offline accounts. On quit the entry is evicted on the calling (main) thread
+ * because it is an in-memory operation. Both handlers use
  * {@link EventPriority#MONITOR} so other plugins have already processed the
  * event.
  */
@@ -63,8 +66,24 @@ public final class PlayerConnectionListener implements Listener {
                     economy.ensureAccount(uuid, name);
                     return Boolean.TRUE;
                 },
-                ignored -> {},
+                ignored -> evictIfOffline(uuid),
                 error -> plugin.getLogger().log(Level.WARNING, "Could not load OptEco account for " + name, error));
+    }
+
+    /**
+     * Drops the cached balance when the account load finished after the player
+     * had already disconnected.
+     *
+     * <p>Join loads run off the main thread while quit eviction is immediate, so
+     * a fast join/quit cycle could otherwise leave an offline player cached for
+     * the rest of the server uptime.</p>
+     *
+     * @param uuid player whose account was just loaded
+     */
+    private void evictIfOffline(@NotNull UUID uuid) {
+        if (Bukkit.getPlayer(uuid) == null) {
+            economy.evict(uuid);
+        }
     }
 
     /**
