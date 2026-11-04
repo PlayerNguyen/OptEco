@@ -6,8 +6,11 @@ import me.playernguyen.opteco.core.model.TransactionState;
 import me.playernguyen.opteco.core.port.EconomyEventBus;
 import me.playernguyen.opteco.event.OptEcoPointChangedEvent;
 import me.playernguyen.opteco.event.OptEcoTransactionEvent;
+import me.playernguyen.opteco.util.ThreadUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Bukkit-backed {@link EconomyEventBus} that re-raises core model changes as
@@ -40,8 +43,8 @@ public final class BukkitEconomyEventBus implements EconomyEventBus {
      * @param change the before/after snapshot of the affected account
      */
     @Override
-    public void balanceChanged(BalanceChange change) {
-        runMain(() -> Bukkit.getPluginManager().callEvent(new OptEcoPointChangedEvent(change)));
+    public void balanceChanged(@NotNull BalanceChange change) {
+        ThreadUtils.run(plugin, () -> Bukkit.getPluginManager().callEvent(new OptEcoPointChangedEvent(change)));
     }
 
     /**
@@ -51,27 +54,8 @@ public final class BukkitEconomyEventBus implements EconomyEventBus {
      * @param previousState the state it had before the transition
      */
     @Override
-    public void transactionChanged(Transaction transaction, TransactionState previousState) {
-        runMain(() -> Bukkit.getPluginManager().callEvent(new OptEcoTransactionEvent(transaction, previousState)));
-    }
-
-    /**
-     * Runs an event dispatch on the main thread, or inline when already there.
-     *
-     * @param runnable the dispatch to perform
-     */
-    private void runMain(Runnable runnable) {
-        if (!plugin.isEnabled()) {
-            return;
-        }
-        if (Bukkit.isPrimaryThread()) {
-            runnable.run();
-        } else {
-            try {
-                Bukkit.getScheduler().runTask(plugin, runnable);
-            } catch (IllegalStateException ignored) {
-                // Plugin is disabling.
-            }
-        }
+    public void transactionChanged(@NotNull Transaction transaction, @Nullable TransactionState previousState) {
+        ThreadUtils.run(plugin, () -> Bukkit.getPluginManager()
+                .callEvent(new OptEcoTransactionEvent(transaction, previousState)));
     }
 }

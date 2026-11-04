@@ -1,5 +1,9 @@
 package me.playernguyen.opteco.core.exception;
 
+import lombok.Getter;
+import lombok.experimental.Accessors;
+import org.jetbrains.annotations.NotNull;
+
 /**
  * Signals that a player reference could not be resolved.
  *
@@ -7,9 +11,12 @@ package me.playernguyen.opteco.core.exception;
  * supplied name does not match an online or cached player. The command layer
  * catches it and reports {@code PLAYER_NOT_FOUND} using {@link #playerName()}.</p>
  */
+@Getter
+@Accessors(fluent = true)
 public class PlayerNotFoundException extends RuntimeException {
 
     /** Name that could not be resolved. */
+    @NotNull
     private final String playerName;
 
     /**
@@ -20,14 +27,5 @@ public class PlayerNotFoundException extends RuntimeException {
     public PlayerNotFoundException(String playerName) {
         super("Player not found: " + playerName);
         this.playerName = playerName;
-    }
-
-    /**
-     * Returns the name that could not be resolved.
-     *
-     * @return unresolved player name
-     */
-    public String playerName() {
-        return playerName;
     }
 }

@@ -1,5 +1,7 @@
 package me.playernguyen.opteco.storage.jdbc;
 
+import java.util.Locale;
+
 /**
  * SQL fragments that differ between the two supported backends, SQLite and MySQL.
  *
@@ -220,5 +222,27 @@ public enum SqlDialect {
         return "INSERT INTO " + quote(table)
                 + " (id, sender, receiver, amount, state, created_at, expires_at) "
                 + "VALUES (?, ?, ?, ?, ?, ?, ?)";
+    }
+
+    /**
+     * Returns the resource folder that holds this dialect's migration scripts.
+     *
+     * <p>Scripts live under {@code migration/<folder>/} inside the plugin jar, for
+     * example {@code migration/sqlite/0001_create_opteco_schema.sql}.</p>
+     *
+     * @return the lower-cased dialect name
+     */
+    public String migrationFolder() {
+        return name().toLowerCase(Locale.ROOT);
+    }
+
+    /**
+     * Reports whether schema changes made inside a transaction can be rolled
+     * back. SQLite can; MySQL implicitly commits every DDL statement and cannot.
+     *
+     * @return {@code true} for SQLite, {@code false} for MySQL
+     */
+    public boolean supportsTransactionalDdl() {
+        return this == SQLITE;
     }
 }

@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.concurrent.atomic.AtomicReference;
+import lombok.Getter;
+import lombok.experimental.Accessors;
 import me.playernguyen.opteco.core.model.Money;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.Plugin;
@@ -23,6 +25,7 @@ import org.jetbrains.annotations.NotNull;
  * storage backend; {@link me.playernguyen.opteco.OptEco#reloadConfiguration()}
  * reports that case so the sender can be told a restart is required.</p>
  */
+@Accessors(fluent = true)
 public final class ConfigService {
 
     /** Header written to generated configuration files. */
@@ -33,6 +36,8 @@ public final class ConfigService {
     private final Plugin plugin;
 
     /** {@code config.yml} inside the plugin data folder. */
+    @Getter
+    @NotNull
     private final File file;
 
     /** Most recently validated snapshot; replaced as a whole on reload. */
@@ -63,16 +68,6 @@ public final class ConfigService {
     @NotNull
     public OptEcoConfig current() {
         return current.get();
-    }
-
-    /**
-     * Returns the backing configuration file.
-     *
-     * @return {@code config.yml} inside the plugin data folder
-     */
-    @NotNull
-    public File file() {
-        return file;
     }
 
     /**

@@ -1,6 +1,7 @@
 package me.playernguyen.opteco;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -12,6 +13,10 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.Statement;
 import java.util.UUID;
 import me.playernguyen.opteco.api.OptEcoAPI;
 import org.bukkit.command.PluginCommand;
@@ -83,6 +88,40 @@ class PluginStartupTest {
         plugin.economy().ensureAccount(playerId, "SmokeTest");
         assertTrue(api.hasAccount(playerId), "The migrated schema should accept new accounts");
         assertEquals(0, api.getBalance(playerId).compareTo(BigDecimal.ZERO));
+    }
+
+    @Test
+    void shouldPopulateMigrationHistoryWhenPluginStartsSuccessfully() throws Exception {
+        // Arrange
+        File pluginsFolder = server.getPluginsFolder();
+        writeFile(
+                new File(new File(pluginsFolder, OptEco.PLUGIN_NAME), "config.yml"),
+                "Update:\n  CheckForUpdate: false\n");
+        writeFile(
+                new File(new File(pluginsFolder, "bStats"), "config.yml"),
+                "enabled: false\nserverUuid: 00000000-0000-0000-0000-000000000000\n");
+
+        // Act
+        plugin = MockBukkit.load(OptEco.class);
+        File database = new File(plugin.getDataFolder(), "account.sqlite");
+
+        // Assert
+        assertTrue(plugin.isEnabled(), "OptEco should stay enabled after onEnable()");
+        assertTrue(database.isFile(), "Startup should create the SQLite database");
+        try (Connection connection = DriverManager.getConnection("jdbc:sqlite:" + database.getAbsolutePath());
+                Statement statement = connection.createStatement();
+                ResultSet history = statement.executeQuery(
+                        "SELECT version, script, checksum, applied_at, execution_ms FROM opteco_schema_history")) {
+            assertTrue(history.next(), "Startup should record the applied migration");
+            assertEquals(1, history.getInt("version"));
+            assertEquals("0001_create_opteco_schema.sql", history.getString("script"));
+            String checksum = history.getString("checksum");
+            assertNotNull(checksum, "Applied rows must store a checksum");
+            assertEquals(64, checksum.length(), "The checksum should be a SHA-256 hex digest");
+            assertTrue(history.getLong("applied_at") > 0L, "The apply timestamp should be recorded");
+            assertTrue(history.getLong("execution_ms") >= 0L);
+            assertFalse(history.next(), "A fresh database should record exactly one migration");
+        }
     }
 
     private static void writeFile(File file, String contents) throws IOException {

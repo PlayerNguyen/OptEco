@@ -2,6 +2,8 @@ package me.playernguyen.opteco;
 
 import java.io.File;
 import java.util.logging.Level;
+import lombok.Getter;
+import lombok.experimental.Accessors;
 import me.playernguyen.opteco.api.OptEcoAPI;
 import me.playernguyen.opteco.api.OptEcoApiImpl;
 import me.playernguyen.opteco.command.CommandDependencies;
@@ -30,8 +32,8 @@ import me.playernguyen.opteco.storage.jdbc.JdbcAccountRepository;
 import me.playernguyen.opteco.storage.jdbc.JdbcPaymentRepository;
 import me.playernguyen.opteco.storage.jdbc.JdbcUnitOfWork;
 import me.playernguyen.opteco.storage.jdbc.MysqlConnectionProvider;
-import me.playernguyen.opteco.storage.jdbc.SchemaMigrator;
 import me.playernguyen.opteco.storage.jdbc.SqliteConnectionProvider;
+import me.playernguyen.opteco.storage.jdbc.migration.SchemaMigrator;
 import me.playernguyen.opteco.updater.UpdateChecker;
 import org.bukkit.Bukkit;
 import org.bukkit.command.PluginCommand;
@@ -64,6 +66,7 @@ import org.jetbrains.annotations.Nullable;
  * {@link #getInstance()} reference is volatile and cleared on disable, so other
  * plugins must not cache it across a reload.</p>
  */
+@Accessors(fluent = true)
 public class OptEco extends JavaPlugin {
 
     /** Human-readable plugin name used by integrations and log output. */
@@ -76,12 +79,15 @@ public class OptEco extends JavaPlugin {
     private static volatile OptEco instance;
 
     /** Configuration file owner and current validated snapshot. */
+    @Getter(onMethod_ = @NotNull)
     private ConfigService configService;
 
     /** Language file loader and message renderer. */
+    @Getter(onMethod_ = @NotNull)
     private MessageService messages;
 
     /** Database worker pool, sized from the storage backend. */
+    @Getter(onMethod_ = @NotNull)
     private AsyncExecutor async;
 
     /** SQLite or MySQL connection source. */
@@ -103,9 +109,11 @@ public class OptEco extends JavaPlugin {
     private BukkitEconomyEventBus eventBus;
 
     /** Balance mutations, transfers and cache maintenance. */
+    @Getter(onMethod_ = @NotNull)
     private EconomyService economy;
 
     /** Pending payment state machine. */
+    @Getter(onMethod_ = @NotNull)
     private PaymentService payments;
 
     /** Resolves command arguments to online or stored players. */
@@ -127,6 +135,7 @@ public class OptEco extends JavaPlugin {
     private BukkitTask countdownBukkitTask;
 
     /** API instance exposed through Bukkit's {@code ServicesManager}. */
+    @Getter(onMethod_ = @NotNull)
     private OptEcoAPI api;
 
     /** PlaceholderAPI expansion, when the plugin is present. */
@@ -142,6 +151,7 @@ public class OptEco extends JavaPlugin {
     private ShopGuiPlusHook shopGuiHook;
 
     /** bStats reporter. */
+    @Getter(onMethod_ = @NotNull)
     private Metrics metrics;
 
     /** GitHub release checker, created only when the update check is enabled. */
@@ -456,66 +466,6 @@ public class OptEco extends JavaPlugin {
     }
 
     /**
-     * Returns the configuration service.
-     *
-     * @return the live configuration service
-     */
-    @NotNull
-    public ConfigService configService() {
-        return configService;
-    }
-
-    /**
-     * Returns the message service.
-     *
-     * @return the language loader and message renderer
-     */
-    @NotNull
-    public MessageService messages() {
-        return messages;
-    }
-
-    /**
-     * Returns the database executor.
-     *
-     * @return the shared worker pool used for database and network work
-     */
-    @NotNull
-    public AsyncExecutor async() {
-        return async;
-    }
-
-    /**
-     * Returns the economy service.
-     *
-     * @return the balance mutation and transfer service
-     */
-    @NotNull
-    public EconomyService economy() {
-        return economy;
-    }
-
-    /**
-     * Returns the payment service.
-     *
-     * @return the pending-payment state machine
-     */
-    @NotNull
-    public PaymentService payments() {
-        return payments;
-    }
-
-    /**
-     * Returns the registered API instance.
-     *
-     * @return the API also available through Bukkit's {@code ServicesManager}
-     */
-    @NotNull
-    public OptEcoAPI api() {
-        return api;
-    }
-
-    /**
      * Returns the API instance.
      *
      * @return the API instance, or {@code null} after disable
@@ -526,15 +476,5 @@ public class OptEco extends JavaPlugin {
     @Nullable
     public OptEcoAPI getApplicationInterface() {
         return api;
-    }
-
-    /**
-     * Returns the bStats reporter.
-     *
-     * @return the metrics instance created during startup
-     */
-    @NotNull
-    public Metrics metrics() {
-        return metrics;
     }
 }

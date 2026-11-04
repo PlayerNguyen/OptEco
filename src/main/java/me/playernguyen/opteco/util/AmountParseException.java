@@ -1,5 +1,9 @@
 package me.playernguyen.opteco.util;
 
+import lombok.Getter;
+import lombok.experimental.Accessors;
+import org.jetbrains.annotations.NotNull;
+
 /**
  * Signals that a typed amount cannot be used for a balance operation.
  *
@@ -8,6 +12,8 @@ package me.playernguyen.opteco.util;
  * {@link me.playernguyen.opteco.message.MessageKey}. The original text is kept
  * in {@link #value()} so it can be echoed back to the sender.</p>
  */
+@Getter
+@Accessors(fluent = true)
 public class AmountParseException extends RuntimeException {
 
     /** Classification of the parse failure, used to choose the reply message. */
@@ -25,9 +31,11 @@ public class AmountParseException extends RuntimeException {
     }
 
     /** Classification of the failure. */
+    @NotNull
     private final Reason reason;
 
     /** Text exactly as typed by the sender. */
+    @NotNull
     private final String value;
 
     /**
@@ -40,23 +48,5 @@ public class AmountParseException extends RuntimeException {
         super(reason + ": " + value);
         this.reason = reason;
         this.value = value;
-    }
-
-    /**
-     * Returns the failure classification.
-     *
-     * @return the classification used to select a reply message
-     */
-    public Reason reason() {
-        return reason;
-    }
-
-    /**
-     * Returns the rejected text.
-     *
-     * @return text exactly as typed by the sender
-     */
-    public String value() {
-        return value;
     }
 }

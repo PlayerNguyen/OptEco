@@ -31,6 +31,7 @@ public final class CommandContext {
     private final CommandDependencies dependencies;
 
     /** Bukkit sender that issued the command; may be a player or the console. */
+    @NotNull
     private final CommandSender sender;
 
     /** Arguments after the subcommand name, in the order the sender typed them. */
@@ -88,16 +89,6 @@ public final class CommandContext {
     @Nullable
     public Player player() {
         return sender instanceof Player ? (Player) sender : null;
-    }
-
-    /**
-     * Returns the raw Bukkit sender.
-     *
-     * @return the sender that issued this command
-     */
-    @NotNull
-    public CommandSender sender() {
-        return sender;
     }
 
     /**

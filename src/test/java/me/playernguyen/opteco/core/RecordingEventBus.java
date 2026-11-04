@@ -6,6 +6,7 @@ import me.playernguyen.opteco.core.model.BalanceChange;
 import me.playernguyen.opteco.core.model.Transaction;
 import me.playernguyen.opteco.core.model.TransactionState;
 import me.playernguyen.opteco.core.port.EconomyEventBus;
+import org.jspecify.annotations.NonNull;
 
 public final class RecordingEventBus implements EconomyEventBus {
 
@@ -13,12 +14,12 @@ public final class RecordingEventBus implements EconomyEventBus {
     private final List<TransactionState> transactionStates = new ArrayList<>();
 
     @Override
-    public void balanceChanged(BalanceChange change) {
+    public void balanceChanged(@NonNull BalanceChange change) {
         balanceChanges.add(change);
     }
 
     @Override
-    public void transactionChanged(Transaction transaction, TransactionState previousState) {
+    public void transactionChanged(@NonNull Transaction transaction, TransactionState previousState) {
         transactionStates.add(transaction.state());
     }
 

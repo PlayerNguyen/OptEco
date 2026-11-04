@@ -5,6 +5,8 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import lombok.Getter;
+import lombok.experimental.Accessors;
 import me.playernguyen.opteco.message.MessageKey;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -27,9 +29,12 @@ import org.jetbrains.annotations.Nullable;
  * the server on the main thread and must stay cheap: subcommands hand database
  * work to {@link me.playernguyen.opteco.runtime.AsyncExecutor}.
  */
+@Accessors(fluent = true)
 public abstract class CommandDispatcher implements CommandExecutor, TabCompleter {
 
     /** Primary label used in help output, without the leading slash. */
+    @Getter
+    @NotNull
     private final String name;
 
     /** Services shared with every registered subcommand. */
@@ -57,16 +62,6 @@ public abstract class CommandDispatcher implements CommandExecutor, TabCompleter
      */
     protected final void register(@NotNull SubCommand subCommand) {
         subCommands.put(subCommand.name().toLowerCase(Locale.ROOT), subCommand);
-    }
-
-    /**
-     * Returns the primary command label.
-     *
-     * @return the label without the leading slash, for example {@code opteco}
-     */
-    @NotNull
-    public String name() {
-        return name;
     }
 
     /**

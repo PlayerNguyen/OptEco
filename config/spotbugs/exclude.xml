@@ -12,11 +12,11 @@
 -->
 <FindBugsFilter>
     <Match>
-        <Class name="~me\.playernguyen\.opteco\.(OptEco|api\.OptEcoApiImpl|command\.CommandContext|command\.CommandDependencies|config\.ConfigService|core\.service\.EconomyService|core\.service\.PaymentService|hook\..*|listener\..*|message\.MessageService|runtime\..*|schedule\..*|storage\.jdbc\.SchemaMigrator|updater\.UpdateChecker)"/>
+        <Class name="~me\.playernguyen\.opteco\.(OptEco|api\.OptEcoApiImpl|command\.CommandContext|command\.CommandDependencies|config\.ConfigService|core\.service\.EconomyService|core\.service\.PaymentService|hook\..*|listener\..*|message\.MessageService|runtime\..*|schedule\..*|storage\.jdbc\.migration\.(SchemaMigrator|LegacyImporter|MigrationHistory)|updater\.UpdateChecker)"/>
         <Bug pattern="EI_EXPOSE_REP"/>
     </Match>
     <Match>
-        <Class name="~me\.playernguyen\.opteco\.(api\.OptEcoApiImpl|command\.CommandContext|command\.CommandDependencies|config\.ConfigService|core\.service\.EconomyService|core\.service\.PaymentService|hook\..*|listener\..*|message\.MessageService|runtime\..*|schedule\..*|storage\.jdbc\.SchemaMigrator|updater\.UpdateChecker)"/>
+        <Class name="~me\.playernguyen\.opteco\.(api\.OptEcoApiImpl|command\.CommandContext|command\.CommandDependencies|config\.ConfigService|core\.service\.EconomyService|core\.service\.PaymentService|hook\..*|listener\..*|message\.MessageService|runtime\..*|schedule\..*|storage\.jdbc\.migration\.(SchemaMigrator|LegacyImporter|MigrationHistory)|updater\.UpdateChecker)"/>
         <Bug pattern="EI_EXPOSE_REP2"/>
     </Match>
     <Match>

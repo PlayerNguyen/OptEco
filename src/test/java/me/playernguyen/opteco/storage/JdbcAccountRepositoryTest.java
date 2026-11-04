@@ -17,8 +17,8 @@ import me.playernguyen.opteco.config.OptEcoConfig;
 import me.playernguyen.opteco.core.model.Account;
 import me.playernguyen.opteco.core.port.SystemClock;
 import me.playernguyen.opteco.storage.jdbc.JdbcAccountRepository;
-import me.playernguyen.opteco.storage.jdbc.SchemaMigrator;
 import me.playernguyen.opteco.storage.jdbc.SqliteConnectionProvider;
+import me.playernguyen.opteco.storage.jdbc.migration.SchemaMigrator;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 

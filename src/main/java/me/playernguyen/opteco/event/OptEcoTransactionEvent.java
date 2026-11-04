@@ -1,10 +1,14 @@
 package me.playernguyen.opteco.event;
 
 import java.util.Objects;
+import lombok.Getter;
+import lombok.experimental.Accessors;
 import me.playernguyen.opteco.core.model.Transaction;
 import me.playernguyen.opteco.core.model.TransactionState;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Fired on the Bukkit main thread when a payment transaction changes state.
@@ -17,15 +21,19 @@ import org.bukkit.event.HandlerList;
  * Balance effects are reported separately through {@link OptEcoPointChangedEvent}.
  * The event is informational and not cancellable.</p>
  */
+@Getter
+@Accessors(fluent = true)
 public final class OptEcoTransactionEvent extends Event {
 
     /** Bukkit handler list shared by every instance of this event. */
     private static final HandlerList HANDLERS = new HandlerList();
 
     /** Transaction in its new state. */
+    @NotNull
     private final Transaction transaction;
 
     /** State before the transition, or {@code null} when the payment was just created. */
+    @Nullable
     private final TransactionState previousState;
 
     /**
@@ -41,28 +49,11 @@ public final class OptEcoTransactionEvent extends Event {
     }
 
     /**
-     * Returns the transaction in its new state.
-     *
-     * @return immutable transaction snapshot
-     */
-    public Transaction transaction() {
-        return transaction;
-    }
-
-    /**
-     * Returns the state the transaction moved away from.
-     *
-     * @return previous state, or {@code null} when the payment was just created
-     */
-    public TransactionState previousState() {
-        return previousState;
-    }
-
-    /**
      * Returns the transaction's current state.
      *
      * @return state carried by {@link #transaction()}
      */
+    @NotNull
     public TransactionState state() {
         return transaction.state();
     }

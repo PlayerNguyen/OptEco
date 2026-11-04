@@ -69,8 +69,9 @@ changes over large rewrites.
   interfaces. Core code must not import Bukkit.
 - `core/service/` — `EconomyService` (balance mutations and atomic transfers)
   and `PaymentService` (persisted pending-payment state machine).
-- `storage/jdbc/` — shared SQLite/MySQL connection providers, schema migration,
-  account and payment repositories, dialect-specific upserts, and transactions.
+- `storage/jdbc/` — shared SQLite/MySQL connection providers, resource-backed
+  schema migrations (`migration/`), account and payment repositories,
+  dialect-specific upserts, and transactions.
 - `config/` — immutable `OptEcoConfig` snapshot, config keys, validation, and
   reloadable `ConfigService`.
 - `message/` — typed message keys and the language loader.
@@ -94,6 +95,12 @@ changes over large rewrites.
 - Add new configuration values to `ConfigKey` (path + default), read them in
   `ConfigService`, and expose a typed field on `OptEcoConfig`. Never hardcode
   config paths in commands.
+- Add schema changes as the next numbered SQL file under both
+  `src/main/resources/migration/sqlite/` and `src/main/resources/migration/mysql/`.
+  Never edit or renumber an applied file: startup compares its SHA-256 with
+  `opteco_schema_history` and refuses to run on a mismatch. Use
+  `{{account_table}}` / `{{transaction_table}}` instead of literal table names.
+  See `storage/jdbc/migration/package-info.java`.
 - Add user-facing messages to `MessageKey`; the language file is generated and
   merged automatically. Do not scatter raw player-facing strings.
 - Add permissions to `OptEcoPermission` and `plugin.yml`, including the
@@ -230,7 +237,7 @@ This reverts commit 1234abcd.
 ## Important gotchas
 
 - `StorageType` supports only `SQLITE` and `MYSQL`. YAML account storage is not
-  implemented. `SchemaMigrator` imports the old `opteco` and
+  implemented. `LegacyImporter` imports the old `opteco` and
   `opteco_transaction` tables into the new schema when it finds them.
 - Vault, the PHP web integration, and the PlayerPoints importer are deliberately
   outside this refactor. They are tracked as follow-up issues; do not register
