@@ -84,7 +84,45 @@ dependencies {
 }
 
 test {
-    useJUnitPlatform()
+    useJUnitPlatform {
+        excludeTags 'soak'
+    }
+    testLogging {
+        events 'passed', 'skipped', 'failed'
+    }
+}
+
+/*
+ * Opt-in lifecycle soak test. `test` excludes the `soak` tag, so this task is
+ * the only way to run it. The small heap and JFR recording make a regression
+ * easy to inspect with jcmd/JMC; the test itself asserts the plugin's internal
+ * per-player counters, which is deterministic and CI-friendly.
+ */
+tasks.register('soakTest', Test) {
+    description = 'Runs the opt-in lifecycle leak soak test'
+    group = 'verification'
+
+    testClassesDirs = sourceSets.test.output.classesDirs
+    classpath = sourceSets.test.runtimeClasspath
+    dependsOn tasks.named('testClasses')
+
+    useJUnitPlatform {
+        includeTags 'soak'
+    }
+
+    maxHeapSize = '256m'
+    jvmArgs(
+            '-XX:+UseG1GC',
+            '-XX:+HeapDumpOnOutOfMemoryError',
+            '-XX:HeapDumpPath=build/reports/soak',
+            '-XX:StartFlightRecording=filename=build/reports/soak/soak.jfr,settings=profile,dumponexit=true')
+    systemProperty 'soak.iterations', providers.gradleProperty('soakIterations').getOrElse('150')
+    systemProperty 'soak.players', providers.gradleProperty('soakPlayers').getOrElse('20')
+
+    doFirst {
+        layout.buildDirectory.dir('reports/soak').get().asFile.mkdirs()
+    }
+
     testLogging {
         events 'passed', 'skipped', 'failed'
     }

@@ -46,6 +46,11 @@ changes over large rewrites.
   unless `OPTECO_TEST_MYSQL_HOST` is set (`..._PORT`, `..._DATABASE`, `..._USER`,
   `..._PASSWORD` are optional); the `mysql` job in `java-tests.yml` provides a
   `mysql:8` service for it.
+- `./gradlew soakTest` runs the opt-in lifecycle leak soak test (JUnit tag
+  `soak`, excluded from `test`). It boots the plugin in MockBukkit, churns
+  joins/quits, title animations, and payments, then asserts that every
+  per-player structure is empty. It writes JFR and heap dumps to
+  `build/reports/soak/`; tune it with `-PsoakIterations` and `-PsoakPlayers`.
 - `build` also runs static analysis. Spotless enforces Palantir Java Format
   (4-space indentation, 120 columns); run `./gradlew spotlessApply` before
   committing. SpotBugs analyzes the compiled classes; run
