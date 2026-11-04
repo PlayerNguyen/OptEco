@@ -11,13 +11,9 @@ commands:
     usage: /opteco help
     description: Command of the OptEco plugin
     aliases: [ points, pts, p ]
-  playerpointtoopteco:
-    usage: /ppto
-    description: To convert all data to the OptEco with one command
-    aliases: [ppto, pptoopteco, pptoopt]
 permissions:
   opteco.admin:
-    description: Grant access to admin tool / command
+    description: Grant access to administrator commands
     default: op
     children:
       opteco.take: true
@@ -31,41 +27,42 @@ permissions:
       opteco.cancel: true
       opteco.pay: true
   opteco.user:
-    description: Grant access to user command
+    description: Grant access to player commands
     default: true
     children:
       opteco.me: true
       opteco.top: true
+      opteco.check: true
       opteco.confirm: true
       opteco.cancel: true
       opteco.pay: true
   opteco.take:
-    description: Grant access to use /points take
+    description: Grant access to /points take
     default: op
   opteco.add:
-    description: Grant access to use /points add
+    description: Grant access to /points add
     default: op
   opteco.check:
-    description: Grant access to use /points check
+    description: Grant access to /points check
     default: op
   opteco.me:
-    description: Grant access to use /points me
-    default: op
+    description: Grant access to /points me
+    default: true
   opteco.pay:
-    description: Grant access to use /points pay
-    default: op
+    description: Grant access to /points pay
+    default: true
   opteco.reload:
-    description: Grant access to use /points reload
+    description: Grant access to /points reload
     default: op
   opteco.set:
-    description: Grant access to use /points set
+    description: Grant access to /points set
     default: op
   opteco.confirm:
-    description: Grant access to use /points confirm
-    default: op
+    description: Grant access to /points confirm
+    default: true
   opteco.cancel:
-    description: Grant access to use /points cancel
-    default: op
+    description: Grant access to /points cancel
+    default: true
   opteco.top:
-    description: Grant access to use /points top
-    default: op
+    description: Grant access to /points top
+    default: true

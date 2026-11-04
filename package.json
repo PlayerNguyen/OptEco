@@ -3,6 +3,7 @@
   "private": true,
   "scripts": {
     "check:pr": "bun run scripts/check-pr/index.ts",
+    "smoke:server": "bun run scripts/smoke-server/index.ts",
     "test": "bun test"
   },
   "engines": {

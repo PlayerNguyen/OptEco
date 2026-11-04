@@ -1,0 +1,50 @@
+# OptEco configuration
+# Documentation: https://github.com/PlayerNguyen/OptEco/wiki
+
+Update:
+  CheckForUpdate: true
+
+Debug: false
+
+Settings:
+  CurrencySymbol: points
+
+  Preferences:
+    Language: en.yml
+    BeginPoint: 0
+    MinimumReachPoint: -15
+    UseDouble: false
+    LimitTopCommand: 5
+    TabExecutor: true
+
+  Storage:
+    Type: sqlite
+
+  SQL:
+    SQLite:
+      File: account.sqlite
+    MySQL:
+      Host: localhost
+      Port: 3306
+      Database: dbname
+      Username: root
+      Password: ''
+      Parameter: 'useSSL=false&allowPublicKeyRetrieval=true&characterEncoding=utf8&serverTimezone=UTC'
+    Table:
+      Accounts: opteco_accounts
+      Transactions: opteco_transactions
+
+  Payment:
+    Pending:
+      Duration: 15
+      Countdown:
+        Enable: true
+        Type: message
+
+  Effect:
+    TitleCounter:
+      Enable: true
+      Stay: 20
+      FadeOut: 100
+      Speed: 5
+      Limit: 10000

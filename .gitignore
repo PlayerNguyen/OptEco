@@ -20,3 +20,6 @@ bin/
 # Gradle
 .gradle/
 build/
+
+# runServer dev server
+run/

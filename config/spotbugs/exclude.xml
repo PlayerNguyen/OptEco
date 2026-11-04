@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    SpotBugs exclusions for OptEco.
+
+    The plugin intentionally shares Bukkit plugin instances, services, and
+    schedulers between adapters. Those objects are mutable by design and are
+    injected through constructors, so EI_EXPOSE_REP/EI_EXPOSE_REP2 are expected
+    for the dependency-injection boundary.
+
+    bStats is vendored third-party code and is excluded as a unit; replace it
+    with the upstream bStats dependency before tightening these rules.
+-->
+<FindBugsFilter>
+    <Match>
+        <Class name="~me\.playernguyen\.opteco\.(OptEco|api\.OptEcoApiImpl|command\.CommandContext|command\.CommandDependencies|config\.ConfigService|core\.service\.EconomyService|core\.service\.PaymentService|hook\..*|listener\..*|message\.MessageService|runtime\..*|schedule\..*|storage\.jdbc\.migration\.(SchemaMigrator|LegacyImporter|MigrationHistory)|updater\.UpdateChecker)"/>
+        <Bug pattern="EI_EXPOSE_REP"/>
+    </Match>
+    <Match>
+        <Class name="~me\.playernguyen\.opteco\.(api\.OptEcoApiImpl|command\.CommandContext|command\.CommandDependencies|config\.ConfigService|core\.service\.EconomyService|core\.service\.PaymentService|hook\..*|listener\..*|message\.MessageService|runtime\..*|schedule\..*|storage\.jdbc\.migration\.(SchemaMigrator|LegacyImporter|MigrationHistory)|updater\.UpdateChecker)"/>
+        <Bug pattern="EI_EXPOSE_REP2"/>
+    </Match>
+    <Match>
+        <Class name="me.playernguyen.opteco.OptEco"/>
+        <Bug pattern="MS_EXPOSE_REP"/>
+    </Match>
+    <Match>
+        <Class name="me.playernguyen.opteco.OptEco"/>
+        <Bug pattern="ST_WRITE_TO_STATIC_FROM_INSTANCE_METHOD"/>
+    </Match>
+    <Match>
+        <Class name="me.playernguyen.opteco.hook.PlaceholderApiHook"/>
+        <Bug pattern="HE_INHERITS_EQUALS_USE_HASHCODE"/>
+    </Match>
+    <Match>
+        <Class name="~me\.playernguyen\.opteco\.metrics\..*"/>
+    </Match>
+    <!-- Test doubles intentionally pass a null Connection and expose recorded lists. -->
+    <Match>
+        <Class name="~me\.playernguyen\.opteco\.core\.(RecordingEventBus|RollbackUnitOfWork|TestUnitOfWork)"/>
+    </Match>
+    <Match>
+        <Class name="~me\.playernguyen\.opteco\.core\.service\.PaymentServiceTest\$RawUnitOfWork"/>
+    </Match>
+</FindBugsFilter>

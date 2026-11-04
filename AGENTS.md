@@ -17,12 +17,15 @@ changes over large rewrites.
 - Canonical build: `./gradlew clean build`
 - Quick compile: `./gradlew compileJava`
 - Output JAR: `build/libs/`
-- The Gradle wrapper is Gradle 8.14.6 and runs on JDK 21. Source and test
-  compilation target Java 8 via `options.release = 8`.
+- The Gradle wrapper is Gradle 8.14.6 and runs on JDK 21. Plugin source compiles
+  for Java 8 via `options.release = 8`; tests compile for Java 17 because JUnit 6
+  requires it.
 - `gradle/wrapper/gradle-wrapper.jar` is tracked intentionally; keep the
   `.gitignore` exception so `./gradlew` works in a fresh clone.
-- The JAR bundles HikariCP; plugin and server APIs are `compileOnly`.
-- The build is Gradle-only. Do not add or maintain a Maven `pom.xml`.
+- The JAR bundles HikariCP, SQLite JDBC, and MySQL Connector/J; plugin and
+  server APIs are `compileOnly`.
+- The build is Gradle-only. The legacy Maven `pom.xml` was removed; do not
+  reintroduce it.
 - The plugin version is injected into `src/main/resources/plugin.yml` through
   `ReplaceTokens`. Set it with `-Pversion=X.Y.Z` or `VERSION`; local builds
   default to `0.0.0-dev`.
@@ -31,6 +34,26 @@ changes over large rewrites.
   `./gradlew clean build`, which runs tests as part of `build`).
 - CI runs `./gradlew clean build` on JDK 21 in
   `.github/workflows/java-tests.yml`.
+- `./gradlew runServer` builds the jar and boots a Purpur 1.20.4 dev server in
+  `run/PURPUR/` (git-ignored) through the runServer Gradle plugin. It is the
+  quickest way to drive the console by hand.
+- `bun run smoke:server` (after `./gradlew jar`) is the automated real-server
+  smoke test: it boots Purpur, installs the jar, checks the console output and
+  fails on packaging or loader errors. CI runs it weekly, on `v*` tags and on
+  demand in `.github/workflows/server-smoke.yml`; see
+  `scripts/smoke-server/README.md`.
+- `MysqlStorageTest` covers the MySQL dialect and migration. It is skipped
+  unless `OPTECO_TEST_MYSQL_HOST` is set (`..._PORT`, `..._DATABASE`, `..._USER`,
+  `..._PASSWORD` are optional); the `mysql` job in `java-tests.yml` provides a
+  `mysql:8` service for it.
+- `build` also runs static analysis. Spotless enforces Palantir Java Format
+  (4-space indentation, 120 columns); run `./gradlew spotlessApply` before
+  committing. SpotBugs analyzes the compiled classes; run
+  `./gradlew spotbugsMain` and read `build/reports/spotbugs/main.html`.
+- `config/spotbugs/exclude.xml` contains the documented baseline for
+  dependency-injection and vendored-code findings. Fix the issue and delete the
+  matching entry instead of widening an exclusion. Only add entries for
+  confirmed false positives, and say why in the pull request.
 - For behavior changes, also manually test on a supported Paper/Spigot server
   (SQLite storage is the easiest setup).
 
@@ -41,56 +64,82 @@ changes over large rewrites.
 - `bun test` runs the PR validator tests in `scripts/check-pr/index.test.ts`.
 - `bun run check:pr` validates the current PR title, body, and commit subjects.
   CI runs both commands in `.github/workflows/pr-check.yml`.
+- `bun run smoke:server` runs the real-server smoke test in
+  `scripts/smoke-server/index.ts`; it needs a built jar and JDK 21.
 - See `scripts/check-pr/README.md` for the validator architecture and flow
-  diagram.
+  diagram, and `scripts/smoke-server/README.md` for the smoke test.
 - Pull requests must use `.github/pull_request_template.md`. Add the
   `skip-pr-check` label only for bot PRs or exceptional cases.
 
 ## Architecture map
 
-- `src/main/java/me/playernguyen/opteco/OptEco.java` — plugin entry point and
-  wiring. Preserve the `onEnable()` setup order: loaders/configuration must be
-  ready before storage, commands, listeners, accounts, and integrations.
-- `OptEcoImplementation.java` — shared accessors used by plugin components.
-- `account/` — account model, SQL balance operations, SQLite/MySQL backends, and
-  the in-memory `OptEcoCacheAccountManager`.
-- `configuration/` — config key enum, YAML loader, storage type enum.
-- `language/` — language key enum and loader. User-facing strings belong here.
-- `command/` — `/opteco` (aliases `/points`, `/pts`, `/p`) and `/ppto`.
-  `OptEcoCommand` constructs and registers subcommands.
-- `transaction/` — pending payment flow, SQL transaction history, confirm/cancel.
-- `event/` — custom Bukkit events for balance changes and transactions.
-- `listener/` — join/quit account cache handling and balance-change effects.
-- `api/` — public `OptEcoAPI` plus PlaceholderAPI, MVdWPlaceholderAPI, Vault,
-  BossShopPro, and ShopGUIPlus adapters.
-- `sql/` — JDBC connection and table-creation abstraction (SQLite and MySQL).
-- `schedule/` — countdown and title-counter tasks.
-- `web_integration/` — standalone PHP client that reads/writes the MySQL
-  account table directly. It is not part of the Java build.
+- `src/main/java/me/playernguyen/opteco/OptEco.java` — plugin bootstrap and
+  lifecycle only. It builds the service graph, registers Bukkit adapters, and
+  closes resources in reverse order on disable.
+- `core/model/` — immutable domain types: `Account`, `Transaction`, `Money`,
+  `PaymentResult`, `TransferResult`, and balance-change reasons. `Money` stores
+  exact `BigDecimal` values at a fixed scale of eight.
+- `core/port/` — repository, cache, unit-of-work, clock, and event-bus
+  interfaces. Core code must not import Bukkit.
+- `core/service/` — `EconomyService` (balance mutations and atomic transfers)
+  and `PaymentService` (persisted pending-payment state machine).
+- `storage/jdbc/` — shared SQLite/MySQL connection providers, resource-backed
+  schema migrations (`migration/`), account and payment repositories,
+  dialect-specific upserts, and transactions.
+- `config/` — immutable `OptEcoConfig` snapshot, config keys, validation, and
+  reloadable `ConfigService`.
+- `message/` — typed message keys and the language loader.
+- `command/` — `/opteco` (aliases `/points`, `/pts`, `/p`) plus the command
+  dispatcher, argument parsing, and one class per subcommand.
+- `event/` — custom Bukkit events for balance changes and payment transitions.
+- `listener/` — join/quit cache loading and the balance title effect.
+- `schedule/` — payment countdown/expiry task.
+- `hook/` — optional PlaceholderAPI, MVdWPlaceholderAPI, BossShopPro, and
+  ShopGUIPlus adapters.
+- `api/` — public `OptEcoAPI`, registered through Bukkit's `ServicesManager`.
+- `runtime/` — async database executor and main-thread event bridge.
+- `updater/` — GitHub release update check.
+- `metrics/` — vendored bStats implementation.
+- `web_integration/` — deprecated standalone PHP client. It is not part of the
+  Java build and is tracked as follow-up work.
 
 ## Conventions
 
 - Use **Java 8** language features only. Do not introduce newer APIs.
-- Add new configuration values to `OptEcoConfiguration` (path + default) and
-  read them through the configuration loader. Never hardcode config paths.
-- Add user-facing messages to `OptEcoLanguage` and `language/lang.yml`, then use
-  `MessageFormat` / the language loader. Do not scatter raw strings.
+- Add new configuration values to `ConfigKey` (path + default), read them in
+  `ConfigService`, and expose a typed field on `OptEcoConfig`. Never hardcode
+  config paths in commands.
+- Add schema changes as the next numbered SQL file under both
+  `src/main/resources/migration/sqlite/` and `src/main/resources/migration/mysql/`.
+  Never edit or renumber an applied file: startup compares its SHA-256 with
+  `opteco_schema_history` and refuses to run on a mismatch. Use
+  `{{account_table}}` / `{{transaction_table}}` instead of literal table names.
+  See `storage/jdbc/migration/package-info.java`.
+- Add user-facing messages to `MessageKey`; the language file is generated and
+  merged automatically. Do not scatter raw player-facing strings.
 - Add permissions to `OptEcoPermission` and `plugin.yml`, including the
   `opteco.admin` / `opteco.user` children when appropriate.
-- Register new subcommands in the `OptEcoCommand` constructor and implement
-  `onPlayerCommand`, `onConsoleCommand`, `onRemoteConsoleCommand`, and `onTab`.
-- Route balance changes through `IAccountDatabase` so change events are fired
-  and persisted. For online players, refresh the cache afterward.
-- Keep `OptEcoAPI` source-compatible: other plugins compile against it.
-- Bukkit API calls (events, player messages, scheduling) must follow the
-  existing main-thread/async patterns. Database work may block; avoid adding
-  new blocking work to the server thread where possible.
-- Match the surrounding style: 4-space indentation, descriptive names, and small
-  classes in the existing package structure.
+- Register new subcommands in `PointsCommand`; implement `SubCommand.execute`
+  and optionally `SubCommand.complete`. Arguments are parsed by
+  `AmountParser`/`PlayerResolver`.
+- Route every balance change through `EconomyService`. Do not call a repository
+  from a command, listener, hook, or the API directly.
+- Store money as `BigDecimal` through `Money`; never store a balance as a
+  `double` in new code. All money crosses the database boundary as scaled longs.
+- Keep `OptEcoAPI` source-compatible where practical. Add methods rather than
+  changing existing signatures; document thread-safety expectations.
+- Core services and storage must not import Bukkit. Database work runs on
+  `AsyncExecutor`; events, messages, titles, and command replies run on the
+  main thread through the runtime bridge.
+- Use JetBrains `@NotNull` / `@Nullable` on public APIs and nullable return
+  values. Lombok `@Getter`, `@Builder`, and related annotations are allowed for
+  data classes; do not add mutable setters to domain models.
+- Run `./gradlew spotlessApply` after editing Java files. The build also runs
+  SpotBugs and Spotless checks.
 - Add JUnit 6 tests under `src/test/java` for pure logic. Name tests
   `should<DoSomething>When<Criteria>` and split bodies into `// Arrange`,
   `// Act`, and `// Assert` blocks. Keep unit tests independent of a running
-  Bukkit server.
+  Bukkit server; SQLite integration tests use a temporary file.
 
 ## Commit convention
 
@@ -201,39 +250,47 @@ This reverts commit 1234abcd.
 
 ## Important gotchas
 
-- `StorageType` supports only `SQLITE` and `MYSQL`. YAML account storage is
-  documented in older files but is not implemented.
-- `VaultEconomyProvider` exists but is not registered (`hookWithVault()` is
-  empty). Do not assume Vault support works.
-- `TransactionStorageYaml` and `OptEcoTransactionLoader` are unused legacy code.
-  Leave them alone unless a task explicitly targets them.
-- The account cache (`OptEcoCacheAccountManager`) is the source of truth for
-  online-player reads. External/database changes are not visible until the cache
-  refreshes.
-- Table names come from configuration and are interpolated into SQL. Do not
-  interpolate untrusted user input into SQL; use prepared statements for values.
+- `StorageType` supports only `SQLITE` and `MYSQL`. YAML account storage is not
+  implemented. `LegacyImporter` imports the old `opteco` and
+  `opteco_transaction` tables into the new schema when it finds them.
+- Vault, the PHP web integration, and the PlayerPoints importer are deliberately
+  outside this refactor. They are tracked as follow-up issues; do not register
+  or depend on a Vault provider until it is implemented properly.
+- The write-through `AccountCache` is authoritative for online-player reads.
+  Every mutation must update the cache after the DB commit; do not add a second
+  cache or a read-through DB lookup in placeholder hooks.
+- Table names come from configuration and are validated as identifiers. Values
+  always use prepared statements; never interpolate player input into SQL.
 - Payments are **pending** until `/points confirm`; they expire and auto-cancel.
-  Test confirm, cancel, and timeout paths when touching transactions.
+  Confirm, cancel, and timeout paths are covered by `PaymentServiceTest`.
+  Transaction state changes and balance moves share one DB transaction.
 - `plugin.yml` declares `loadbefore: [BossShopPro]` and soft-depends on
   PlaceholderAPI, BossShopPro, MVdWPlaceholderAPI, and ShopGUIPlus. Optional
-  integrations must stay optional and null-safe.
-- The PHP web integration writes directly to the MySQL table and duplicates the
-  plugin's schema assumptions. Update both sides when the schema changes.
-- Plugin APIs (Paper, PlaceholderAPI, ShopGUI, Vault, BossShopPro, MVdW) are
-  `compileOnly`. Only HikariCP is bundled into the JAR. Do not move server or
-  plugin APIs to `implementation`; that would shade them into the plugin.
+  integrations must stay optional and null-safe; catch `Throwable` around class
+  loading.
+- Plugin APIs (Paper, PlaceholderAPI, ShopGUI, BossShopPro, MVdW) are
+  `compileOnly`. HikariCP, SQLite JDBC, and MySQL Connector/J are shaded into
+  the JAR. Do not move server or plugin APIs to `implementation`.
+- `build.gradle` uses Lombok as an annotation processor; keep the `compileOnly`
+  and `annotationProcessor` entries in sync.
+- `/points reload` swaps config/message snapshots. Storage or database connection
+  changes require a server restart and are reported to the sender.
 - BossShopPro and MVdWPlaceholderAPI are resolved from online Maven
   repositories. Do not reintroduce `lib/*.jar`; keep build inputs reproducible.
 
 ## Change checklist
 
-1. `./gradlew clean build` succeeds (this includes the JUnit `test` task).
-2. New config keys have sensible defaults and appear in generated `config.yml`.
-3. New messages exist in every shipped language file when reasonable.
+1. `./gradlew clean build` succeeds (this includes `test`, `spotlessCheck`, and
+   `spotbugsMain`).
+2. New config keys have sensible defaults in `ConfigKey`, are validated by
+   `OptEcoConfig`, and appear in `src/main/resources/config.yml`.
+3. New messages exist in `MessageKey` and are created in the generated language
+   file.
 4. New permissions are declared in `plugin.yml`.
 5. Manual smoke test: join, `/points me`, admin `add`/`take`/`set`,
-   `/points top`, a `pay` + `confirm`/`cancel`, and `/points reload`.
-6. No secrets or server-specific credentials are committed (especially
+   `/points top`, a `pay` + `confirm`/`cancel`/timeout, and `/points reload`.
+6. SQLite and MySQL both start from a fresh database and from the legacy schema.
+7. No secrets or server-specific credentials are committed (especially
    `web_integration/api/APIConfig.php`).
 
 ## Remote and workflow notes
