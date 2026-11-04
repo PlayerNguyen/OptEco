@@ -34,3 +34,49 @@ jobs:
 
       - name: Build and test
         run: ./gradlew clean build --console=plain
+
+  mysql:
+    name: MySQL Storage
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_ROOT_HOST: '%'
+          MYSQL_DATABASE: opteco_test
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping --silent -h 127.0.0.1 -uroot -proot"
+          --health-interval=5s
+          --health-timeout=5s
+          --health-retries=20
+
+    env:
+      OPTECO_TEST_MYSQL_HOST: 127.0.0.1
+      OPTECO_TEST_MYSQL_PORT: '3306'
+      OPTECO_TEST_MYSQL_DATABASE: opteco_test
+      OPTECO_TEST_MYSQL_USER: root
+      OPTECO_TEST_MYSQL_PASSWORD: root
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v6
+        with:
+          distribution: temurin
+          java-version: '21'
+          cache: gradle
+
+      - name: Validate Gradle wrapper
+        uses: gradle/actions/wrapper-validation@v6
+
+      # The suite is skipped when OPTECO_TEST_MYSQL_HOST is unset, so this job
+      # is the only place the MySQL dialect and migration run for real.
+      - name: Run MySQL integration tests
+        run: ./gradlew test --tests "*MysqlStorageTest" --console=plain

@@ -82,6 +82,32 @@ The build runs JUnit tests, Spotless formatting checks, and SpotBugs. Use:
 
 The output jar is in `build/libs/`.
 
+To boot a local test server with the plugin installed:
+
+```bash
+./gradlew runServer
+```
+
+This uses the [runServer](https://plugins.gradle.org/plugin/com.undefinedcreations.runServer)
+Gradle plugin to start Purpur 1.20.4 (Paper-compatible) in `run/PURPUR/` with
+2 GB of RAM and the EULA pre-accepted. The folder is git-ignored. Stop the
+server with `stop` in the console. Purpur is used instead of PaperMC because
+runServer 0.1.8 downloads Paper through the retired `api.papermc.io` v2 API,
+which now returns HTTP 410.
+
+To run the automated server smoke test instead:
+
+```bash
+./gradlew jar
+bun run smoke:server
+```
+
+It boots Purpur in `build/smoke-server/`, installs the built jar, drives the
+console through a few commands, and fails on packaging, class-loader or startup
+errors. CI runs it weekly, on release tags and on demand. The MySQL integration
+tests are skipped unless `OPTECO_TEST_MYSQL_HOST` is set; the `mysql` CI job
+provides a MySQL 8 service for them.
+
 ## Links
 
 - [JavaDoc](https://playernguyen.github.io/OptEco/me/playernguyen/opteco/api/OptEcoAPI.html)

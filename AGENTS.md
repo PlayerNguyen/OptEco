@@ -34,6 +34,18 @@ changes over large rewrites.
   `./gradlew clean build`, which runs tests as part of `build`).
 - CI runs `./gradlew clean build` on JDK 21 in
   `.github/workflows/java-tests.yml`.
+- `./gradlew runServer` builds the jar and boots a Purpur 1.20.4 dev server in
+  `run/PURPUR/` (git-ignored) through the runServer Gradle plugin. It is the
+  quickest way to drive the console by hand.
+- `bun run smoke:server` (after `./gradlew jar`) is the automated real-server
+  smoke test: it boots Purpur, installs the jar, checks the console output and
+  fails on packaging or loader errors. CI runs it weekly, on `v*` tags and on
+  demand in `.github/workflows/server-smoke.yml`; see
+  `scripts/smoke-server/README.md`.
+- `MysqlStorageTest` covers the MySQL dialect and migration. It is skipped
+  unless `OPTECO_TEST_MYSQL_HOST` is set (`..._PORT`, `..._DATABASE`, `..._USER`,
+  `..._PASSWORD` are optional); the `mysql` job in `java-tests.yml` provides a
+  `mysql:8` service for it.
 - `build` also runs static analysis. Spotless enforces Palantir Java Format
   (4-space indentation, 120 columns); run `./gradlew spotlessApply` before
   committing. SpotBugs analyzes the compiled classes; run
@@ -52,8 +64,10 @@ changes over large rewrites.
 - `bun test` runs the PR validator tests in `scripts/check-pr/index.test.ts`.
 - `bun run check:pr` validates the current PR title, body, and commit subjects.
   CI runs both commands in `.github/workflows/pr-check.yml`.
+- `bun run smoke:server` runs the real-server smoke test in
+  `scripts/smoke-server/index.ts`; it needs a built jar and JDK 21.
 - See `scripts/check-pr/README.md` for the validator architecture and flow
-  diagram.
+  diagram, and `scripts/smoke-server/README.md` for the smoke test.
 - Pull requests must use `.github/pull_request_template.md`. Add the
   `skip-pr-check` label only for bot PRs or exceptional cases.
 
