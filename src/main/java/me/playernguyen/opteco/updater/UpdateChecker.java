@@ -8,6 +8,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import me.playernguyen.opteco.runtime.AsyncExecutor;
+import me.playernguyen.opteco.util.Semver;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.plugin.Plugin;
@@ -44,8 +45,8 @@ public final class UpdateChecker {
     }
 
     /**
-     * Fetches the latest GitHub release and prints a console notice when its tag
-     * differs from the running plugin version.
+     * Fetches the latest GitHub release and prints a console notice when it is
+     * newer than the running plugin version.
      *
      * @param currentVersion version from {@code plugin.yml}; may contain a
      *                       leading {@code v}
@@ -53,7 +54,17 @@ public final class UpdateChecker {
     public void check(@NotNull String currentVersion) {
         Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
             Release release = fetchLatestRelease();
-            if (release == null || normalize(release.tag).equalsIgnoreCase(normalize(currentVersion))) {
+            if (release == null) {
+                return;
+            }
+            boolean newer;
+            try {
+                newer = release.isNewerThan(currentVersion);
+            } catch (IllegalArgumentException exception) {
+                plugin.getLogger().fine("Skipping update notice, cannot compare versions: " + exception.getMessage());
+                return;
+            }
+            if (!newer) {
                 return;
             }
             async.runOnMain(() -> Bukkit.getConsoleSender()
@@ -107,16 +118,6 @@ public final class UpdateChecker {
         }
     }
 
-    /**
-     * Removes a leading {@code v} or {@code V} so tags and manifest versions compare equally.
-     *
-     * @param version version text from the release tag or {@code plugin.yml}
-     * @return the version without its optional leading {@code v}
-     */
-    private String normalize(String version) {
-        return version.startsWith("v") || version.startsWith("V") ? version.substring(1) : version;
-    }
-
     /** Minimal view of the GitHub release fields used by the notice. */
     private static final class Release {
         /** Release tag, for example {@code v1.2.3}. */
@@ -134,6 +135,17 @@ public final class UpdateChecker {
         private Release(String tag, String url) {
             this.tag = tag;
             this.url = url;
+        }
+
+        /**
+         * Checks whether this release is newer than the running version.
+         *
+         * @param currentVersion version from {@code plugin.yml}
+         * @return {@code true} when the release has higher SemVer precedence
+         * @throws IllegalArgumentException when either version cannot be parsed
+         */
+        private boolean isNewerThan(@NotNull String currentVersion) {
+            return Semver.isNewer(tag, currentVersion);
         }
     }
 }
