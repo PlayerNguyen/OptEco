@@ -4,6 +4,8 @@
  * <p>{@link me.playernguyen.opteco.util.AmountParser} converts user input into
  * validated {@code BigDecimal} amounts and reports precise failure reasons
  * through {@link me.playernguyen.opteco.util.AmountParseException}.
+ * {@link me.playernguyen.opteco.util.Semver} compares plugin and release
+ * versions using Semantic Versioning precedence.
  * {@link me.playernguyen.opteco.util.ThreadUtils} moves work onto the
  * Bukkit main thread.</p>
  */
