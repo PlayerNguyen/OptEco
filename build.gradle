@@ -73,6 +73,12 @@ dependencies {
         transitive = false
     }
     compileOnly 'be.maximvdw:MVdWPlaceholderAPI:2.5.1'
+    compileOnly('com.github.MilkBowl:VaultAPI:1.7') {
+        transitive = false
+    }
+    testImplementation('com.github.MilkBowl:VaultAPI:1.7') {
+        transitive = false
+    }
 
     implementation 'com.zaxxer:HikariCP:3.4.5'
     implementation 'org.xerial:sqlite-jdbc:3.42.0.0'
