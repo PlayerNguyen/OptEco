@@ -24,6 +24,7 @@ import me.playernguyen.opteco.listener.BalanceTitleListener;
 import me.playernguyen.opteco.listener.PlayerConnectionListener;
 import me.playernguyen.opteco.message.MessageService;
 import me.playernguyen.opteco.metrics.Metrics;
+import me.playernguyen.opteco.placeholder.PlaceholderService;
 import me.playernguyen.opteco.runtime.AsyncExecutor;
 import me.playernguyen.opteco.runtime.BukkitEconomyEventBus;
 import me.playernguyen.opteco.schedule.PaymentCountdownTask;
@@ -138,6 +139,9 @@ public class OptEco extends JavaPlugin {
     @Getter(onMethod_ = @NotNull)
     private OptEcoAPI api;
 
+    /** Provider-agnostic placeholder resolver shared by the placeholder hooks. */
+    private PlaceholderService placeholderService;
+
     /** PlaceholderAPI expansion, when the plugin is present. */
     private PlaceholderApiHook placeholderHook;
 
@@ -229,6 +233,8 @@ public class OptEco extends JavaPlugin {
         registerListeners();
         loadOnlinePlayers();
         registerApi();
+        placeholderService = new PlaceholderService(
+                economy, configService::current, () -> getDescription().getVersion());
         registerHooks();
         startCountdown();
         setupMetrics();
@@ -314,7 +320,7 @@ public class OptEco extends JavaPlugin {
         PluginManager pluginManager = getServer().getPluginManager();
         if (pluginManager.isPluginEnabled("PlaceholderAPI")) {
             try {
-                placeholderHook = new PlaceholderApiHook(this, economy, configService);
+                placeholderHook = new PlaceholderApiHook(this, placeholderService);
                 if (!placeholderHook.register()) {
                     getLogger().warning("PlaceholderAPI rejected the OptEco expansion");
                 }
@@ -324,7 +330,7 @@ public class OptEco extends JavaPlugin {
         }
         if (pluginManager.isPluginEnabled("MVdWPlaceholderAPI")) {
             try {
-                mvdwHook = new MvdwPlaceholderHook(this, economy, configService);
+                mvdwHook = new MvdwPlaceholderHook(this, placeholderService);
                 mvdwHook.register();
             } catch (Throwable throwable) {
                 getLogger().log(Level.WARNING, "Could not hook MVdWPlaceholderAPI", throwable);
@@ -476,6 +482,7 @@ public class OptEco extends JavaPlugin {
         payments = null;
         eventBus = null;
         api = null;
+        placeholderService = null;
         instance = null;
     }
 

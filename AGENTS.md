@@ -99,6 +99,8 @@ changes over large rewrites.
 - `event/` — custom Bukkit events for balance changes and payment transitions.
 - `listener/` — join/quit cache loading and the balance title effect.
 - `schedule/` — payment countdown/expiry task.
+- `placeholder/` — provider-agnostic placeholder strategies and registry used by
+  the PlaceholderAPI and MVdWPlaceholderAPI hooks.
 - `hook/` — optional PlaceholderAPI, MVdWPlaceholderAPI, BossShopPro, and
   ShopGUIPlus adapters.
 - `api/` — public `OptEcoAPI`, registered through Bukkit's `ServicesManager`.

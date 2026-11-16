@@ -53,6 +53,22 @@ All commands use `/opteco`; aliases are `/points`, `/pts`, and `/p`.
 `opteco.admin` grants all administrator commands and `opteco.user` grants the
 default player commands. See `plugin.yml` for the complete permission tree.
 
+## Placeholders
+
+With PlaceholderAPI installed, the expansion identifier is `opteco`:
+
+| Placeholder | Description |
+|---|---|
+| `%opteco_points%` | Cached balance, formatted without trailing zeros |
+| `%opteco_balance%` | Alias of `%opteco_points%` |
+| `%opteco_points_rounded%` | Cached balance rounded to whole units (HALF_UP) |
+| `%opteco_currency%` | Configured currency symbol |
+| `%opteco_version%` | Plugin version |
+
+MVdWPlaceholderAPI exposes the same identifiers with the `opteco_` prefix.
+Placeholders read the account cache only and never query the database, so they
+are safe to use in scoreboards and holograms.
+
 ## Configuration
 
 See [CONFIGURATION.md](CONFIGURATION.md) and the generated `config.yml`.
