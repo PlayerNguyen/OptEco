@@ -29,7 +29,8 @@ import org.jetbrains.annotations.Nullable;
  * <p>A payment request creates a {@link Transaction} in
  * {@link TransactionState#PENDING} and caches it by sender. Confirmation
  * atomically claims the transition to {@link TransactionState#CONFIRMED} and
- * moves funds in the same database transaction; cancellation and expiry move it
+ * moves funds in the same database transaction and writes matching sender and
+ * receiver ledger rows under the payment id; cancellation and expiry move it
  * to {@link TransactionState#CANCELLED} or {@link TransactionState#EXPIRED}
  * without touching balances. The request, confirm, cancel, and expire operations
  * are {@code synchronized} so the in-memory index stays consistent with the
@@ -169,9 +170,10 @@ public final class PaymentService {
      * Confirms a sender's pending payment and moves the funds.
      *
      * <p>An expired payment is marked expired instead of being confirmed. The
-     * lock covers both participants, and the state transition plus debit/credit
-     * share one database transaction; a failed transfer rolls the claim back and
-     * marks the payment {@link TransactionState#FAILED}.</p>
+     * lock covers both participants, and the state transition, debit/credit and
+     * both ledger rows share one database transaction; a failed transfer rolls
+     * the claim and any ledger write back and marks the payment
+     * {@link TransactionState#FAILED}.</p>
      *
      * @param sender sender UUID
      * @return a result with both resulting balances on success, or an explanatory status
@@ -210,7 +212,14 @@ public final class PaymentService {
                     return null;
                 }
                 TransferOutcome transferOutcome = economy.transferWithin(
-                        connection, transaction.sender(), null, transaction.receiver(), null, transaction.amount());
+                        connection,
+                        transaction.sender(),
+                        null,
+                        transaction.receiver(),
+                        null,
+                        transaction.amount(),
+                        BalanceChangeReason.PAYMENT_SENT,
+                        transaction.id());
                 if (!transferOutcome.isSuccess()) {
                     throw new PaymentRollbackException();
                 }

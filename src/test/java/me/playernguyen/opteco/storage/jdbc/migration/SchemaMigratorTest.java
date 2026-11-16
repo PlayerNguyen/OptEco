@@ -44,7 +44,9 @@ class SchemaMigratorTest {
         // Assert
         assertTrue(tableExists(provider, config.accountTable()));
         assertTrue(tableExists(provider, config.transactionTable()));
-        assertEquals(1, count(provider, "SELECT COUNT(*) FROM " + HISTORY));
+        assertTrue(tableExists(provider, config.ledgerTable()));
+        assertTrue(indexExists(provider, config.ledgerTable(), "idx_" + config.ledgerTable() + "_player_created"));
+        assertEquals(2, count(provider, "SELECT COUNT(*) FROM " + HISTORY));
         provider.close();
     }
 
@@ -59,7 +61,7 @@ class SchemaMigratorTest {
         migrate(provider, config);
 
         // Assert
-        assertEquals(1, count(provider, "SELECT COUNT(*) FROM " + HISTORY));
+        assertEquals(2, count(provider, "SELECT COUNT(*) FROM " + HISTORY));
         provider.close();
     }
 
@@ -124,7 +126,7 @@ class SchemaMigratorTest {
         migrate(provider, config);
 
         // Assert
-        assertEquals(1, count(provider, "SELECT COUNT(*) FROM " + HISTORY));
+        assertEquals(2, count(provider, "SELECT COUNT(*) FROM " + HISTORY));
         assertEquals(1, count(provider, "SELECT COUNT(*) FROM " + HISTORY + " WHERE checksum IS NULL"));
         assertEquals(1, count(provider, "SELECT COUNT(*) FROM " + config.accountTable()));
         provider.close();
@@ -141,6 +143,7 @@ class SchemaMigratorTest {
                 .paymentDurationSeconds(15)
                 .accountTable("custom_accounts")
                 .transactionTable("custom_transactions")
+                .ledgerTable("custom_ledger")
                 .build();
         config.validate();
 
@@ -150,7 +153,9 @@ class SchemaMigratorTest {
         // Assert
         assertTrue(tableExists(provider, "custom_accounts"));
         assertTrue(tableExists(provider, "custom_transactions"));
+        assertTrue(tableExists(provider, "custom_ledger"));
         assertTrue(indexExists(provider, "custom_accounts", "idx_custom_accounts_balance"));
+        assertTrue(indexExists(provider, "custom_ledger", "idx_custom_ledger_player_created"));
         provider.close();
     }
 

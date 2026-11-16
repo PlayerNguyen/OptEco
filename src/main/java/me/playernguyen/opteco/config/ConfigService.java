@@ -153,6 +153,7 @@ public final class ConfigService {
                 .startBalance(decimalValue(yaml, ConfigKey.START_BALANCE))
                 .minBalance(decimalValue(yaml, ConfigKey.MIN_BALANCE))
                 .topLimit(intValue(yaml, ConfigKey.TOP_LIMIT))
+                .historyPageSize(intValue(yaml, ConfigKey.HISTORY_PAGE_SIZE))
                 .paymentDurationSeconds(intValue(yaml, ConfigKey.PAYMENT_DURATION))
                 .titleStay(intValue(yaml, ConfigKey.TITLE_STAY))
                 .titleFadeOut(intValue(yaml, ConfigKey.TITLE_FADE_OUT))
@@ -168,6 +169,7 @@ public final class ConfigService {
                 .sqliteFile(stringValue(yaml, ConfigKey.SQLITE_FILE))
                 .accountTable(stringValue(yaml, ConfigKey.ACCOUNT_TABLE))
                 .transactionTable(stringValue(yaml, ConfigKey.TRANSACTION_TABLE))
+                .ledgerTable(stringValue(yaml, ConfigKey.LEDGER_TABLE))
                 .build();
     }
 

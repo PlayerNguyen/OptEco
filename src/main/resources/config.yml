@@ -15,6 +15,7 @@ Settings:
     MinimumReachPoint: -15
     UseDouble: false
     LimitTopCommand: 5
+    HistoryPageSize: 10
     TabExecutor: true
 
   Storage:
@@ -33,6 +34,7 @@ Settings:
     Table:
       Accounts: opteco_accounts
       Transactions: opteco_transactions
+      Ledger: opteco_ledger
 
   Payment:
     Pending:
