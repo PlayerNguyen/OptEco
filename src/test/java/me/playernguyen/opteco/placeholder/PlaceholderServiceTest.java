@@ -10,7 +10,9 @@ import java.util.UUID;
 import java.util.concurrent.atomic.AtomicReference;
 import me.playernguyen.opteco.TestConfigs;
 import me.playernguyen.opteco.config.OptEcoConfig;
+import me.playernguyen.opteco.core.FixedClock;
 import me.playernguyen.opteco.core.InMemoryAccountRepository;
+import me.playernguyen.opteco.core.InMemoryLedgerRepository;
 import me.playernguyen.opteco.core.RecordingEventBus;
 import me.playernguyen.opteco.core.TestUnitOfWork;
 import me.playernguyen.opteco.core.model.BalanceChangeReason;
@@ -31,9 +33,11 @@ class PlaceholderServiceTest {
     void setUp() {
         economy = new EconomyService(
                 new InMemoryAccountRepository(),
+                new InMemoryLedgerRepository(),
                 new TestUnitOfWork(),
                 new WriteThroughAccountCache(),
                 new RecordingEventBus(),
+                new FixedClock(1_000_000L),
                 TestConfigs::config);
         placeholders = new PlaceholderService(economy, TestConfigs::config, () -> VERSION);
         alice = UUID.randomUUID();
