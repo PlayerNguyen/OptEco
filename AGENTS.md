@@ -101,8 +101,8 @@ changes over large rewrites.
 - `schedule/` — payment countdown/expiry task.
 - `placeholder/` — provider-agnostic placeholder strategies and registry used by
   the PlaceholderAPI and MVdWPlaceholderAPI hooks.
-- `hook/` — optional PlaceholderAPI, MVdWPlaceholderAPI, BossShopPro, and
-  ShopGUIPlus adapters.
+- `hook/` — optional PlaceholderAPI, MVdWPlaceholderAPI, BossShopPro,
+  ShopGUIPlus, and Vault/VaultUnlocked adapters.
 - `api/` — public `OptEcoAPI`, registered through Bukkit's `ServicesManager`.
 - `runtime/` — async database executor and main-thread event bridge.
 - `updater/` — GitHub release update check.
@@ -260,9 +260,11 @@ This reverts commit 1234abcd.
 - `StorageType` supports only `SQLITE` and `MYSQL`. YAML account storage is not
   implemented. `LegacyImporter` imports the old `opteco` and
   `opteco_transaction` tables into the new schema when it finds them.
-- Vault, the PHP web integration, and the PlayerPoints importer are deliberately
-  outside this refactor. They are tracked as follow-up issues; do not register
-  or depend on a Vault provider until it is implemented properly.
+- The PHP web integration and the PlayerPoints importer are deliberately outside
+  this refactor. They are tracked as follow-up issues. The Vault economy
+  provider in `hook/VaultEconomyProvider` is optional: it is registered only
+  when Vault or VaultUnlocked is enabled, the Vault API stays `compileOnly`, and
+  OptEco must not hard-depend on or shade Vault.
 - The write-through `AccountCache` is authoritative for online-player reads.
   Every mutation must update the cache after the DB commit; do not add a second
   cache or a read-through DB lookup in placeholder hooks.
@@ -272,10 +274,10 @@ This reverts commit 1234abcd.
   Confirm, cancel, and timeout paths are covered by `PaymentServiceTest`.
   Transaction state changes and balance moves share one DB transaction.
 - `plugin.yml` declares `loadbefore: [BossShopPro]` and soft-depends on
-  PlaceholderAPI, BossShopPro, MVdWPlaceholderAPI, and ShopGUIPlus. Optional
-  integrations must stay optional and null-safe; catch `Throwable` around class
-  loading.
-- Plugin APIs (Paper, PlaceholderAPI, ShopGUI, BossShopPro, MVdW) are
+  PlaceholderAPI, BossShopPro, MVdWPlaceholderAPI, ShopGUIPlus, Vault, and
+  VaultUnlocked. Optional integrations must stay optional and null-safe; catch
+  `Throwable` around class loading.
+- Plugin APIs (Paper, PlaceholderAPI, ShopGUI, BossShopPro, MVdW, Vault) are
   `compileOnly`. HikariCP, SQLite JDBC, and MySQL Connector/J are shaded into
   the JAR. Do not move server or plugin APIs to `implementation`.
 - `build.gradle` uses Lombok as an annotation processor; keep the `compileOnly`
