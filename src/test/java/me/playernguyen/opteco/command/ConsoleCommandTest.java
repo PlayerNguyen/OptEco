@@ -124,6 +124,21 @@ class ConsoleCommandTest {
     }
 
     @Test
+    void shouldPrintBalanceHistoryFromTheConsole() {
+        // Arrange
+        dispatch(console, "points add Alice 100");
+        awaitOutput("Added 100 points to Alice");
+
+        // Act
+        dispatch(console, "points history Alice");
+
+        // Assert
+        awaitOutput("History: Alice");
+        awaitOutput("Admin add");
+        awaitOutput("Page 1/1");
+    }
+
+    @Test
     void shouldReloadConfigurationFromTheConsole() {
         // Act
         dispatch(console, "points reload");

@@ -124,6 +124,48 @@ public enum MessageKey {
     /** Footer printed after the leaderboard rows. */
     TOP_FOOTER("COMMAND.TOP.FOOTER", "&8---------------------"),
 
+    /** Help text for {@code /points history}. */
+    HISTORY_DESCRIPTION("COMMAND.HISTORY.DESCRIPTION", "show recent balance changes"),
+    /** History header rendered with {@code %who%}. */
+    HISTORY_HEADER("COMMAND.HISTORY.HEADER", "&8----- &6History: &e%who% &8-----"),
+    /** History row rendered with {@code %date%}, {@code %amount%}, {@code %currency%}, {@code %balance%}, {@code %reason%} and {@code %counterparty%}. */
+    HISTORY_FORMAT(
+            "COMMAND.HISTORY.FORMAT",
+            "&7%date% &8| %amount% %currency% &8| &7balance %balance% &8| &7%reason%%counterparty%"),
+    /** Counterparty suffix appended to {@link #HISTORY_FORMAT}, rendered with {@code %who%}. */
+    HISTORY_COUNTERPARTY("COMMAND.HISTORY.COUNTERPARTY", " &8| &7%who%"),
+    /** Shown when a player has no ledger entries yet. */
+    HISTORY_EMPTY("COMMAND.HISTORY.EMPTY", "&7No balance history yet."),
+    /** History footer rendered with {@code %page%}, {@code %pages%} and {@code %total%}. */
+    HISTORY_FOOTER("COMMAND.HISTORY.FOOTER", "&8----- &7Page &e%page%&7/&e%pages% &8(&7%total% entries&8) -----"),
+    /** Shown when the page argument is not a positive integer. */
+    HISTORY_INVALID_PAGE("COMMAND.HISTORY.INVALID_PAGE", "&cPage must be a positive number."),
+    /** Shown when a sender without {@code opteco.history.others} asks for another player's history. */
+    HISTORY_OTHERS_PERMISSION(
+            "COMMAND.HISTORY.OTHERS_PERMISSION", "&cYou do not have permission to view another player's history."),
+    /** Readable label for {@link me.playernguyen.opteco.core.model.BalanceChangeReason#START_BALANCE}. */
+    HISTORY_REASON_START_BALANCE("COMMAND.HISTORY.REASON.START_BALANCE", "Start balance"),
+    /** Readable label for {@link me.playernguyen.opteco.core.model.BalanceChangeReason#ADMIN_ADD}. */
+    HISTORY_REASON_ADMIN_ADD("COMMAND.HISTORY.REASON.ADMIN_ADD", "Admin add"),
+    /** Readable label for {@link me.playernguyen.opteco.core.model.BalanceChangeReason#ADMIN_TAKE}. */
+    HISTORY_REASON_ADMIN_TAKE("COMMAND.HISTORY.REASON.ADMIN_TAKE", "Admin take"),
+    /** Readable label for {@link me.playernguyen.opteco.core.model.BalanceChangeReason#ADMIN_SET}. */
+    HISTORY_REASON_ADMIN_SET("COMMAND.HISTORY.REASON.ADMIN_SET", "Admin set"),
+    /** Readable label for {@link me.playernguyen.opteco.core.model.BalanceChangeReason#PAYMENT_SENT}. */
+    HISTORY_REASON_PAYMENT_SENT("COMMAND.HISTORY.REASON.PAYMENT_SENT", "Payment sent"),
+    /** Readable label for {@link me.playernguyen.opteco.core.model.BalanceChangeReason#PAYMENT_RECEIVED}. */
+    HISTORY_REASON_PAYMENT_RECEIVED("COMMAND.HISTORY.REASON.PAYMENT_RECEIVED", "Payment received"),
+    /** Readable label for {@link me.playernguyen.opteco.core.model.BalanceChangeReason#API_ADD}. */
+    HISTORY_REASON_API_ADD("COMMAND.HISTORY.REASON.API_ADD", "API add"),
+    /** Readable label for {@link me.playernguyen.opteco.core.model.BalanceChangeReason#API_TAKE}. */
+    HISTORY_REASON_API_TAKE("COMMAND.HISTORY.REASON.API_TAKE", "API take"),
+    /** Readable label for {@link me.playernguyen.opteco.core.model.BalanceChangeReason#API_SET}. */
+    HISTORY_REASON_API_SET("COMMAND.HISTORY.REASON.API_SET", "API set"),
+    /** Readable label for {@link me.playernguyen.opteco.core.model.BalanceChangeReason#API_TRANSFER}. */
+    HISTORY_REASON_API_TRANSFER("COMMAND.HISTORY.REASON.API_TRANSFER", "API transfer"),
+    /** Fallback label for a reason added after this build. */
+    HISTORY_REASON_UNKNOWN("COMMAND.HISTORY.REASON.UNKNOWN", "Other"),
+
     /** Help text for {@code /points reload}. */
     RELOAD_DESCRIPTION("COMMAND.RELOAD.DESCRIPTION", "reload OptEco configuration"),
     /** Shown when the configuration and language files reload successfully. */
