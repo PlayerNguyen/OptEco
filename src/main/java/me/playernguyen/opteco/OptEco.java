@@ -20,6 +20,7 @@ import me.playernguyen.opteco.hook.BossShopProHook;
 import me.playernguyen.opteco.hook.MvdwPlaceholderHook;
 import me.playernguyen.opteco.hook.PlaceholderApiHook;
 import me.playernguyen.opteco.hook.ShopGuiPlusHook;
+import me.playernguyen.opteco.hook.VaultEconomyProvider;
 import me.playernguyen.opteco.listener.BalanceTitleListener;
 import me.playernguyen.opteco.listener.PlayerConnectionListener;
 import me.playernguyen.opteco.message.MessageService;
@@ -153,6 +154,9 @@ public class OptEco extends JavaPlugin {
 
     /** ShopGUIPlus price hook, when the plugin is present. */
     private ShopGuiPlusHook shopGuiHook;
+
+    /** Vault economy provider, when Vault or VaultUnlocked is present. */
+    private VaultEconomyProvider vaultEconomyProvider;
 
     /** bStats reporter. */
     @Getter(onMethod_ = @NotNull)
@@ -310,11 +314,14 @@ public class OptEco extends JavaPlugin {
     }
 
     /**
-     * Registers the optional PlaceholderAPI, MVdWPlaceholderAPI, BossShopPro and ShopGUIPlus adapters.
+     * Registers the optional PlaceholderAPI, MVdWPlaceholderAPI, BossShopPro,
+     * ShopGUIPlus and Vault/VaultUnlocked adapters.
      *
      * <p>Each integration is created inside its own try block so a missing or
      * incompatible plugin only logs a warning. The ShopGUIPlus hook is deferred
-     * by one tick to let that plugin finish its own enable.</p>
+     * by one tick to let that plugin finish its own enable. The Vault provider is
+     * registered through the {@code ServicesManager} only when Vault or
+     * VaultUnlocked is enabled.</p>
      */
     private void registerHooks() {
         PluginManager pluginManager = getServer().getPluginManager();
@@ -361,6 +368,14 @@ public class OptEco extends JavaPlugin {
                                 1L);
             } catch (Throwable throwable) {
                 getLogger().log(Level.WARNING, "Could not create the ShopGUIPlus hook", throwable);
+            }
+        }
+        if (pluginManager.isPluginEnabled("Vault") || pluginManager.isPluginEnabled("VaultUnlocked")) {
+            try {
+                vaultEconomyProvider = new VaultEconomyProvider(this, economy, configService);
+                vaultEconomyProvider.register();
+            } catch (Throwable throwable) {
+                getLogger().log(Level.WARNING, "Could not register the Vault economy provider", throwable);
             }
         }
     }

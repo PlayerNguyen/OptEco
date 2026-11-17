@@ -130,10 +130,10 @@ public final class EconomyService {
      * inserted; an existing balance is left unchanged.</p>
      *
      * @param uuid player UUID
-     * @param name last known player name
+     * @param name last known player name; null or empty is stored for an unknown player
      * @throws me.playernguyen.opteco.core.exception.StorageException if the account cannot be loaded or created
      */
-    public void ensureAccount(@NotNull UUID uuid, @NotNull String name) {
+    public void ensureAccount(@NotNull UUID uuid, @Nullable String name) {
         BigDecimal startBalance = config.get().startBalance();
         Account account = accounts.getOrCreate(uuid, name, startBalance);
         cache.put(uuid, account.balance());

@@ -11,6 +11,7 @@ OptEco is a player points/economy plugin for Bukkit, Spigot, and Paper servers.
 - Admin balance commands and a leaderboard
 - Pending player-to-player payments with confirm, cancel, and timeout
 - PlaceholderAPI, MVdWPlaceholderAPI, BossShopPro, and ShopGUIPlus hooks
+- Optional Vault/VaultUnlocked economy provider
 - Public `OptEcoAPI` registered through Bukkit's `ServicesManager`
 - bStats metrics and a GitHub release update check
 

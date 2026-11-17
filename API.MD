@@ -80,13 +80,37 @@ Both events are fired on the Bukkit main thread.
 - PlaceholderAPI and shop hooks use the cache and never query the database from
   a placeholder expansion.
 
+## Vault
+
+OptEco registers a `net.milkbowl.vault.economy.Economy` service through
+Bukkit's `ServicesManager` at `ServicePriority.Highest` when Vault or
+VaultUnlocked is enabled. The integration is optional: OptEco declares a
+`softdepend`, the Vault API is compile-only, and no service is registered when
+neither plugin is present.
+
+```java
+Economy economy = Bukkit.getServicesManager().load(Economy.class);
+if (economy != null) {
+    double balance = economy.getBalance(player);
+}
+```
+
+The provider exposes one global balance per player and reports
+`hasBankSupport()` as `false`; bank methods return
+`EconomyResponse.ResponseType.NOT_IMPLEMENTED`. `fractionalDigits()` is eight.
+`depositPlayer` and `withdrawPlayer` write through `EconomyService` and may
+block on database I/O, while `getBalance` is cheap for cached online players and
+may read the database otherwise. Vault is synchronous, so there is no async
+variant.
+
 ## Compatibility
 
 The refactor is a breaking change: balances are now `BigDecimal`, the old
-`VaultEconomyProvider`, `/ppto` importer, and PHP integration are not registered,
-and the storage schema changed. Existing tables are migrated automatically.
-Deprecated `double` convenience methods on `OptEcoAPI` are kept only to ease
-migration; new code should use the `BigDecimal` methods.
+`/ppto` importer and PHP integration are not registered, and the storage schema
+changed. Vault support is provided by the optional service described above.
+Existing tables are migrated automatically. Deprecated `double` convenience
+methods on `OptEcoAPI` are kept only to ease migration; new code should use the
+`BigDecimal` methods.
 
 ## Maven/Gradle
 
