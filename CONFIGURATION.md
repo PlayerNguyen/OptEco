@@ -41,6 +41,7 @@ Settings:
     MinimumReachPoint: -15
     UseDouble: false
     LimitTopCommand: 5
+    HistoryPageSize: 10
     TabExecutor: true
 ```
 
@@ -51,6 +52,8 @@ Settings:
 - `UseDouble` — when false, command amounts must be whole numbers. Internally
   balances are always exact decimals.
 - `LimitTopCommand` — number of leaderboard rows.
+- `HistoryPageSize` — number of ledger rows shown per `/points history` page,
+  validated to 1-50.
 - `TabExecutor` — enable/disable command tab completion.
 
 ## Settings.Storage
@@ -80,11 +83,17 @@ Settings:
     Table:
       Accounts: opteco_accounts
       Transactions: opteco_transactions
+      Ledger: opteco_ledger
 ```
 
 - The SQLite file is relative to `plugins/OptEco/`.
 - MySQL table names must match `[A-Za-z0-9_]+`; values are always sent through
   prepared statements.
+- `Accounts`, `Transactions` and `Ledger` must all be different. Changing any
+  table name requires a restart.
+- The ledger table is append-only. Every committed balance change writes its
+  row in the same transaction as the balance update, including both sides of a
+  payment.
 - The bundled jar includes the SQLite and MySQL JDBC drivers.
 - `SchemaMigrator` imports the legacy `opteco` / `opteco_transaction` tables when
   they are found. The old tables are kept as a backup.

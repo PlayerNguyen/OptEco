@@ -43,6 +43,8 @@ All commands use `/opteco`; aliases are `/points`, `/pts`, and `/p`.
 | `/points me` | `opteco.me` | Show your own balance |
 | `/points check [player]` | `opteco.check` | Show your or another player's balance |
 | `/points top` | `opteco.top` | Show the leaderboard |
+| `/points history [page]` | `opteco.history` | Show your recent balance changes |
+| `/points history <player> [page]` | `opteco.history.others` | Show another player's balance changes |
 | `/points pay <player> <amount>` | `opteco.pay` | Start a pending payment to an online player |
 | `/points confirm` | `opteco.confirm` | Confirm your pending payment |
 | `/points cancel` | `opteco.cancel` | Cancel your pending payment |
@@ -69,6 +71,16 @@ With PlaceholderAPI installed, the expansion identifier is `opteco`:
 MVdWPlaceholderAPI exposes the same identifiers with the `opteco_` prefix.
 Placeholders read the account cache only and never query the database, so they
 are safe to use in scoreboards and holograms.
+
+## Ledger
+
+Every committed balance change is appended to a ledger
+(`Settings.SQL.Table.Ledger`) in the same database transaction as the balance
+update. The ledger is append-only: rows are never updated or deleted, so it can
+be used for auditing. History starts with the first change after the ledger was
+introduced; the initial account/start balance is not recorded retroactively.
+Ledger rows are retained indefinitely, so purge the table manually if it grows
+too large on a busy server.
 
 ## Configuration
 

@@ -9,10 +9,10 @@ import org.jetbrains.annotations.NotNull;
  *
  * <p>The constructor registers every subcommand in the order used by the help
  * listing: administration ({@code add}, {@code take}, {@code set}),
- * inspection ({@code check}, {@code me}, {@code top}), payments ({@code pay},
- * {@code confirm}, {@code cancel}), and {@code reload}. Registration happens
- * once during plugin startup; the instance is then read-only apart from the
- * underlying services.
+ * inspection ({@code check}, {@code me}, {@code top}, {@code history}),
+ * payments ({@code pay}, {@code confirm}, {@code cancel}), and {@code reload}.
+ * Registration happens once during plugin startup; the instance is then
+ * read-only apart from the underlying services.
  */
 public final class PointsCommand extends CommandDispatcher {
 
@@ -32,6 +32,7 @@ public final class PointsCommand extends CommandDispatcher {
         register(new ConfirmCommand());
         register(new CancelCommand());
         register(new TopCommand());
+        register(new HistoryCommand());
         register(new ReloadCommand());
     }
 }

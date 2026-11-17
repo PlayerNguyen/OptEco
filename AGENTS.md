@@ -81,21 +81,22 @@ changes over large rewrites.
 - `src/main/java/me/playernguyen/opteco/OptEco.java` — plugin bootstrap and
   lifecycle only. It builds the service graph, registers Bukkit adapters, and
   closes resources in reverse order on disable.
-- `core/model/` — immutable domain types: `Account`, `Transaction`, `Money`,
-  `PaymentResult`, `TransferResult`, and balance-change reasons. `Money` stores
-  exact `BigDecimal` values at a fixed scale of eight.
+- `core/model/` — immutable domain types: `Account`, `Transaction`, `LedgerEntry`,
+  `Money`, `PaymentResult`, `TransferResult`, and balance-change reasons. `Money`
+  stores exact `BigDecimal` values at a fixed scale of eight.
 - `core/port/` — repository, cache, unit-of-work, clock, and event-bus
   interfaces. Core code must not import Bukkit.
-- `core/service/` — `EconomyService` (balance mutations and atomic transfers)
-  and `PaymentService` (persisted pending-payment state machine).
+- `core/service/` — `EconomyService` (balance mutations, atomic transfers, and
+  ledger writes) and `PaymentService` (persisted pending-payment state machine).
 - `storage/jdbc/` — shared SQLite/MySQL connection providers, resource-backed
-  schema migrations (`migration/`), account and payment repositories,
+  schema migrations (`migration/`), account, payment, and ledger repositories,
   dialect-specific upserts, and transactions.
 - `config/` — immutable `OptEcoConfig` snapshot, config keys, validation, and
   reloadable `ConfigService`.
 - `message/` — typed message keys and the language loader.
 - `command/` — `/opteco` (aliases `/points`, `/pts`, `/p`) plus the command
-  dispatcher, argument parsing, and one class per subcommand.
+  dispatcher, argument parsing, and one class per subcommand, including
+  paginated `/points history`.
 - `event/` — custom Bukkit events for balance changes and payment transitions.
 - `listener/` — join/quit cache loading and the balance title effect.
 - `schedule/` — payment countdown/expiry task.
@@ -120,8 +121,8 @@ changes over large rewrites.
   `src/main/resources/migration/sqlite/` and `src/main/resources/migration/mysql/`.
   Never edit or renumber an applied file: startup compares its SHA-256 with
   `opteco_schema_history` and refuses to run on a mismatch. Use
-  `{{account_table}}` / `{{transaction_table}}` instead of literal table names.
-  See `storage/jdbc/migration/package-info.java`.
+  `{{account_table}}`, `{{transaction_table}}` and `{{ledger_table}}` instead of
+  literal table names. See `storage/jdbc/migration/package-info.java`.
 - Add user-facing messages to `MessageKey`; the language file is generated and
   merged automatically. Do not scatter raw player-facing strings.
 - Add permissions to `OptEcoPermission` and `plugin.yml`, including the
@@ -272,7 +273,12 @@ This reverts commit 1234abcd.
   always use prepared statements; never interpolate player input into SQL.
 - Payments are **pending** until `/points confirm`; they expire and auto-cancel.
   Confirm, cancel, and timeout paths are covered by `PaymentServiceTest`.
-  Transaction state changes and balance moves share one DB transaction.
+  Transaction state changes, balance moves and both ledger rows share one DB
+  transaction.
+- Balance changes are append-only in the ledger: never update or delete a ledger
+  row. Every mutation must append its rows through `LedgerRepository` on the
+  same connection as the balance change so a rollback removes both. Initial
+  account/start balances are not recorded in this version.
 - `plugin.yml` declares `loadbefore: [BossShopPro]` and soft-depends on
   PlaceholderAPI, BossShopPro, MVdWPlaceholderAPI, ShopGUIPlus, Vault, and
   VaultUnlocked. Optional integrations must stay optional and null-safe; catch

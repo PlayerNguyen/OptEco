@@ -96,6 +96,10 @@ public final class OptEcoConfig {
     @Builder.Default
     private final int topLimit = 5;
 
+    /** Number of ledger rows shown per history page; validated to 1-50. Defaults to {@code 10}. */
+    @Builder.Default
+    private final int historyPageSize = 10;
+
     /** Seconds a pending payment stays confirmable; validated to 1-3600. Defaults to {@code 15}. */
     @Builder.Default
     private final int paymentDurationSeconds = 15;
@@ -159,26 +163,36 @@ public final class OptEcoConfig {
     private final String sqliteFile = "account.sqlite";
 
     /**
-     * Table that stores balances. Must match {@link #IDENTIFIER} and differ from {@link #transactionTable};
-     * defaults to {@code opteco_accounts}.
+     * Table that stores balances. Must match {@link #IDENTIFIER} and differ from
+     * {@link #transactionTable} and {@link #ledgerTable}; defaults to
+     * {@code opteco_accounts}.
      */
     @Builder.Default
     private final String accountTable = "opteco_accounts";
 
     /**
-     * Table that stores payment transactions. Must match {@link #IDENTIFIER} and differ from {@link #accountTable};
-     * defaults to {@code opteco_transactions}.
+     * Table that stores payment transactions. Must match {@link #IDENTIFIER} and
+     * differ from {@link #accountTable} and {@link #ledgerTable}; defaults to
+     * {@code opteco_transactions}.
      */
     @Builder.Default
     private final String transactionTable = "opteco_transactions";
+
+    /**
+     * Append-only table that stores balance ledger rows. Must match
+     * {@link #IDENTIFIER} and differ from {@link #accountTable} and
+     * {@link #transactionTable}; defaults to {@code opteco_ledger}.
+     */
+    @Builder.Default
+    private final String ledgerTable = "opteco_ledger";
 
     /**
      * Validates the snapshot before it is published; the fields themselves are never modified.
      *
      * <p>Checks that the start and minimum balances can be normalized and are whole numbers when
      * {@link #useDouble} is off, that a storage backend and a valid language file are present, that numeric
-     * settings fall inside their supported ranges, that required text settings are not blank, and that both table
-     * names are plain identifiers with different values.</p>
+     * settings fall inside their supported ranges, that required text settings are not blank, and that the
+     * account, transaction and ledger table names are plain identifiers with different values.</p>
      *
      * @throws ConfigException when any setting is missing, malformed or outside its accepted range
      */
@@ -195,6 +209,7 @@ public final class OptEcoConfig {
         normalizeCountdownType(countdownType);
         requireLanguageFile(languageFile);
         requireRange(topLimit, 1, 1000, "top limit");
+        requireRange(historyPageSize, 1, 50, "history page size");
         requireRange(paymentDurationSeconds, 1, 3600, "payment duration");
         requireRange(titleStay, 0, 1000, "title stay");
         requireRange(titleFadeOut, 0, 1000, "title fade out");
@@ -208,8 +223,12 @@ public final class OptEcoConfig {
         requireText(sqliteFile, "SQLite file");
         String account = requireIdentifier(accountTable, "account table");
         String transaction = requireIdentifier(transactionTable, "transaction table");
+        String ledger = requireIdentifier(ledgerTable, "ledger table");
         if (account.equalsIgnoreCase(transaction)) {
             throw new ConfigException("Account and transaction tables must be different");
+        }
+        if (account.equalsIgnoreCase(ledger) || transaction.equalsIgnoreCase(ledger)) {
+            throw new ConfigException("Ledger table must differ from the account and transaction tables");
         }
     }
 

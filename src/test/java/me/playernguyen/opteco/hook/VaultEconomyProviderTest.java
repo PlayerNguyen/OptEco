@@ -12,7 +12,9 @@ import be.seeseemelk.mockbukkit.ServerMock;
 import be.seeseemelk.mockbukkit.entity.OfflinePlayerMock;
 import java.util.UUID;
 import me.playernguyen.opteco.TestConfigs;
+import me.playernguyen.opteco.core.FixedClock;
 import me.playernguyen.opteco.core.InMemoryAccountRepository;
+import me.playernguyen.opteco.core.InMemoryLedgerRepository;
 import me.playernguyen.opteco.core.RecordingEventBus;
 import me.playernguyen.opteco.core.TestUnitOfWork;
 import me.playernguyen.opteco.core.exception.StorageException;
@@ -48,9 +50,11 @@ class VaultEconomyProviderTest {
         accounts = new InMemoryAccountRepository();
         economy = new EconomyService(
                 accounts,
+                new InMemoryLedgerRepository(),
                 new TestUnitOfWork(),
                 new WriteThroughAccountCache(),
                 new RecordingEventBus(),
+                new FixedClock(1_000_000L),
                 TestConfigs::config);
         provider = new VaultEconomyProvider(plugin, economy, TestConfigs::config);
         alice = new OfflinePlayerMock(UUID.randomUUID(), "Alice");
@@ -224,9 +228,11 @@ class VaultEconomyProviderTest {
         };
         EconomyService failingEconomy = new EconomyService(
                 accounts,
+                new InMemoryLedgerRepository(),
                 failingUnitOfWork,
                 new WriteThroughAccountCache(),
                 new RecordingEventBus(),
+                new FixedClock(1_000_000L),
                 TestConfigs::config);
         VaultEconomyProvider failingProvider = new VaultEconomyProvider(plugin, failingEconomy, TestConfigs::config);
 

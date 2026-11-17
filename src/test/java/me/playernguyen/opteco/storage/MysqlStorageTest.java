@@ -64,6 +64,7 @@ class MysqlStorageTest {
                 .useDouble(true)
                 .accountTable("opteco_it_" + suffix)
                 .transactionTable("opteco_it_tx_" + suffix)
+                .ledgerTable("opteco_it_ledger_" + suffix)
                 .mysqlHost(host)
                 .mysqlPort(port())
                 .mysqlDatabase(environmentOrDefault("OPTECO_TEST_MYSQL_DATABASE", "opteco_test"))
@@ -89,6 +90,7 @@ class MysqlStorageTest {
         try {
             execute("DROP TABLE IF EXISTS `" + config.accountTable() + "`");
             execute("DROP TABLE IF EXISTS `" + config.transactionTable() + "`");
+            execute("DROP TABLE IF EXISTS `" + config.ledgerTable() + "`");
             execute("DROP TABLE IF EXISTS `" + HISTORY_TABLE + "`");
         } catch (Exception ignored) {
             // Best-effort cleanup of a throwaway test database.
@@ -103,7 +105,7 @@ class MysqlStorageTest {
         int applied = count("SELECT COUNT(*) FROM `" + HISTORY_TABLE + "`");
 
         // Assert
-        assertEquals(1, applied, "A fresh MySQL database should record exactly one migration");
+        assertEquals(2, applied, "A fresh MySQL database should record both migrations");
     }
 
     @Test

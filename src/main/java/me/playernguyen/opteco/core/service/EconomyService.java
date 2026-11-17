@@ -11,12 +11,15 @@ import me.playernguyen.opteco.config.OptEcoConfig;
 import me.playernguyen.opteco.core.model.Account;
 import me.playernguyen.opteco.core.model.BalanceChange;
 import me.playernguyen.opteco.core.model.BalanceChangeReason;
+import me.playernguyen.opteco.core.model.LedgerEntry;
 import me.playernguyen.opteco.core.model.Money;
 import me.playernguyen.opteco.core.model.TransferResult;
 import me.playernguyen.opteco.core.model.TransferStatus;
 import me.playernguyen.opteco.core.port.AccountCache;
 import me.playernguyen.opteco.core.port.AccountRepository;
+import me.playernguyen.opteco.core.port.Clock;
 import me.playernguyen.opteco.core.port.EconomyEventBus;
+import me.playernguyen.opteco.core.port.LedgerRepository;
 import me.playernguyen.opteco.core.port.UnitOfWork;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -25,11 +28,11 @@ import org.jetbrains.annotations.Nullable;
  * Coordinates account reads, balance mutations, and transfers.
  *
  * <p>This is the only service allowed to change a balance. Each mutation runs
- * inside a {@link UnitOfWork} transaction, refreshes the write-through
- * {@link AccountCache} after the commit, and then publishes a
- * {@link BalanceChange}. Mutations for the same player are serialized with
- * {@link KeyedLocks} so the cache update stays ordered with the transaction that
- * produced it.</p>
+ * inside a {@link UnitOfWork} transaction, appends its ledger rows on the same
+ * connection, refreshes the write-through {@link AccountCache} after the commit,
+ * and then publishes a {@link BalanceChange}. Mutations for the same player are
+ * serialized with {@link KeyedLocks} so the cache update stays ordered with the
+ * transaction that produced it.</p>
  *
  * <p>The service is thread-safe and designed to be called from the async
  * database executor for writes; reads may be served from the cache. It holds no
@@ -40,6 +43,9 @@ public final class EconomyService {
     /** Account persistence used for all reads and writes. */
     private final AccountRepository accounts;
 
+    /** Append-only ledger written inside every balance transaction. */
+    private final LedgerRepository ledger;
+
     /** Transaction boundary shared with the storage layer. */
     private final UnitOfWork unitOfWork;
 
@@ -48,6 +54,9 @@ public final class EconomyService {
 
     /** Event sink notified after committed balance changes. */
     private final EconomyEventBus events;
+
+    /** Time source for ledger row timestamps. */
+    private final Clock clock;
 
     /** Supplies the current config snapshot, which a reload can replace. */
     private final Supplier<OptEcoConfig> config;
@@ -59,21 +68,27 @@ public final class EconomyService {
      * Creates the economy service.
      *
      * @param accounts account persistence
+     * @param ledger append-only balance ledger
      * @param unitOfWork transaction runner used for every mutation
      * @param cache write-through balance cache
      * @param events event sink for committed balance changes
+     * @param clock time source for ledger row timestamps
      * @param config supplies the current configuration snapshot
      */
     public EconomyService(
             AccountRepository accounts,
+            LedgerRepository ledger,
             UnitOfWork unitOfWork,
             AccountCache cache,
             EconomyEventBus events,
+            Clock clock,
             Supplier<OptEcoConfig> config) {
         this.accounts = accounts;
+        this.ledger = ledger;
         this.unitOfWork = unitOfWork;
         this.cache = cache;
         this.events = events;
+        this.clock = clock;
         this.config = config;
     }
 
@@ -173,7 +188,8 @@ public final class EconomyService {
      *
      * <p>The new value must not be below the configured minimum balance. The
      * account is created with the configured start balance first when it does not
-     * exist.</p>
+     * exist. Setting the balance to its current value writes neither an account
+     * update nor a ledger row.</p>
      *
      * @param uuid player UUID
      * @param name last known player name; null or empty keeps the stored name for an existing account
@@ -195,8 +211,13 @@ public final class EconomyService {
         BigDecimal oldBalance = mutate(uuid, connection -> {
             Account account =
                     accounts.getOrCreate(connection, uuid, name, config.get().startBalance());
+            BigDecimal previous = account.balance();
+            if (previous.compareTo(normalized) == 0) {
+                return previous;
+            }
             accounts.set(connection, uuid, name, normalized);
-            return account.balance();
+            recordLedger(connection, uuid, null, normalized.subtract(previous), previous, normalized, reason, null);
+            return previous;
         });
         cache.put(uuid, normalized);
         publish(uuid, oldBalance, normalized, reason);
@@ -224,6 +245,7 @@ public final class EconomyService {
                     accounts.getOrCreate(connection, uuid, name, config.get().startBalance());
             BigDecimal newBalance = accounts.credit(connection, uuid, name, normalized)
                     .orElseThrow(() -> new IllegalStateException("Credit did not return a balance"));
+            recordLedger(connection, uuid, null, normalized, account.balance(), newBalance, reason, null);
             return new BigDecimal[] {account.balance(), newBalance};
         });
         cache.put(uuid, balances[1]);
@@ -254,7 +276,9 @@ public final class EconomyService {
             if (!newBalance.isPresent()) {
                 return null;
             }
-            return new BigDecimal[] {newBalance.get().add(normalized), newBalance.get()};
+            BigDecimal previous = newBalance.get().add(normalized);
+            recordLedger(connection, uuid, null, normalized.negate(), previous, newBalance.get(), reason, null);
+            return new BigDecimal[] {previous, newBalance.get()};
         });
         if (balances == null) {
             return false;
@@ -268,7 +292,7 @@ public final class EconomyService {
      * Atomically moves funds between two players.
      *
      * <p>Both players are locked together and both balance updates share one
-     * transaction. The receiver reason becomes
+     * transaction with the two ledger rows. The receiver reason becomes
      * {@link BalanceChangeReason#PAYMENT_RECEIVED} when the sender reason is
      * {@link BalanceChangeReason#PAYMENT_SENT}; any other reason is copied to
      * both sides. Cache entries and events are updated only after the commit.</p>
@@ -303,8 +327,8 @@ public final class EconomyService {
         TransferOutcome outcome = locks.withLock(
                 from,
                 to,
-                () -> unitOfWork.execute(
-                        connection -> transferWithin(connection, from, fromName, to, toName, normalized)));
+                () -> unitOfWork.execute(connection ->
+                        transferWithin(connection, from, fromName, to, toName, normalized, reason, null)));
         if (outcome == null) {
             throw new IllegalStateException("Transfer did not return an outcome");
         }
@@ -331,8 +355,9 @@ public final class EconomyService {
      *
      * <p>The caller must already hold the per-player locks and provide the
      * surrounding transaction; this method neither locks nor commits. Payment
-     * confirmation uses it so the payment state change and the balance moves
-     * commit together.</p>
+     * confirmation uses it so the payment state change, both balance moves and
+     * both ledger rows commit together. No ledger row is written when the sender
+     * cannot cover the amount.</p>
      *
      * @param connection connection participating in the caller's transaction
      * @param from sender UUID
@@ -340,6 +365,10 @@ public final class EconomyService {
      * @param to receiver UUID
      * @param toName receiver name, or null when unknown
      * @param amount amount to move
+     * @param senderReason reason recorded for the sender; the receiver reason is
+     *        {@link BalanceChangeReason#PAYMENT_RECEIVED} for a payment and the
+     *        same reason otherwise
+     * @param transactionId payment identifier shared by both ledger rows, or null
      * @return the balance outcome, including the unchanged sender balance on insufficient funds
      * @throws IllegalArgumentException if {@code amount} cannot be normalized to the fixed scale
      * @throws SQLException if a database operation fails
@@ -351,7 +380,9 @@ public final class EconomyService {
             @Nullable String fromName,
             @NotNull UUID to,
             @Nullable String toName,
-            @NotNull BigDecimal amount)
+            @NotNull BigDecimal amount,
+            @NotNull BalanceChangeReason senderReason,
+            @Nullable String transactionId)
             throws SQLException {
         Account sender =
                 accounts.getOrCreate(connection, from, fromName, config.get().startBalance());
@@ -367,6 +398,19 @@ public final class EconomyService {
         if (!receiverBalance.isPresent()) {
             throw new SQLException("Could not credit receiver");
         }
+        BalanceChangeReason receiverReason =
+                senderReason == BalanceChangeReason.PAYMENT_SENT ? BalanceChangeReason.PAYMENT_RECEIVED : senderReason;
+        recordLedger(
+                connection,
+                from,
+                to,
+                amount.negate(),
+                sender.balance(),
+                senderBalance.get(),
+                senderReason,
+                transactionId);
+        recordLedger(
+                connection, to, from, amount, receiver.balance(), receiverBalance.get(), receiverReason, transactionId);
         return TransferOutcome.success(
                 from, to, sender.balance(), senderBalance.get(), receiver.balance(), receiverBalance.get());
     }
@@ -415,6 +459,39 @@ public final class EconomyService {
     @NotNull
     public List<Account> top(int limit) {
         return accounts.top(limit);
+    }
+
+    /**
+     * Loads one page of a player's ledger history, newest first.
+     *
+     * <p>This is a blocking storage read and must run on the
+     * {@link me.playernguyen.opteco.runtime.AsyncExecutor}, not on the Bukkit main
+     * thread. The command layer supplies the limit and offset.</p>
+     *
+     * @param player player whose history is read
+     * @param limit maximum number of entries to return
+     * @param offset number of newest entries to skip
+     * @return ledger entries ordered by creation time descending
+     * @throws me.playernguyen.opteco.core.exception.StorageException if the query fails
+     */
+    @NotNull
+    public List<LedgerEntry> history(@NotNull UUID player, int limit, int offset) {
+        return ledger.findByPlayer(player, limit, offset);
+    }
+
+    /**
+     * Counts a player's ledger entries.
+     *
+     * <p>This is a blocking storage read and must run on the
+     * {@link me.playernguyen.opteco.runtime.AsyncExecutor}, not on the Bukkit main
+     * thread.</p>
+     *
+     * @param player player whose entries are counted
+     * @return total number of ledger entries for the player
+     * @throws me.playernguyen.opteco.core.exception.StorageException if the query fails
+     */
+    public long historyCount(@NotNull UUID player) {
+        return ledger.countByPlayer(player);
     }
 
     /**
@@ -477,6 +554,43 @@ public final class EconomyService {
             throw new IllegalArgumentException("Amount must be greater than zero");
         }
         return normalized;
+    }
+
+    /**
+     * Appends one ledger row on the transaction connection used by the caller.
+     *
+     * @param connection connection participating in the current transaction
+     * @param player player whose balance changed
+     * @param counterparty other participant for a transfer, or null
+     * @param amount signed delta applied to the balance
+     * @param before balance before the change
+     * @param after balance after the change
+     * @param reason category describing the change
+     * @param transactionId payment identifier, or null
+     * @throws SQLException if the insert fails
+     */
+    private void recordLedger(
+            Connection connection,
+            UUID player,
+            @Nullable UUID counterparty,
+            BigDecimal amount,
+            BigDecimal before,
+            BigDecimal after,
+            BalanceChangeReason reason,
+            @Nullable String transactionId)
+            throws SQLException {
+        ledger.append(
+                connection,
+                new LedgerEntry(
+                        UUID.randomUUID().toString(),
+                        player,
+                        counterparty,
+                        amount,
+                        before,
+                        after,
+                        reason,
+                        transactionId,
+                        clock.now()));
     }
 
     /**

@@ -31,6 +31,7 @@ import me.playernguyen.opteco.runtime.BukkitEconomyEventBus;
 import me.playernguyen.opteco.schedule.PaymentCountdownTask;
 import me.playernguyen.opteco.storage.jdbc.ConnectionProvider;
 import me.playernguyen.opteco.storage.jdbc.JdbcAccountRepository;
+import me.playernguyen.opteco.storage.jdbc.JdbcLedgerRepository;
 import me.playernguyen.opteco.storage.jdbc.JdbcPaymentRepository;
 import me.playernguyen.opteco.storage.jdbc.JdbcUnitOfWork;
 import me.playernguyen.opteco.storage.jdbc.MysqlConnectionProvider;
@@ -103,6 +104,9 @@ public class OptEco extends JavaPlugin {
 
     /** Persists payment transaction rows. */
     private JdbcPaymentRepository paymentRepository;
+
+    /** Append-only balance ledger shared by the economy service and history command. */
+    private JdbcLedgerRepository ledgerRepository;
 
     /** Authoritative read cache for balances of loaded players. */
     private WriteThroughAccountCache cache;
@@ -218,9 +222,17 @@ public class OptEco extends JavaPlugin {
         unitOfWork = new JdbcUnitOfWork(connectionProvider);
         accountRepository = new JdbcAccountRepository(connectionProvider, config.accountTable(), SystemClock.INSTANCE);
         paymentRepository = new JdbcPaymentRepository(connectionProvider, config.transactionTable());
+        ledgerRepository = new JdbcLedgerRepository(connectionProvider, config.ledgerTable());
         cache = new WriteThroughAccountCache();
         eventBus = new BukkitEconomyEventBus(this);
-        economy = new EconomyService(accountRepository, unitOfWork, cache, eventBus, configService::current);
+        economy = new EconomyService(
+                accountRepository,
+                ledgerRepository,
+                unitOfWork,
+                cache,
+                eventBus,
+                SystemClock.INSTANCE,
+                configService::current);
         payments = new PaymentService(
                 paymentRepository, unitOfWork, economy, eventBus, configService::current, SystemClock.INSTANCE);
 
@@ -423,6 +435,7 @@ public class OptEco extends JavaPlugin {
         return previous.storageType() != updated.storageType()
                 || !previous.accountTable().equals(updated.accountTable())
                 || !previous.transactionTable().equals(updated.transactionTable())
+                || !previous.ledgerTable().equals(updated.ledgerTable())
                 || !previous.sqliteFile().equals(updated.sqliteFile())
                 || previous.mysqlPort() != updated.mysqlPort()
                 || !previous.mysqlHost().equals(updated.mysqlHost())
@@ -496,6 +509,7 @@ public class OptEco extends JavaPlugin {
         economy = null;
         payments = null;
         eventBus = null;
+        ledgerRepository = null;
         api = null;
         placeholderService = null;
         instance = null;

@@ -37,6 +37,10 @@ public enum OptEcoPermission {
     CANCEL("opteco.cancel"),
     /** Allows {@code /points top}. */
     TOP("opteco.top"),
+    /** Allows {@code /points history} for the sender's own account. */
+    HISTORY("opteco.history"),
+    /** Allows {@code /points history <player>} for another player's account. */
+    HISTORY_OTHERS("opteco.history.others"),
     /** Allows {@code /points reload}. */
     RELOAD("opteco.reload");
 

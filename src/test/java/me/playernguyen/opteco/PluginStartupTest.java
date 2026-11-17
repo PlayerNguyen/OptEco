@@ -111,17 +111,29 @@ class PluginStartupTest {
         try (Connection connection = DriverManager.getConnection("jdbc:sqlite:" + database.getAbsolutePath());
                 Statement statement = connection.createStatement();
                 ResultSet history = statement.executeQuery(
-                        "SELECT version, script, checksum, applied_at, execution_ms FROM opteco_schema_history")) {
+                        "SELECT version, script, checksum, applied_at, execution_ms FROM opteco_schema_history"
+                                + " ORDER BY version")) {
             assertTrue(history.next(), "Startup should record the applied migration");
             assertEquals(1, history.getInt("version"));
             assertEquals("0001_create_opteco_schema.sql", history.getString("script"));
-            String checksum = history.getString("checksum");
-            assertNotNull(checksum, "Applied rows must store a checksum");
-            assertEquals(64, checksum.length(), "The checksum should be a SHA-256 hex digest");
+            assertChecksum(history.getString("checksum"));
             assertTrue(history.getLong("applied_at") > 0L, "The apply timestamp should be recorded");
             assertTrue(history.getLong("execution_ms") >= 0L);
-            assertFalse(history.next(), "A fresh database should record exactly one migration");
+
+            assertTrue(history.next(), "Startup should record the ledger migration");
+            assertEquals(2, history.getInt("version"));
+            assertEquals("0002_create_opteco_ledger.sql", history.getString("script"));
+            assertChecksum(history.getString("checksum"));
+            assertTrue(history.getLong("applied_at") > 0L, "The apply timestamp should be recorded");
+            assertTrue(history.getLong("execution_ms") >= 0L);
+
+            assertFalse(history.next(), "A fresh database should record exactly two migrations");
         }
+    }
+
+    private static void assertChecksum(String checksum) {
+        assertNotNull(checksum, "Applied rows must store a checksum");
+        assertEquals(64, checksum.length(), "The checksum should be a SHA-256 hex digest");
     }
 
     private static void writeFile(File file, String contents) throws IOException {

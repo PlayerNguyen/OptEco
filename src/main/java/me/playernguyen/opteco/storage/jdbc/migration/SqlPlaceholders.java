@@ -10,7 +10,7 @@ import me.playernguyen.opteco.core.exception.StorageException;
  * Expands {@code {{placeholder}}} tokens in migration templates.
  *
  * <p>Only the configured table names are interpolated. {@link OptEcoConfig}
- * validates both names as plain identifiers before this class sees them, so
+ * validates every name as a plain identifier before this class sees them, so
  * substitution cannot break quoting or inject SQL. Expansion happens at
  * execution time; checksums are computed on the template so changing a table
  * name never invalidates an applied migration.</p>
@@ -34,6 +34,7 @@ final class SqlPlaceholders {
         Map<String, String> values = new HashMap<>();
         values.put("account_table", config.accountTable());
         values.put("transaction_table", config.transactionTable());
+        values.put("ledger_table", config.ledgerTable());
         return Collections.unmodifiableMap(values);
     }
 

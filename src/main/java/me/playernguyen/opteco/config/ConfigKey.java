@@ -35,6 +35,8 @@ public enum ConfigKey {
     CURRENCY_SYMBOL("Settings.CurrencySymbol", "points"),
     /** Maximum number of entries rendered by the leaderboard; validated to the range 1-1000. */
     TOP_LIMIT("Settings.Preferences.LimitTopCommand", 5),
+    /** Number of ledger rows shown per {@code /points history} page; validated to the range 1-50. */
+    HISTORY_PAGE_SIZE("Settings.Preferences.HistoryPageSize", 10),
     /** Enables tab completion for {@code /opteco} and its aliases. */
     TAB_COMPLETE("Settings.Preferences.TabExecutor", Boolean.TRUE),
 
@@ -76,10 +78,12 @@ public enum ConfigKey {
     /** SQLite database file, resolved against the plugin data folder. */
     SQLITE_FILE("Settings.SQL.SQLite.File", "account.sqlite"),
 
-    /** Table holding balances; must be a plain identifier and differ from {@link #TRANSACTION_TABLE}. */
+    /** Table holding balances; must be a plain identifier and differ from the other tables. */
     ACCOUNT_TABLE("Settings.SQL.Table.Accounts", "opteco_accounts"),
-    /** Table holding payment transactions; must be a plain identifier and differ from {@link #ACCOUNT_TABLE}. */
-    TRANSACTION_TABLE("Settings.SQL.Table.Transactions", "opteco_transactions");
+    /** Table holding payment transactions; must be a plain identifier and differ from the other tables. */
+    TRANSACTION_TABLE("Settings.SQL.Table.Transactions", "opteco_transactions"),
+    /** Append-only ledger table; must be a plain identifier and differ from the other tables. */
+    LEDGER_TABLE("Settings.SQL.Table.Ledger", "opteco_ledger");
 
     /** Dotted YAML path this key is stored under. */
     private final String path;
